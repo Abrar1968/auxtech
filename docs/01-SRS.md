@@ -42,7 +42,7 @@ Build Auxtech's public website: a bilingual, animated, search-optimised portfoli
 |---|---|
 | Backend | Laravel 12, PHP 8.2+ |
 | Database | MySQL 8 / MariaDB 10.4+ (XAMPP locally) |
-| Bridge | Inertia.js v2 with **server-side rendering** |
+| Bridge | Inertia.js v3 with **server-side rendering** |
 | Frontend | Vue 3 (Composition API, TypeScript), Tailwind CSS v4 |
 | Motion | Motion for Vue (`motion-v`, the Vue port of Framer Motion), GSAP ScrollTrigger, Lenis |
 | Tests | Pest, Vitest, Playwright |

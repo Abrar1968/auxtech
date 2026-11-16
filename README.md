@@ -1,59 +1,75 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Auxtech Website
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Company website and admin panel for **Auxtech** — website development, app development and digital marketing, Dhaka, Bangladesh.
 
-## About Laravel
+| Layer | Technology |
+|---|---|
+| Backend | Laravel 12, PHP 8.2+ |
+| Database | MySQL / MariaDB (XAMPP locally) |
+| Frontend | Vue 3 + TypeScript, Inertia v3 with server-side rendering, Tailwind CSS v4 |
+| Motion | Motion for Vue (`motion-v`), GSAP, Lenis |
+| Tests | Pest, Vitest, Playwright |
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Documentation is in [`docs/`](docs/README.md). The project is at the end of **Phase 0** (setup and documentation); Phase 1 is the backend.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Local setup (Windows + XAMPP)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+**Requirements:** XAMPP with PHP 8.2 or newer, [Composer](https://getcomposer.org), [Node.js 20+](https://nodejs.org).
 
-## Learning Laravel
+1. Start **Apache** and **MySQL** in the XAMPP control panel.
+2. Create the database in phpMyAdmin (`http://localhost/phpmyadmin`) → SQL:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+   ```sql
+   CREATE DATABASE auxtech CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+   ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+3. In `C:\xampp\php\php.ini`, make sure these extensions are enabled (no leading `;`): `gd`, `intl`, `zip`, `pdo_mysql`, `fileinfo`, `exif`.
+4. In the project folder:
 
-## Laravel Sponsors
+   ```bash
+   composer run setup
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+   This installs PHP and Node packages, creates `.env` from `.env.example` (already set to XAMPP's defaults: host `127.0.0.1`, port `3306`, user `root`, empty password, database `auxtech`), generates the app key, runs migrations, links storage and builds assets.
 
-### Premium Partners
+5. Start everything for development:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+   ```bash
+   composer run dev
+   ```
 
-## Contributing
+   Open `http://localhost:8000`. You should see the "Environment ready" page.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+If your MySQL has a password or a different port, edit the `DB_*` lines in `.env` and run `php artisan migrate`.
 
-## Code of Conduct
+## Commands
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+| Task | Command |
+|---|---|
+| Dev server + queue + logs + Vite | `composer run dev` |
+| Production build (client + SSR) | `npm run build` |
+| Start the SSR server | `php artisan inertia:start-ssr` |
+| Backend tests | `composer test` |
+| PHP code style check / fix | `composer lint` / `composer format` |
+| Type check, lint, unit tests (JS) | `npm run typecheck`, `npm run lint`, `npm test` |
+| End-to-end tests | `npm run test:e2e` (first run: `npx playwright install`) |
 
-## Security Vulnerabilities
+## Project layout
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```
+app/                Laravel application code
+config/auxtech.php  Company facts (name, address, WhatsApp number, locales)
+docs/               SRS, architecture, design, testing, SEO, phase plans
+resources/js/       Vue app (pages/, later components/, layouts/, composables/)
+resources/css/      Tailwind v4 entry with design tokens
+resources/brand/    Logo
+resources/seed/     Portfolio screenshots used by the seeder
+scripts/            Tooling (site capture script)
+tests/              Pest (Unit, Feature) and Playwright (e2e)
+```
 
-## License
+## Known gaps
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- **Larastan (PHPStan) is not installed yet.** It could not be downloaded in the environment where the project was scaffolded. On your machine run `composer require --dev larastan/larastan` (first task of Phase 1).
+- **Playwright** is pinned to 1.63.0. Firefox and WebKit must be installed locally with `npx playwright install`.
+- The logo is a WebP file. An **SVG** version is needed for sharp rendering at every size.

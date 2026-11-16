@@ -12,7 +12,7 @@
 |---|---|---|
 | Framework | Laravel 12 | `composer.json` pins `config.platform.php` to 8.2.12 so the lock file installs on XAMPP's PHP 8.2 |
 | Database | MySQL 8 **or MariaDB 10.4+** | XAMPP's "MySQL" is MariaDB. See §4.4 for the compatibility rules |
-| Frontend bridge | `inertiajs/inertia-laravel` v2 + SSR | Controllers return `Inertia::render()`; no separate REST API for pages |
+| Frontend bridge | `inertiajs/inertia-laravel` v3 + SSR | Controllers return `Inertia::render()`; no separate REST API for pages. Page components live in `resources/js/pages`; `ensure_pages_exist` is on, so a wrong component name fails fast |
 | Routes in JS | `tightenco/ziggy` | |
 | Auth | `laravel/fortify` (headless) | Login, password reset, TOTP 2FA |
 | Authorisation | `spatie/laravel-permission` | Roles + permissions, enforced through policies |
@@ -22,7 +22,7 @@
 | HTML sanitising | `mews/purifier` | All rich text is purified on write |
 | Queue | `database` driver locally, Redis in production | |
 | Cache | `database`/`file` locally, Redis in production | |
-| Quality | Pest 3, Larastan, Pint | |
+| Quality | Pest 3, Pint, Larastan | Larastan is still to be installed (Phase 1, step 1.0) |
 
 Sitemap, robots, `llms.txt`, feeds and JSON-LD are built in-house (small, and we need full control over the output).
 

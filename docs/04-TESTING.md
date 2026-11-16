@@ -94,7 +94,7 @@ Priority: **P1** blocks release, **P2** should pass, **P3** nice to have. Type: 
 | TC-L06 | Visit with `?utm_source=facebook&utm_campaign=eid`, browse 3 pages, submit | Lead has UTM values, landing URL and referrer | FR-B06 | P1 | A |
 | TC-L07 | Mail server down during submit | Lead still stored; job retried; user sees success | NFR-11 | P1 | A |
 | TC-L08 | Same phone submits twice within 24 h | One lead; second message added as a note | FR-A15 | P2 | A |
-| TC-L09 | Click each WhatsApp placement (header, hero, FAB, sticky bar, case study, pricing) | `href` is `https://wa.me/8801805019415?text=…`; a `conversion_events` row with the right `placement` exists; `dataLayer` has `whatsapp_click` | FR-B02–B04 | P1 | A |
+| TC-L09 | Click each WhatsApp placement (header, hero, FAB, sticky bar, case study, pricing); click each email CTA | `href` is `https://wa.me/8801805019415?text=…`; a `conversion_events` row with the right `placement` exists; `dataLayer` has `whatsapp_click` | FR-B02–B04 | P1 | A |
 | TC-L10 | WhatsApp text on a case study, a plan, and a Bangla page | Message names the project/plan; Bangla page sends Bangla text; text is URL-encoded correctly | FR-B03 | P1 | A |
 | TC-L11 | Complete the estimator | Steps validate; back keeps answers; lead stored with answers in `meta`; WhatsApp message summarises them | FR-P13 | P2 | A |
 | TC-L12 | `/go/whatsapp` with JavaScript disabled | Click recorded; 302 to `wa.me` | FR-B04 | P2 | A |
@@ -115,7 +115,9 @@ Priority: **P1** blocks release, **P2** should pass, **P3** nice to have. Type: 
 | TC-P09 | Theme switch | Persists across pages and reloads; no flash of wrong theme | FR-B08 | P2 | A |
 | TC-P10 | Blog index pagination, category, tag, post page | Correct posts; reading time; related posts | FR-P11 | P2 | A |
 | TC-P11 | Unknown URL | Branded 404 with status 404 and WhatsApp CTA | FR-P18 | P1 | A |
-| TC-P12 | JavaScript disabled | Main content, navigation and WhatsApp links present in HTML | FR-S01 | P1 | A |
+| TC-P12 | JavaScript disabled, on every public page type | `h1`, main text, internal links and WhatsApp link present in the HTML (Blade fallback) and equal to what the Vue page shows | FR-S01 | P1 | A |
+| TC-P14 | Microsoft Clarity | Tag with project `zehuflmwqj` present on public pages in production; absent in admin and outside production | FR-I08 | P1 | A |
+| TC-P15 | Fully dynamic content: change each home-page text, stat, testimonial and price in admin | Public site shows the new value; no hard-coded copy remains (checked by a string scan of the page components) | FR-A25 | P1 | A + M |
 | TC-P13 | Cookie consent declined | No GA/Meta requests fired; site fully usable | FR-B10 | P1 | A |
 
 ### 7.3 SEO and AI visibility
@@ -153,6 +155,8 @@ Priority: **P1** blocks release, **P2** should pass, **P3** nice to have. Type: 
 | TC-A12 | Schedule a post for the future | Publishes automatically at the set time | FR-A09 | P2 | A |
 | TC-A13 | Dashboard numbers | Match database counts for the period | FR-A02 | P2 | A |
 | TC-A14 | Activity log | Records user, action, before/after | FR-A20 | P2 | A |
+| TC-A15 | Real-time: submit a lead in one browser while admin is open in another | Toast, badge and leads table update within 2 seconds without reload | FR-I07 | P1 | A |
+| TC-A16 | Private channel authorisation | Guests and users without permission get 403 from `/broadcasting/auth` | FR-I07 | P1 | A |
 
 ### 7.5 UI, responsive and motion
 
@@ -182,7 +186,11 @@ Priority: **P1** blocks release, **P2** should pass, **P3** nice to have. Type: 
 | TC-N07 | Access another user's resource by ID; mass-assign `status`, `role` fields | 403 / ignored | NFR-09 | P1 | A |
 | TC-N08 | OWASP ZAP baseline scan on staging | No High findings | NFR-09 | P1 | A |
 | TC-N09 | `composer audit`, `npm audit --omit=dev` | No known high-severity vulnerabilities | NFR-09 | P1 | A |
-| TC-N10 | SSR process stopped | Pages still load (client-rendered); title, meta and JSON-LD still in HTML | doc 02 §11 | P1 | A |
+| TC-N10 | Pusher unreachable or wrong secret | Lead still stored and emailed; site unaffected; admin shows "live updates paused" | doc 02 §11.1 | P1 | A |
+| TC-N13 | **Release zip on a clean shared-hosting-like server** (Apache + PHP 8.2 + MySQL, no shell): extract into document root, open `/install`, complete it | Site and admin work; `/install` then returns 404; `/.env`, `/vendor/`, `/storage/logs/laravel.log`, `/composer.json` return 403 | NFR-14, FR-A23 | P1 | A + M |
+| TC-N14 | Installer with wrong DB password, missing PHP extension, unwritable `storage/` | Clear message for each; nothing half-installed; can retry | FR-A23 | P1 | A |
+| TC-N15 | Extract a newer zip over an installed site, then run the database update from admin | Content, uploads and `.env` intact; migrations applied; caches cleared | FR-A24 | P1 | A + M |
+| TC-N16 | No Gmail app password configured | Lead stored and broadcast; email skipped without error; dashboard reminder shown | doc 02 §11.2 | P1 | A |
 | TC-N11 | Migrate fresh + seed on MariaDB 10.4 and MySQL 8; rollback | All succeed | doc 02 §4.4 | P1 | A |
 | TC-N12 | Production config | `APP_DEBUG=false`; no stack traces; `.env` and `/storage` not web-accessible | NFR-09 | P1 | M |
 
@@ -211,8 +219,8 @@ Naming: Pest tests read as sentences (`it('stores a lead before sending notifica
 `.github/workflows/ci.yml` runs on every push and pull request:
 
 1. **Backend:** Pint → Pest on SQLite → Pest on MariaDB 10.4.
-2. **Frontend:** ESLint → `vue-tsc` → Vitest → production build (client + SSR).
-3. **E2E (added in Phase 3):** start app + SSR → Playwright (Chromium) → axe; nightly: full matrix + visual + Lighthouse CI.
+2. **Frontend:** ESLint → `vue-tsc` → Vitest → production build.
+3. **E2E (added in Phase 3):** start app → Playwright (Chromium) → axe; nightly: full matrix + visual + Lighthouse CI.
 
 A red pipeline blocks merging. Tests are never skipped or disabled to get a green build.
 
@@ -230,7 +238,8 @@ A red pipeline blocks merging. Tests are never skipped or disabled to get a gree
 
 | Item | Status |
 |---|---|
-| Pest configured, 3 environment tests | Passing |
+| Pest configured, 14 environment tests (config, brand assets, Pusher config, Clarity, no-SSR) | Passing |
+| Pusher credentials | Verified with a live test event |
 | Playwright configured with 6 device projects, 1 smoke spec | Passing on Chromium desktop and Pixel 7 |
 | Vitest, ESLint, `vue-tsc`, Pint configured | Passing |
 | Larastan | **Not installed yet** (see root `README.md`, "Known gaps"); install as the first step of Phase 1 |

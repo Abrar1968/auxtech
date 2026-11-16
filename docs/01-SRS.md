@@ -42,7 +42,8 @@ Build Auxtech's public website: a bilingual, animated, search-optimised portfoli
 |---|---|
 | Backend | Laravel 12, PHP 8.2+ |
 | Database | MySQL 8 / MariaDB 10.4+ (XAMPP locally) |
-| Bridge | Inertia.js v3 with **server-side rendering** |
+| Bridge | Inertia.js v3; crawlable HTML from a server-rendered Blade content fallback (no Node on the server) |
+| Real-time | Pusher Channels |
 | Frontend | Vue 3 (Composition API, TypeScript), Tailwind CSS v4 |
 | Motion | Motion for Vue (`motion-v`, the Vue port of Framer Motion), GSAP ScrollTrigger, Lenis |
 | Tests | Pest, Vitest, Playwright |
@@ -82,10 +83,10 @@ Priority: **M** = must (launch blocker), **S** = should, **C** = could.
 | ID | Requirement | Pri |
 |---|---|---|
 | FR-B01 | **Bilingual**: English at `/`, Bangla at `/bn/...`; switcher keeps the current page; `hreflang` on every page | M |
-| FR-B02 | **WhatsApp CTA** in header, hero, every section end, floating button, and sticky bottom bar on mobile | M |
+| FR-B02 | **WhatsApp CTA** (primary) in header, hero, every section end, floating button, and sticky bottom bar on mobile. **Email** is the only secondary CTA (`mailto:` link and the contact form). No phone-call or callback CTAs | M |
 | FR-B03 | WhatsApp messages are **pre-filled by context** (page, service, project, plan, language); templates editable in admin | M |
 | FR-B04 | Every WhatsApp click is **recorded** (placement, page, UTM, device) before the user leaves | M |
-| FR-B05 | **Lead forms** (contact, callback, demo request, estimator) validate inline, store the lead, notify staff, then offer "continue on WhatsApp" | M |
+| FR-B05 | **Lead forms** (contact form and estimator) validate inline, store the lead, notify staff, then offer "continue on WhatsApp" | M |
 | FR-B06 | First-touch **attribution**: UTM parameters, referrer and landing page are stored with each lead | M |
 | FR-B07 | **Newsletter** signup with double opt-in | C |
 | FR-B08 | **Light and dark theme**, following the system and switchable; choice remembered | S |
@@ -98,7 +99,7 @@ Priority: **M** = must (launch blocker), **S** = should, **C** = could.
 
 | ID | Requirement | Pri |
 |---|---|---|
-| FR-S01 | All public pages are **server-rendered**; content is present in the HTML response | M |
+| FR-S01 | Every public page's content (headings, text, links, images) is **present in the HTML response** without JavaScript | M |
 | FR-S02 | Per-page title, description, canonical, robots, Open Graph and Twitter tags; editable in admin with sensible generated defaults | M |
 | FR-S03 | **JSON-LD**: Organization + LocalBusiness (site-wide), WebSite, BreadcrumbList, Service, Product/SoftwareApplication, CreativeWork (case studies), Article, FAQPage, JobPosting | M |
 | FR-S04 | `sitemap.xml` (index + per-type, with `hreflang` and image entries), regenerated on content change | M |
@@ -137,12 +138,17 @@ Priority: **M** = must (launch blocker), **S** = should, **C** = could.
 | FR-A20 | Activity log | Who changed what and when, with before/after | S |
 | FR-A21 | Homepage manager | Reorder and toggle home sections, edit hero copy | S |
 | FR-A22 | Newsletter | Subscribers list, export | C |
+| FR-A23 | **Web installer** | `/install` wizard: requirement checks, database details, admin account, migrations and seed, self-locking | M |
+| FR-A24 | **System** | One-click database update after uploading a new release, cache clear, backup now, failed-task retry, send test email | M |
+| FR-A25 | **Fully dynamic content** | Every text, number, image, stat, testimonial, price, FAQ, menu label and section on the public site is editable in the admin panel; nothing is hard-coded | M |
 
 ### 5.5 Notifications and integrations
 
 | ID | Requirement | Pri |
 |---|---|---|
-| FR-I01 | New lead → email to sales address; in-app notification in admin | M |
+| FR-I01 | New lead → email to `auxtechbd@gmail.com`; in-app notification in admin | M |
+| FR-I07 | **Real-time (Pusher):** new leads, WhatsApp clicks and lead changes appear in the admin panel instantly, with toast and badge | M |
+| FR-I08 | **Microsoft Clarity** (project `zehuflmwqj`) on public pages in production; ID editable in settings | M |
 | FR-I02 | New lead → optional Telegram or WhatsApp Cloud API message to the sales team | C |
 | FR-I03 | GTM container with consent-aware `dataLayer` events (`whatsapp_click`, `generate_lead`, `estimator_step`, `demo_click`) | M |
 | FR-I04 | Meta Pixel + **server-side Conversions API** `Lead` and `Contact` events with deduplication | S |
@@ -173,7 +179,7 @@ Priority: **M** = must (launch blocker), **S** = should, **C** = could.
 | NFR-11 | Reliability | Lead submission never lost: stored in DB before any external call; queued jobs retry |
 | NFR-12 | Maintainability | Typed frontend, static analysis (Larastan level 6+), formatted code, ≥ 80% backend coverage on domain code |
 | NFR-13 | Localisation | All UI strings and content translatable; Bangla numerals and fonts render correctly |
-| NFR-14 | Operability | One-command local setup on XAMPP; documented deployment; daily DB backup |
+| NFR-14 | Operability | One-command local setup on XAMPP. Production: **upload one zip, extract, run the browser installer**; no SSH, Composer, Node or cron needed on the host |
 
 ## 7. Information architecture
 
@@ -217,25 +223,26 @@ Priority: **M** = must (launch blocker), **S** = should, **C** = could.
 
 | Topic | Decision |
 |---|---|
-| Domain | **`auxtechbd.com`** is the public domain, pointed by custom DNS at the `auxtechsoftware.com` hosting account. It is currently expired and must be renewed before launch (see `00-RESEARCH.md` §2.1) |
-| Hosting | Shared cPanel with SSH/terminal access. Deployment and SSR approach: `02-BACKEND-ARCHITECTURE.md` §11 |
-| Email | auxtechbd@gmail.com |
+| Domain | **`auxtechbd.com`**, pointed by custom DNS at the `auxtechsoftware.com` hosting account. Currently expired; must be renewed before launch (`00-RESEARCH.md` §2.1) |
+| Hosting and delivery | Shared cPanel. Delivered as a **production zip**: upload, extract, open `/install`. No SSH work (`02` §11) |
+| Content | **Fully dynamic.** Stats (founding year, team size, clients), testimonials and pricing are entered by Auxtech in the admin panel, not seeded |
+| CTAs | **WhatsApp is the main CTA. Email is the only other one.** No call or callback CTAs |
+| Email | Everything goes to auxtechbd@gmail.com; no hosting mailbox |
+| Real-time | Pusher Channels, cluster `ap2` |
+| Analytics | Microsoft Clarity project `zehuflmwqj` |
 | Social | Facebook `facebook.com/auxtechs`; Instagram `auxtech.bd` |
 | Office hours | Every day except Friday, 10:00–18:00 |
 | Logo | Transparent logo supplied; SVG, white variant, favicon and app icons generated from it |
-| Portfolio rights | All 32 projects may be shown. Auxtech retains portfolio rights; client sites carry Auxtech branding |
+| Portfolio rights | All 32 projects may be shown |
 
 ### Still open
 
 | # | Question | Default used until answered |
 |---|---|---|
-| Q1 | Founding year, team size, number of clients served? | Hidden until provided |
-| Q2 | Other profiles (LinkedIn, YouTube, Google Business Profile link)? | Only Facebook and Instagram shown |
-| Q3 | Real client testimonials (name, role, quote)? | Testimonial section hidden until at least 3 exist |
-| Q4 | Published pricing for Auxtech Ecommerce and other solutions? | "Get a quote" CTAs |
-| Q5 | Does the cPanel account offer "Setup Node.js App" or a usable `node` binary over SSH? | Assume yes; fallback in document 02 §11 |
-| Q6 | A domain mailbox (e.g. `hello@auxtechbd.com`) for sending lead notifications? Gmail as a sender address hurts deliverability | Gmail used as the reply-to and notification recipient |
+| Q1 | A **Google App Password** for auxtechbd@gmail.com, so the site can send lead emails through Gmail | Leads are stored and shown live in admin; email copy skipped until it is entered in Settings |
+| Q2 | Which PHP version does the hosting account offer? (8.2 or newer is required) | Installer checks and reports |
+| Q3 | Other profiles (LinkedIn, YouTube, Google Business Profile)? | Added in Settings when available |
 
 ## 10. Acceptance
 
-The project is accepted when all **M** requirements pass their test cases in `04-TESTING.md`, the performance and accessibility thresholds in section 6 are met on production, `auxtechbd.com` is renewed and pointing at the hosting account, and open question Q5 (Node on the hosting account) is resolved.
+The project is accepted when all **M** requirements pass their test cases in `04-TESTING.md`, the performance and accessibility thresholds in section 6 are met on production, `auxtechbd.com` is renewed and pointing at the hosting account, and the production zip installs cleanly on the hosting account.

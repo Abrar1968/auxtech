@@ -7,7 +7,7 @@
 
 ## 3.1 Test readiness
 
-- [ ] Staging environment matches production (PHP, database engine and version, SSR running, HTTPS)
+- [ ] Staging environment matches production (shared-hosting-like: Apache, PHP 8.2, MySQL/MariaDB, no shell, HTTPS), installed from the release zip
 - [ ] `TestSeeder` with deterministic data; staging loaded with real content
 - [ ] Traceability sheet: every SRS requirement mapped to at least one `TC-` case
 - [ ] E2E job added to CI (Chromium on every push, full matrix nightly)
@@ -34,7 +34,8 @@
 - [ ] Performance: Lighthouse CI on six key pages; WebPageTest from South Asia on 4G; bundle budget (TC-N01, TC-N02)
 - [ ] Load: k6 browse and lead-burst scenarios (TC-N03)
 - [ ] Security: headers, CSRF, injection, IDOR, ZAP baseline, dependency audits, production config (TC-N04–N09, TC-N12)
-- [ ] Resilience: SSR stopped, queue stopped, cache flushed (TC-N10)
+- [ ] Resilience: Pusher unreachable, mail not configured, cache flushed (TC-N10, TC-N16)
+- [ ] Release zip: clean install, private paths blocked, update over an existing install (TC-N13–N15)
 
 ## 3.5 SEO and AI-visibility verification
 
@@ -54,7 +55,8 @@
 
 ## 3.7 Launch
 
-- [ ] Production deploy, environment hardened (`APP_DEBUG=false`, HTTPS, backups, queue and SSR supervised)
+- [ ] Deliver `auxtech-production.zip`; Auxtech extracts it on the hosting account and completes `/install`
+- [ ] Production checks: `APP_DEBUG=false`, HTTPS, private paths return 403, backup works, Gmail test email received, Pusher live updates working, Clarity recording
 - [ ] Launch-day smoke test (`04-TESTING.md` §10)
 - [ ] Search Console and Bing verified; sitemap submitted
 - [ ] Monitoring: uptime check, error log alerts, failed-job alerts

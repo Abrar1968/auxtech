@@ -9,10 +9,10 @@ export default defineConfig({
     plugins: [
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.ts'],
-            ssr: 'resources/js/app.ts',
             refresh: true,
         }),
-        inertia(),
+        // Production has no Node runtime, so SSR is not built (docs/02 §3).
+        inertia({ ssr: false }),
         vue({
             template: {
                 transformAssetUrls: { base: null, includeAbsolute: false },

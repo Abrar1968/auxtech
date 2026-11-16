@@ -75,13 +75,13 @@ Fluid scale (`clamp`): display 40→76 px, h1 34→56, h2 28→44, h3 22→28, b
 | Component | Notes |
 |---|---|
 | `SiteHeader` | Transparent over hero, becomes glass after 40 px scroll, hides on scroll down and returns on scroll up. Logo, nav with mega menu (Services, Solutions, Work, Pricing, Blog, About), language switch, theme switch, **WhatsApp button** |
-| `MobileNav` | Full-screen sheet with staggered links; WhatsApp and Call pinned at the bottom |
-| `WhatsAppButton` | Variants: primary, compact, floating (FAB with pulse ring and one-time tooltip), sticky mobile bar (WhatsApp + Call + Estimate) |
+| `MobileNav` | Full-screen sheet with staggered links; WhatsApp and Email pinned at the bottom |
+| `WhatsAppButton` | Variants: primary, compact, floating (FAB with pulse ring and one-time tooltip), sticky mobile bar (WhatsApp + Email) |
 | `Button` | Primary (brand), WhatsApp, secondary (glass/outline), ghost, link-with-arrow; magnetic hover on desktop |
 | `SectionHeading` | Eyebrow, title, lead; reveal animation built in |
 | `ProjectCard` | Browser-framed screenshot, client name, industry tag, one-line result, hover tilt + image scroll |
 | `DeviceFrame` | Browser and phone frames in pure CSS |
-| `StatCounter` | Counts up once when visible; renders the final number in SSR |
+| `StatCounter` | Counts up once when visible; the final number is in the HTML fallback |
 | `LogoMarquee` | CSS-only infinite marquee, pauses on hover, grayscale to colour |
 | `ModuleExplorer` | Tabs for Sell / Fulfil / Grow / Control; module list on the left, animated mock screen on the right |
 | `BentoGrid` | Asymmetric service grid |
@@ -110,7 +110,7 @@ Fluid scale (`clamp`): display 40→76 px, h1 34→56, h2 28→44, h3 22→28, b
 | 11 | **Pricing teaser / estimator** | Brand gradient | "Get a price in 60 seconds" → estimator |
 | 12 | **Insights** | Light | 3 latest posts |
 | 13 | **FAQ** | Light | 6 questions, accordion, FAQ schema |
-| 14 | **Closing CTA** | Dark, aurora | Large WhatsApp button, phone, short form |
+| 14 | **Closing CTA** | Dark, aurora | Large WhatsApp button, email link, short form |
 | 15 | **Footer** | Dark | Services, solutions, industries, company, full address and phone, socials, language |
 
 #### 5.2 Work index
@@ -151,7 +151,7 @@ About (story, team, office map, values), Pricing (toggle by solution, comparison
 - Animate only `transform` and `opacity`. No layout-triggering properties.
 - `prefers-reduced-motion`: reveals become instant, pinned sections become normal scroll, marquee and aurora stop, smooth scroll is off.
 - Low-end guard: if `navigator.deviceMemory ≤ 4` or `hardwareConcurrency ≤ 4`, disable blur-heavy layers, tilt and pinning.
-- Server-rendered HTML is visible without JavaScript: initial states are applied on mount, never in SSR markup, so content cannot be stuck invisible.
+- Hidden initial states are applied by JavaScript on mount, never by CSS alone, so content cannot be stuck invisible if a script fails.
 - No animation delays the LCP element. Hero text is visible in the first paint.
 - GSAP and Lenis are dynamically imported after first paint and only on pages that use them.
 
@@ -160,9 +160,9 @@ About (story, team, office map, values), Pricing (toggle by solution, comparison
 1. **Placements:** header button, hero primary CTA, end of every section group, case-study CTA, pricing cards, floating button (desktop), sticky bottom bar (mobile), 404, form success state.
 2. **Context-aware messages**, e.g. on a case study: *"Hi Auxtech, I saw your work for Gearzen and want a similar gadget store."* On a plan: *"I'm interested in the Professional package."* Bangla pages send Bangla text.
 3. **Every click is tracked** with `sendBeacon` to `/api/events` and a `dataLayer` push (`whatsapp_click`, with `placement` and `page_type`) before the tab opens.
-4. **Low-friction fallback:** a two-field callback form (name + phone) for visitors who do not want to chat.
+4. **One secondary route: email.** A `mailto:auxtechbd@gmail.com` link with a pre-filled subject, and the contact form, for visitors who do not use WhatsApp. There are no call or callback CTAs.
 5. **Micro-commitments:** the estimator, "see a live demo" and "view pricing" lead to WhatsApp with a pre-filled summary.
-6. **Trust next to every CTA:** response-time line ("Usually replies within minutes, Sat–Thu 10am–7pm"), address, project count.
+6. **Trust next to every CTA:** response-time line ("Usually replies within minutes, 10am–6pm, closed Friday"), address, project count.
 7. **No dark patterns:** no fake countdowns, no fake "X people viewing", no auto-opening chat windows.
 
 ### 8. Responsive behaviour
@@ -193,6 +193,9 @@ A separate, calmer interface: light by default, dense, no decorative animation.
 - **Leads:** table and kanban views; lead drawer with contact buttons (WhatsApp, call, email), attribution, timeline, notes, status and assignee.
 - **Media:** grid with upload drop zone, alt-text editing, usage count.
 - **Feedback:** toasts for success, inline errors, confirm dialogs for destructive actions.
+- **Live updates (Pusher):** a new lead raises a toast with sound and updates the badge, table and kanban instantly; the dashboard shows a live activity feed of WhatsApp clicks and leads; a small indicator shows the connection state.
+- **System:** update database, clear cache, backup now, retry failed tasks, send test email.
+- **Everything is editable:** every public text, number, image and section has a field in the admin panel (FR-A25); empty optional sections hide themselves on the site.
 
 ---
 
@@ -203,7 +206,8 @@ A separate, calmer interface: light by default, dense, no decorative animation.
 | Concern | Choice |
 |---|---|
 | Framework | Vue 3.5, `<script setup lang="ts">`, strict TypeScript |
-| Routing/data | Inertia v3 (`@inertiajs/vue3` + `@inertiajs/vite`), SSR on public pages |
+| Routing/data | Inertia v3 (`@inertiajs/vue3` + `@inertiajs/vite`). No SSR: the server prints a Blade content fallback that Vue mounts over (`02` §3.1) |
+| Real-time (admin) | `laravel-echo` + `pusher-js`, loaded lazily through `lib/echo.ts` in the admin layout only |
 | Styling | Tailwind CSS v4 (CSS-first `@theme`), no component CSS files unless unavoidable |
 | Motion | `motion-v` (Motion for Vue), GSAP + ScrollTrigger, Lenis |
 | Primitives | Reka UI (dialog, popover, tabs, accordion, select, toast) |
@@ -217,7 +221,7 @@ A separate, calmer interface: light by default, dense, no decorative animation.
 
 ```
 resources/js/
-├── app.ts                    Single entry (browser + SSR)
+├── app.ts                    Browser entry
 ├── pages/
 │   ├── Site/                 Home, Work/Index, Work/Show, Services/*, Solutions/*, Blog/*, ...
 │   ├── Admin/                Dashboard, Projects/{Index,Form}, Leads/*, ...
@@ -238,7 +242,7 @@ resources/js/
 
 ### 13. Rules
 
-1. **SSR-safe code.** No `window`/`document` at module top level or in `setup` outside `onMounted`. Browser-only libraries (GSAP, Lenis) are imported dynamically inside `onMounted`.
+1. **Fast first paint.** The Blade fallback already shows the page's text; Vue must mount without a visible jump. Heavy browser-only libraries (GSAP, Lenis) are imported dynamically inside `onMounted`, never in the entry bundle.
 2. **The server owns `<head>`.** Title, meta, `hreflang` and JSON-LD are printed by Blade from the `seo` prop. Pages do not use `<Head>` for these. `useSeoSync()` in `SiteLayout` updates `document.title` and meta tags on client-side navigation.
 3. **Props are typed** from `types/models.d.ts`, which mirrors backend Resources one-to-one.
 4. **Text comes from props or i18n files**, never hard-coded in components, so both languages work.
@@ -265,7 +269,7 @@ Techniques: route-level splitting, `defineAsyncComponent` for below-the-fold int
 ### 15. Frontend definition of done
 
 - Matches the blueprint at 360, 768, 1280 and 1920 px in both themes and both languages.
-- Renders meaningful HTML with JavaScript disabled (SSR check).
+- With JavaScript disabled, the page's headings, text and links are readable (Blade fallback check).
 - `npm run typecheck`, `npm run lint`, `npm run test` pass; no console errors or hydration warnings.
 - Lighthouse mobile thresholds from SRS §6.1 met for the page.
 - Keyboard-only walkthrough passes; axe reports no serious or critical issues.

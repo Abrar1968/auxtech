@@ -12,7 +12,7 @@
 |---|---|---|
 | Framework | Laravel 12 | `composer.json` pins `config.platform.php` to 8.2.12 so the lock file installs on XAMPP's PHP 8.2 |
 | Database | MySQL 8 **or MariaDB 10.4+** | XAMPP's "MySQL" is MariaDB. See §4.4 for the compatibility rules |
-| Frontend bridge | `inertiajs/inertia-laravel` v3 + SSR | Controllers return `Inertia::render()`; no separate REST API for pages. Page components live in `resources/js/pages`; `ensure_pages_exist` is on, so a wrong component name fails fast |
+| Frontend bridge | `inertiajs/inertia-laravel` v3, **no Node on the server** (§3.1) | Controllers return `Inertia::render()`; no separate REST API for pages. Page components live in `resources/js/pages`; `ensure_pages_exist` is on, so a wrong component name fails fast |
 | Routes in JS | `tightenco/ziggy` | |
 | Auth | `laravel/fortify` (headless) | Login, password reset, TOTP 2FA |
 | Authorisation | `spatie/laravel-permission` | Roles + permissions, enforced through policies |
@@ -20,7 +20,9 @@
 | Translations | `spatie/laravel-translatable` | JSON columns holding `{"en": "...", "bn": "..."}` |
 | Audit | `spatie/laravel-activitylog` | |
 | HTML sanitising | `mews/purifier` | All rich text is purified on write |
-| Queue | `database` driver, processed by a scheduler-driven worker (§11) | Shared hosting has no Redis or Supervisor |
+| Queue | `sync` + after-response execution (`defer()` / `dispatchAfterResponse`) | No queue worker, cron or SSH is required on the host |
+| Real-time | Pusher Channels (`pusher/pusher-php-server`, `laravel-echo`, `pusher-js`), cluster `ap2` | Live admin notifications (§6.1). Works on shared hosting because the server only makes outbound HTTPS calls |
+| Analytics | Microsoft Clarity (project `zehuflmwqj`), GTM, Meta Pixel | Clarity loads on public pages in production only |
 | Cache | `database` / `file` | |
 | Quality | Pest 3, Pint, Larastan | Larastan is still to be installed (Phase 1, step 1.0) |
 
@@ -70,12 +72,22 @@ Rules:
 ```
 Request → SecurityHeaders → HandleRedirects → SetLocale → CaptureAttribution
         → HandleInertiaRequests (shared props) → Site controller
-        → cached query → Resource → Inertia::render() → SSR server → HTML
+        → cached query → Resource → Inertia::render() → Blade root (SEO tags + content fallback) → HTML
 ```
 
 **Shared Inertia props** (every public response): `locale`, `locales`, `alternateUrls`, `settings` (public subset: company, contact, socials, WhatsApp number), `navigation`, `seo` (title, description, canonical, og, robots, JSON-LD graph), `flash`, `consent`.
 
-**Root Blade template** (`resources/views/app.blade.php`) prints `<title>`, meta tags, `hreflang` links and the JSON-LD `<script>` from the `seo` prop **on the server**, independent of Vue. Search engines therefore get correct metadata even if the SSR process is down (§11).
+**Root Blade template** (`resources/views/app.blade.php`) prints `<title>`, meta tags, `hreflang` links and the JSON-LD `<script>` from the `seo` prop **on the server**, independent of Vue.
+
+### 3.1 Rendering without Node: the Blade content fallback
+
+The site is deployed by unzipping a file on shared hosting, so no Node process can run there and Inertia SSR is off (`INERTIA_SSR_ENABLED=false`). To keep the content visible to search engines and AI crawlers that do not run JavaScript:
+
+1. Every public controller passes its page data to Inertia as usual.
+2. The root Blade template renders a **plain semantic HTML version of the same data** inside the app root (`<div id="app">`): headings, paragraphs, lists, links, images with alt text. Each page type has a small Blade partial in `resources/views/fallback/` (home, work index, case study, service, solution, post, page, etc.).
+3. In the browser, Vue mounts and replaces that markup with the designed, animated page.
+
+The fallback contains exactly the content the visitor sees, so it is not cloaking. It is unstyled apart from a minimal inline style that avoids a flash before Vue mounts. Feature tests assert that every public page's fallback contains its `h1`, main text and internal links (FR-S01).
 
 ## 4. Data model
 
@@ -108,9 +120,9 @@ All content tables carry `id`, timestamps, and where stated `status`, `published
 
 | Table | Key columns |
 |---|---|
-| `leads` | `uuid`, `name`, `phone` (E.164), `email`, `company`, `service_id`, `solution_id`, `project_id`, `budget_range`, `message`, `source` (enum: contact_form, callback, demo_request, estimator, whatsapp, newsletter, career), `status` (enum: new, contacted, qualified, proposal, won, lost, spam), `assigned_to`, `locale`, `utm_source`, `utm_medium`, `utm_campaign`, `utm_term`, `utm_content`, `gclid`, `fbclid`, `referrer`, `landing_url`, `page_url`, `ip_hash`, `user_agent`, `meta`(json: estimator answers), `contacted_at`, `closed_at` |
+| `leads` | `uuid`, `name`, `phone` (E.164), `email`, `company`, `service_id`, `solution_id`, `project_id`, `budget_range`, `message`, `source` (enum: contact_form, email, demo_request, estimator, whatsapp, newsletter, career), `status` (enum: new, contacted, qualified, proposal, won, lost, spam), `assigned_to`, `locale`, `utm_source`, `utm_medium`, `utm_campaign`, `utm_term`, `utm_content`, `gclid`, `fbclid`, `referrer`, `landing_url`, `page_url`, `ip_hash`, `user_agent`, `meta`(json: estimator answers), `contacted_at`, `closed_at` |
 | `lead_notes` | `lead_id`, `user_id`, `body` |
-| `conversion_events` | `type` (enum: whatsapp_click, call_click, demo_click, form_start, form_submit, estimator_step), `placement`, `page_url`, `visitor_id`, `lead_id`, `locale`, `device`, UTM columns, `created_at` |
+| `conversion_events` | `type` (enum: whatsapp_click, email_click, demo_click, form_start, form_submit, estimator_step), `placement`, `page_url`, `visitor_id`, `lead_id`, `locale`, `device`, UTM columns, `created_at` |
 | `newsletter_subscribers` | `email`, `token`, `confirmed_at`, `unsubscribed_at` |
 
 Indexes: `leads(status, created_at)`, `leads(phone)`, `leads(assigned_to)`, `conversion_events(type, created_at)`, `conversion_events(visitor_id)`.
@@ -174,15 +186,16 @@ CaptureLead ── DB transaction: create Lead (+ attribution from CaptureAttrib
       │          de-duplicate: same phone within 24h → append to existing lead as a note
       ▼
 LeadCaptured event (after commit)
-      ├─ SendLeadNotification (queue)   mail + database notification to sales role
-      ├─ SendMetaCapiEvent (queue)      server-side Lead event, event_id shared with the Pixel
+      ├─ NotifySales (after response)   email to auxtechbd@gmail.com + database notification
+      ├─ BroadcastLead (after response) Pusher `lead.captured` on the private admin channel
+      ├─ SendMetaCapiEvent (after resp.) server-side Lead event, event_id shared with the Pixel
       └─ optional Telegram / WhatsApp Cloud API ping
       │
       ▼
 Response: lead uuid + ready-made WhatsApp URL ("continue on WhatsApp")
 ```
 
-- The lead row is committed **before** any external call. External failures retry on the queue and never lose a lead (NFR-11).
+- The lead row is committed **before** any external call. External calls run after the response; failures are recorded for retry and never lose a lead (NFR-11).
 - `CaptureAttribution` middleware stores first-touch UTM, click IDs, referrer and landing URL in an encrypted first-party cookie for 90 days, only overwriting when a new campaign parameter arrives.
 - `WhatsApp\LinkBuilder` builds `https://wa.me/8801805019415?text=...` from a template key (`default`, `service`, `project`, `plan`, `estimator`), locale and context. Templates live in settings.
 - IP addresses are stored as `hash_hmac('sha256', ip, app_key)`; raw IPs are never persisted.
@@ -223,8 +236,8 @@ Response: lead uuid + ready-made WhatsApp URL ("continue on WhatsApp")
 |---|---|
 | Settings, navigation, redirects | `Cache::rememberForever`, flushed by observers |
 | Public page data | Cache keys per entity type and locale (e.g. `projects:en`), tracked in a small key registry because the database/file cache has no tags; invalidated by model observers |
-| Full responses | Full-page HTML cache for anonymous GET requests, rebuilt on content change (§11) |
-| Images | Conversions generated on a queue; `srcset` widths 480/768/1280/1920; long-lived immutable cache headers |
+| Full responses | Optional full-page HTML cache for anonymous GET requests, cleared on content change |
+| Images | Conversions generated at upload time; `srcset` widths 480/768/1280/1920; long-lived immutable cache headers |
 | Database | Eager loading enforced; indexes on every `slug`, `status + published_at`, `sort_order`, foreign key |
 | HTTP | Brotli/gzip, `Cache-Control` for assets, `103 Early Hints`/preload for the hero image and fonts where the server supports it |
 
@@ -241,52 +254,68 @@ Response: lead uuid + ready-made WhatsApp URL ("continue on WhatsApp")
 
 ## 11. Environments and deployment
 
-**Local (XAMPP):** steps are in the root `README.md`. Uses MySQL on `127.0.0.1:3306`, user `root`, no password, database `auxtech`. `composer run dev` starts the PHP server, queue worker, log tail and Vite together.
+**Local (XAMPP):** steps are in the root `README.md`. Uses MySQL on `127.0.0.1:3306`, user `root`, no password, database `auxtech`. `composer run dev` starts the PHP server, log tail and Vite together.
 
-### Production: shared cPanel with SSH (confirmed hosting)
+### Production: one zip, unzip, done
 
-**Domain:** `auxtechbd.com` is added to the `auxtechsoftware.com` hosting account (addon domain or custom DNS) and is the canonical host. `auxtechsoftware.com` and `www` variants 301 to `https://auxtechbd.com`. Demo subdomains are untouched.
+Hosting is shared cPanel. **No SSH, Composer, Node or cron is required on the server.** The deliverable is a single file, `auxtech-production.zip`, built by `scripts/build-release.sh` on the developer machine.
 
-**Layout:** the application lives outside the web root (e.g. `~/apps/auxtech`). The domain's document root points at `~/apps/auxtech/public` (set in cPanel → Domains). If the document root cannot be changed, `public/` is symlinked into it. Nothing but `public/` is ever web-accessible.
+**What the zip contains:** application code, `vendor/` (production dependencies only, optimised autoloader), compiled frontend assets (`public/build`), the root `.htaccess`, and `.env.production` (a ready-made environment template that includes the Pusher keys and Clarity ID). It contains no `node_modules`, tests, docs or development files.
 
-**Requirements to verify on the account (Phase 1, step 1.0):** PHP 8.2+ selectable for the domain with `gd`, `intl`, `zip`, `pdo_mysql`, `fileinfo`, `exif`; Composer over SSH; MySQL/MariaDB version; cron jobs; Node.js 20+ (cPanel "Setup Node.js App", or a user-level install with `nvm`).
+**Installation (done once, in the browser):**
 
-**Deploy steps (SSH):**
+1. In cPanel create a MySQL database and user (cPanel → MySQL Databases).
+2. Upload the zip to the domain's folder with File Manager and extract it.
+3. Open `https://auxtechbd.com/install`. The installer:
+   - checks PHP version (8.2+), extensions and folder permissions, and explains anything missing;
+   - asks for the database name, user and password and tests the connection;
+   - asks for the admin name, email and password;
+   - optionally asks for the Gmail app password used to send email (§11.2);
+   - writes `.env` from `.env.production`, generates the app key, runs all migrations and the seeders;
+   - locks itself (writes `storage/installed`) so it can never run again.
+4. The site is live; `/admin` is ready.
 
-```
-git pull
-composer install --no-dev --optimize-autoloader
-php artisan migrate --force
-php artisan storage:link        # once
-php artisan optimize
-php artisan inertia:stop-ssr    # the watchdog cron restarts it with the new bundle
-```
+**Updates:** upload and extract a newer zip over the old files (`.env`, `storage/` and uploads are never in the zip, so nothing is overwritten). On the next admin login a Super Admin sees "Database update available" and runs pending migrations with one click (`/admin/system/update`). Caches are cleared automatically when the release version changes.
 
-Frontend assets (`public/build`, `bootstrap/ssr`) are **built on the developer machine or in CI and uploaded**, so the server never has to run `npm install`. A `scripts/deploy.sh` wraps these steps.
+**Folder layout and security.** The zip can be extracted directly into the domain's document root. The root `.htaccess` (in the repository) forwards every request to `public/` and returns 403 for dotfiles (`.env`), `app/`, `config/`, `storage/`, `vendor/` and other private paths. If the host allows it, pointing the domain's document root at `public/` is even better and needs no other change.
 
-**Background work without Supervisor** (shared hosting has no process manager), using cPanel cron:
+**Uploads without a symlink.** `php artisan storage:link` needs a shell, and many shared hosts disable `symlink()`. The public upload disk therefore writes directly to `public/uploads/`; private files (CVs, backups) stay in `storage/app/private`.
 
-| Cron | Command | Purpose |
+**No background processes.**
+
+| Need | How it works without a worker or cron |
+|---|---|
+| Lead emails, Pusher events, Meta CAPI calls | The lead is saved first, the response is sent, then the slow work runs in the same PHP process after the response (`defer()`). Failures are logged in a `failed_tasks` table and can be retried from the admin panel |
+| Image conversions (WebP, responsive sizes) | Run during upload in the admin panel, with a progress indicator |
+| Scheduled publishing | Not a job: public queries filter on `published_at <= now()` |
+| Sitemap, `llms.txt`, feeds | Built on request and cached; cache cleared when content changes |
+| Database backup, log pruning | "Run now" buttons in Admin → System, also triggered opportunistically once a day by the first admin request |
+
+A cron entry (`php artisan schedule:run`, addable from cPanel → Cron Jobs without SSH) is supported as an optional improvement but nothing depends on it.
+
+### 11.1 Real-time with Pusher
+
+Pusher Channels app `2212282`, cluster `ap2`. The key and cluster are public and live in `.env.example`; **the secret is never committed** — it is in the developer's local `.env` and in the release zip's `.env.production`.
+
+| Event (private channel `admin`) | Trigger | Admin panel reaction |
 |---|---|---|
-| every minute | `php artisan schedule:run` | Scheduler |
-| via scheduler, every minute | `queue:work --stop-when-empty --max-time=50` with `withoutOverlapping()` | Processes queued jobs (lead emails, CAPI, image conversions) without a permanent worker |
-| via scheduler, every minute | SSR watchdog: if `GET http://127.0.0.1:13714/health` fails, start `php artisan inertia:start-ssr` in the background | Keeps the SSR process alive and restarts it after deploys or host restarts |
+| `lead.captured` | New lead stored | Toast + sound, notification badge, leads table and kanban update live |
+| `whatsapp.clicked` | WhatsApp CTA click recorded | Dashboard counters and "live activity" feed tick up |
+| `lead.updated` | Status, assignee or note changed | Other admins see the change without reloading |
 
-Queue and cache use the `database` driver (Redis is usually unavailable on shared hosting). Sessions use `database`.
+Channel access is authorised through `/broadcasting/auth` for signed-in admin users with the matching permission. Public pages never load `pusher-js`. If Pusher is unreachable the site and lead capture work normally; only the live updates pause.
 
-**Server-side rendering on shared hosting.** SSR needs a long-running Node process bound to localhost. This works on most cPanel accounts with SSH, but hosts may kill long-running user processes. The design therefore has three safety layers:
+### 11.2 Email
 
-1. The watchdog above restarts SSR within a minute.
-2. If SSR is unreachable, Inertia automatically serves the client-rendered page; visitors notice nothing.
-3. Title, meta tags, `hreflang` and JSON-LD are always printed by the Blade root template, so they never depend on Node.
+All notifications go to **auxtechbd@gmail.com**; no hosting mailbox is used.
 
-If the host forbids persistent Node processes entirely, layer 4 is added in Phase 1: **full-page HTML caching**. A scheduled command renders every public URL once (through SSR run on demand, or from a build step) and stores the HTML; anonymous requests are served that static HTML. Crawlers and AI bots then always receive complete content.
+- **Sending:** Gmail SMTP (`smtp.gmail.com:587`, TLS) signed in as `auxtechbd@gmail.com` with a **Google App Password** (Google Account → Security → 2-Step Verification → App passwords). The password is entered in the installer or in Admin → Settings → Mail and stored encrypted. A "Send test email" button verifies it.
+- **Until an app password is set**, leads are still stored, shown in the admin panel and pushed live through Pusher; only the email copy is skipped, and the dashboard shows a reminder.
+- **Email as a CTA:** `mailto:auxtechbd@gmail.com` links with a pre-filled subject, plus the contact form.
 
-**Other shared-hosting rules:** `APP_DEBUG=false`; `.env` permissions 600; force HTTPS (AutoSSL) and HSTS; `.htaccess` adds compression and long cache headers for `/build`; daily database dump to a non-public folder with 14-day rotation.
+### 11.3 Other production rules
 
-**Mail:** lead notifications are sent through SMTP. A domain mailbox on the hosting account (e.g. `hello@auxtechbd.com`) with SPF and DKIM is preferred as the sender; `auxtechbd@gmail.com` receives the notifications and is the reply-to.
-
-**Scheduled tasks:** sitemap rebuild (daily, plus on change), queue pruning, publish scheduled content (every minute), activity-log pruning (monthly), database backup (daily).
+`APP_DEBUG=false`; HTTPS forced (cPanel AutoSSL) with HSTS; `public/.htaccess` adds compression and long cache headers for `/build`; `auxtechsoftware.com` and `www` variants 301 to `https://auxtechbd.com` (managed in Admin → SEO → Redirects or `.htaccess`).
 
 ## 12. Seed data
 

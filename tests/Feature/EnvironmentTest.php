@@ -40,3 +40,22 @@ it('ships the brand assets', function (string $file) {
 it('keeps the remaining config intact', function () {
     expect(config('auxtech.whatsapp.number'))->toBe('8801805019415');
 });
+
+it('is configured to broadcast through Pusher on the ap2 cluster', function () {
+    expect(config('broadcasting.connections.pusher.driver'))->toBe('pusher')
+        ->and(config('broadcasting.connections.pusher.options.cluster'))->not->toBeNull();
+});
+
+it('loads Microsoft Clarity on public pages in production only', function () {
+    $this->get('/')->assertOk()->assertDontSee('clarity.ms/tag', false);
+
+    app()->detectEnvironment(fn () => 'production');
+
+    $this->get('/')->assertOk()
+        ->assertSee('clarity.ms/tag', false)
+        ->assertSee('zehuflmwqj', false);
+});
+
+it('keeps server-side rendering off because production has no Node runtime', function () {
+    expect(config('inertia.ssr.enabled'))->toBeFalse();
+});

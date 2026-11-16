@@ -6,7 +6,8 @@ Company website and admin panel for **Auxtech** — website development, app dev
 |---|---|
 | Backend | Laravel 12, PHP 8.2+ |
 | Database | MySQL / MariaDB (XAMPP locally) |
-| Frontend | Vue 3 + TypeScript, Inertia v3 with server-side rendering, Tailwind CSS v4 |
+| Frontend | Vue 3 + TypeScript, Inertia v3, Tailwind CSS v4 |
+| Real-time / analytics | Pusher Channels, Microsoft Clarity |
 | Motion | Motion for Vue (`motion-v`), GSAP, Lenis |
 | Tests | Pest, Vitest, Playwright |
 
@@ -42,13 +43,18 @@ Documentation is in [`docs/`](docs/README.md). The project is at the end of **Ph
 
 If your MySQL has a password or a different port, edit the `DB_*` lines in `.env` and run `php artisan migrate`.
 
+**Pusher secret:** `.env.example` has the Pusher app ID, key and cluster but not the secret (secrets are never committed). After setup, open `.env` and fill in `PUSHER_APP_SECRET`.
+
+## Production
+
+The site is delivered as one file, `auxtech-production.zip`: upload it to the hosting account, extract it, and open `/install` in the browser. No SSH, Composer, Node or cron is needed on the server. Details: [`docs/02-BACKEND-ARCHITECTURE.md`](docs/02-BACKEND-ARCHITECTURE.md) §11. The installer and the zip build script are built in Phase 1.
+
 ## Commands
 
 | Task | Command |
 |---|---|
 | Dev server + queue + logs + Vite | `composer run dev` |
-| Production build (client + SSR) | `npm run build` |
-| Start the SSR server | `php artisan inertia:start-ssr` |
+| Production build | `npm run build` |
 | Backend tests | `composer test` |
 | PHP code style check / fix | `composer lint` / `composer format` |
 | Type check, lint, unit tests (JS) | `npm run typecheck`, `npm run lint`, `npm test` |

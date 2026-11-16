@@ -21,7 +21,7 @@
 
 - [ ] `SiteLayout`: header (glass on scroll, mega menu), mobile navigation sheet, footer
 - [ ] Language switch, theme switch
-- [ ] WhatsApp: header button, floating button, sticky mobile bar; `useWhatsApp` + `useTracking`
+- [ ] WhatsApp (primary) and email (secondary) CTAs: header button, floating button, sticky mobile bar; `useWhatsApp` + `useTracking`
 - [ ] Consent banner with Google Consent Mode v2; GTM loader
 - [ ] Lenis smooth scroll and page transitions
 - [ ] Error pages
@@ -36,7 +36,7 @@
 - [ ] Beyond e-commerce, process timeline, testimonials, why Auxtech
 - [ ] Estimator teaser, insights, FAQ, closing CTA
 
-**Done when:** Home meets the Lighthouse thresholds on mobile and works with reduced motion and without JavaScript.
+**Done when:** Home meets the Lighthouse thresholds on mobile, works with reduced motion, and its content is readable without JavaScript.
 
 ## 2.4 Inner pages
 
@@ -51,6 +51,8 @@
 ## 2.5 Admin panel
 
 - [ ] `AdminLayout`: sidebar, top bar, command palette, toasts
+- [ ] Real-time: Echo connection in the admin layout, new-lead toast and sound, live badge, live leads table/kanban, dashboard activity feed, connection indicator
+- [ ] Installer screens and System screens (update, cache, backup, failed tasks, test email)
 - [ ] Auth screens (login, 2FA, reset)
 - [ ] Shared admin components: DataTable, FormSection, LocaleTabs, SeoPanel, MediaPicker, RichEditor, SortableList, StatusBadge, ConfirmDialog
 - [ ] Dashboard with KPI cards and charts

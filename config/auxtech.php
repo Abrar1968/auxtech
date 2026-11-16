@@ -66,10 +66,12 @@ return [
     ],
 
     'leads' => [
-        'notify_email' => env('LEADS_NOTIFY_EMAIL'),
+        // Every notification goes to this inbox.
+        'notify_email' => env('LEADS_NOTIFY_EMAIL', 'auxtechbd@gmail.com'),
     ],
 
     'tracking' => [
+        'clarity_id' => env('CLARITY_PROJECT_ID', 'zehuflmwqj'),
         'gtm_id' => env('GTM_ID'),
         'meta_pixel_id' => env('META_PIXEL_ID'),
         'meta_capi_token' => env('META_CAPI_TOKEN'),

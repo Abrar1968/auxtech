@@ -10,7 +10,6 @@ Work top to bottom. Each step ends with passing tests.
 
 - [ ] Install Larastan (`composer require --dev larastan/larastan`), add `phpstan.neon` at level 6
 - [ ] Add MariaDB 10.4 job to CI (already defined in `ci.yml`), confirm green
-- [ ] Verify the cPanel account: PHP 8.2+ and extensions, Composer, MySQL/MariaDB version, cron, Node.js 20+ (`02` §11); record the results in `README.md`
 - [ ] `AppServiceProvider`: `Model::shouldBeStrict()` outside production, immutable dates, HTTPS forcing in production
 
 ## 1.1 Foundations
@@ -22,6 +21,9 @@ Work top to bottom. Each step ends with passing tests.
 - [ ] `SecurityHeaders` middleware (CSP with nonce, HSTS, etc.)
 - [ ] Shared Inertia props: locale, settings, navigation, seo, flash
 - [ ] Root Blade template prints all SEO tags and JSON-LD from the `seo` prop
+- [ ] Blade content fallback: one partial per public page type, rendered inside the app root (`02` §3.1)
+- [ ] Public upload disk at `public/uploads` (no symlink)
+- [ ] After-response task runner with a `failed_tasks` table and retry
 
 **Done when:** locale switching, shared props and headers are covered by feature tests.
 
@@ -74,7 +76,8 @@ Migrations, models, factories, resources, policies, observers and admin controll
 - [ ] `CaptureAttribution` middleware (first-touch cookie)
 - [ ] `StoreLeadRequest`: honeypot, time trap, throttle, optional Turnstile, BD phone normaliser
 - [ ] `CaptureLead` action with 24-hour de-duplication
-- [ ] `LeadCaptured` event → mail + database notification, Meta CAPI job, optional Telegram
+- [ ] `LeadCaptured` event → email to auxtechbd@gmail.com + database notification, Pusher broadcast, Meta CAPI (all after the response)
+- [ ] Broadcast events `lead.captured`, `whatsapp.clicked`, `lead.updated` on the private `admin` channel with permission-based authorisation
 - [ ] `WhatsApp\LinkBuilder` with templates per context and locale
 - [ ] `/api/events` beacon endpoint and `/go/whatsapp` redirect
 - [ ] Admin: leads list, filters, kanban data, detail, notes, status, assignment, CSV export, spam
@@ -99,9 +102,11 @@ Migrations, models, factories, resources, policies, observers and admin controll
 
 - [ ] Settings admin: company, contact, socials, WhatsApp templates, tracking IDs, homepage sections and stats, mail
 - [ ] Activity log on all admin mutations
-- [ ] Scheduler entries: queue worker (`--stop-when-empty`), SSR watchdog, backups
-- [ ] Full-page HTML cache for anonymous requests with invalidation on content change
-- [ ] `scripts/deploy.sh` for the cPanel host
+- [ ] Mail settings: Gmail SMTP with app password (encrypted), "send test email"
+- [ ] System tools: database update, cache clear, backup now, failed-task retry
+- [ ] **Web installer** at `/install` (requirements, database, admin account, migrate + seed, self-lock)
+- [ ] **`scripts/build-release.sh`** producing `auxtech-production.zip` (production vendor, built assets, `.env.production`, no dev files)
+- [ ] Rehearse: extract the zip on a clean Apache + PHP 8.2 + MySQL server with no shell and install through the browser
 - [ ] Deployment notes in `README.md` verified on a clean machine
 
 ## 1.8 Seed data
@@ -111,6 +116,7 @@ Migrations, models, factories, resources, policies, observers and admin controll
 - [ ] Industries, technologies
 - [ ] **32 clients and projects** with screenshots from `resources/seed/portfolio/` (demo projects typed `demo`; case-study text left as draft)
 - [ ] Starter FAQs and legal pages
+- [ ] No seeded stats, testimonials or prices: those sections stay hidden until Auxtech enters them in the admin panel
 - [ ] Re-capture screenshots with popups dismissed, plus mobile versions (`scripts/capture-sites.cjs`)
 
 **Done when:** `php artisan migrate:fresh --seed` yields a browsable site on XAMPP MySQL.
@@ -120,4 +126,5 @@ Migrations, models, factories, resources, policies, observers and admin controll
 1. `pint --test`, `phpstan`, and `pest` pass on SQLite and MariaDB 10.4.
 2. ≥ 80% coverage on Actions, Services and Http.
 3. TypeScript types for all Resources exist in `resources/js/types/models.d.ts`.
-4. Open questions Q1–Q5 from the SRS are answered or have agreed placeholders.
+4. The release zip installs through the browser on a clean server (TC-N13).
+5. Every public text and number is backed by an admin-editable field (FR-A25).

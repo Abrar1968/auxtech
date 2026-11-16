@@ -15,6 +15,10 @@ return [
     'company' => [
         'name' => 'Auxtech',
         'tagline' => 'Website development, app development and digital marketing',
+        'slogan' => "Don't go for a company that makes simple software, go for a company that can make the software simple.",
+        'domain' => 'auxtechbd.com',
+        'url' => 'https://auxtechbd.com',
+        'email' => 'auxtechbd@gmail.com',
         'address' => [
             'street' => '754/1, 5th Floor, West Shewrapara, Begum Rokeya Avenue',
             'locality' => 'Dhaka',
@@ -28,6 +32,20 @@ return [
         ],
     ],
 
+    // Open every day except Friday, 10:00-18:00 Bangladesh time (Asia/Dhaka).
+    'hours' => [
+        'timezone' => 'Asia/Dhaka',
+        'opens' => '10:00',
+        'closes' => '18:00',
+        'open_days' => ['saturday', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday'],
+        'closed_days' => ['friday'],
+    ],
+
+    'social' => [
+        'facebook' => 'https://www.facebook.com/auxtechs/',
+        'instagram' => 'https://www.instagram.com/auxtech.bd/',
+    ],
+
     'whatsapp' => [
         // International format without "+", as required by wa.me links.
         'number' => env('WHATSAPP_NUMBER', '8801805019415'),
@@ -36,7 +54,10 @@ return [
 
     'brand' => [
         'color' => '#0145FF',
-        'logo' => '/brand/auxtech-logo.webp',
+        'logo' => '/brand/auxtech-logo.svg',
+        'logo_white' => '/brand/auxtech-logo-white.svg',
+        'icon' => '/brand/auxtech-icon.svg',
+        'icon_white' => '/brand/auxtech-icon-white.svg',
     ],
 
     'locales' => [

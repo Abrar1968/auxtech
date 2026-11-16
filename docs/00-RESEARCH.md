@@ -14,8 +14,14 @@
 | Address | 754/1, 5th Floor, West Shewrapara, Begum Rokeya Avenue, Sharini 1216, Dhaka, Bangladesh |
 | WhatsApp / hotline | 01805019415 → international `+8801805019415` → `https://wa.me/8801805019415` |
 | Primary conversion | WhatsApp chat |
+| Website | **https://auxtechbd.com** (primary domain; see §2.1). Hosting account: `auxtechsoftware.com`, which also serves demos on subdomains |
+| Email | auxtechbd@gmail.com |
+| Office hours | Every day except Friday, 10:00–18:00 (Asia/Dhaka) |
+| Social | Facebook https://www.facebook.com/auxtechs/ (about 5.2K followers, category "Software Company"); Instagram `auxtech.bd` (as shown on the Facebook page) |
+| Slogan (Facebook) | "Don't go for a company that makes simple software, go for a company that can make the software simple." |
 | Brand colour | `#0145FF` (sampled from the logo), on white |
-| Logo | `resources/brand/auxtech-logo.webp` (1125×174, transparent). **An SVG master is still needed.** |
+| Logo | `resources/brand/`: `auxtech-logo.svg`, `auxtech-logo-white.svg`, `auxtech-icon.svg`, `auxtech-icon-white.svg`, traced from the supplied 1125×174 transparent WebP. Favicon and app icons are in `public/` |
+| Portfolio rights | Auxtech keeps the right to show every client project; all client sites carry Auxtech branding by agreement |
 
 ## 2. Portfolio audit — 32 live projects
 
@@ -64,13 +70,33 @@ Every URL supplied was loaded in a headless browser on the research date. **All 
 4. **Two own products** (Auxtech Ecommerce and Auxify) let us sell productised offers with clear pricing, which convert better than open-ended quotes.
 5. **The audience is Bangladeshi merchants.** Most client sites are in Bangla or mixed. The Auxtech site must be bilingual (English + বাংলা).
 
+### 2.1 Footer credits and the domain decision
+
+A second pass checked every site's full page text and links for an Auxtech credit.
+
+| Finding | Count |
+|---|---|
+| Sites that name Auxtech in the page ("Developed by / Crafted by / Powered by Auxtech"; includes Auxtech's own reseller demo) | **28 of 32** |
+| Sites whose credit **links to `https://auxtechbd.com/`** | **20** |
+| Credit present but no link to an Auxtech domain found | Kalki, Queens Club BD, CleanBDX, and the staging sites La Vie World, Jamilooms, Seasonal demo |
+| Credit links to a different domain (`auxtechint.com`, which does not resolve) | WTBL |
+| No credit found | E7 Training, Gulshan Baking Shop, SS Typing & Travels (Auxify is Auxtech's own product) |
+
+On the research date `auxtechbd.com` showed a registrar page titled **"Your domain is expired"**, and `auxtechsoftware.com` showed an empty directory listing.
+
+Consequences:
+
+1. **`auxtechbd.com` must be the site's primary domain.** Twenty client sites already link to it. Those links are the most valuable SEO asset Auxtech has, and they are currently pointing at an expired-domain page.
+2. **Renewing `auxtechbd.com` is urgent.** After expiry a domain passes through grace and redemption periods and can then be registered by someone else, who would inherit all twenty backlinks.
+3. `auxtechsoftware.com` should 301-redirect to `auxtechbd.com` (its subdomains keep serving demos).
+4. Small fixes on the client side: make the text-only credits into links to `auxtechbd.com`, correct the WTBL link, add a credit to the three sites without one.
+
 ### Issues found on client sites that affect our portfolio
 
 These weaken the proof when a prospect clicks through. Worth fixing on the client side:
 
-- 12 of 22 stores still have the default meta description "E-commerce store"; several have the title "Home".
+- 13 of the 22 storefronts still have the default meta description "E-commerce store"; several have the title "Home".
 - Several footers carry template placeholder text ("Your premium destination for beauty and wellness") on non-beauty stores (Ventire, Bottola Bazar, Seasonal demo, The Patchee).
-- Only 5 sites credit Auxtech in the footer. A consistent "Developed by Auxtech" link on all client sites is the cheapest backlink source available.
 - Auxify shows the name "My SaaS Platform" in its header and title.
 - Typos: "Bilolpoo" (title of bikolpoo.com), "Gulshan **Banking** Shop", "Casula Shirt's".
 

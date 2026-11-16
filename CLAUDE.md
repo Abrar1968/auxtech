@@ -9,6 +9,7 @@ Laravel 12 (lock pinned to PHP 8.2 via `config.platform`), MySQL/MariaDB 10.4+ (
 ## Conventions
 
 - Phases: 1 backend → 2 frontend → 3 testing. Plans in `docs/phases/`. Do not start a later phase early.
+- Production domain: `auxtechbd.com` on shared cPanel hosting with SSH (no Supervisor/Redis; see `docs/02-BACKEND-ARCHITECTURE.md` §11).
 - Company facts live in `config/auxtech.php` (later the `settings` table). WhatsApp: `https://wa.me/8801805019415`. WhatsApp is the primary CTA everywhere.
 - Inertia pages are in `resources/js/pages` (lowercase, v3 convention). Single entry `resources/js/app.ts` serves browser and SSR through `@inertiajs/vite`; there is no `ssr.ts`.
 - The Blade root template owns `<title>`, meta and JSON-LD (from the `seo` prop). Vue pages must not set them with `<Head>`.

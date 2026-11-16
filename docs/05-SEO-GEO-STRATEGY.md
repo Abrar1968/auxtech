@@ -92,9 +92,10 @@ AI assistants answer "which company should I use?" from three places: what they 
 |---|---|---|
 | **Google Business Profile**: exact name, address, phone, category "Website designer / Software company", photos, services; ask every client for a Google review | Review count is the strongest observed predictor of AI and local-pack visibility | 1 |
 | **Clutch, GoodFirms, DesignRush, TechBehemoths** profiles with verified client reviews | These directories own page one for "top IT firms in Bangladesh" and are heavily cited by AI assistants | 1 |
-| **"Developed by Auxtech" footer link** on all client sites (only 5 of 32 have it today) | Relevant backlinks at no cost | 1 |
+| **Renew `auxtechbd.com` immediately.** 20 client sites already link to it and it is showing an "expired" page | These backlinks are Auxtech's strongest SEO asset; if the domain lapses someone else can take it and them | **0 (now)** |
+| Complete the footer credits: 28 of 32 sites already name Auxtech; make the text-only credits into links to `auxtechbd.com`, fix WTBL's link (points to `auxtechint.com`), add a credit to the 3 sites without one | Relevant backlinks at no cost | 1 |
 | Fix weak SEO on client stores (default "E-commerce store" descriptions, "Home" titles, placeholder footer text) | Client sites are the portfolio's proof and the link sources | 2 |
-| **LinkedIn company page, Facebook page, YouTube** with the same description and NAP | Entity consistency | 2 |
+| **Facebook page (`facebook.com/auxtechs`, ~5.2K followers) and Instagram (`auxtech.bd`)**: set the website to `https://auxtechbd.com`, use the same description, address and phone; add a **LinkedIn company page** and YouTube | Entity consistency; these URLs go into the site's `sameAs` schema | 2 |
 | **BASIS** membership listing; local business directories | Authority and citations | 2 |
 | Guest articles and mentions in Bangladeshi tech and business media; inclusion in other people's "top companies" lists | Third-party mentions drive both rankings and AI recommendations | 3 |
 | Bing Webmaster Tools + IndexNow | ChatGPT's live search leans on Bing's index | 1 |
@@ -121,6 +122,7 @@ AI assistants answer "which company should I use?" from three places: what they 
 
 | Weeks | Work |
 |---|---|
+| 0 | Renew `auxtechbd.com`; point it at the hosting account; 301 `auxtechsoftware.com` to it |
 | 1–2 | Search Console and Bing verification, sitemap submitted, Google Business Profile complete, directory profiles created, footer credit added to client sites |
 | 3–6 | Publish 8 case studies and the cost guide; request reviews from 10 clients; fix client-site meta data |
 | 7–12 | Two posts per month; first Bangla originals; outreach for listings and mentions; first AI-visibility log; adjust titles based on Search Console data |

@@ -72,4 +72,5 @@ tests/              Pest (Unit, Feature) and Playwright (e2e)
 
 - **Larastan (PHPStan) is not installed yet.** It could not be downloaded in the environment where the project was scaffolded. On your machine run `composer require --dev larastan/larastan` (first task of Phase 1).
 - **Playwright** is pinned to 1.63.0. Firefox and WebKit must be installed locally with `npx playwright install`.
-- The logo is a WebP file. An **SVG** version is needed for sharp rendering at every size.
+- The SVG logo was traced from the 1125 px WebP. It is accurate at normal sizes; if the designer's original vector file exists, drop it into `resources/brand/` and `public/brand/` for perfectly sharp corners.
+- **`auxtechbd.com` is expired** (checked 16 Nov 2026) and must be renewed before launch. See `docs/00-RESEARCH.md` §2.1.

@@ -20,8 +20,8 @@
 | Translations | `spatie/laravel-translatable` | JSON columns holding `{"en": "...", "bn": "..."}` |
 | Audit | `spatie/laravel-activitylog` | |
 | HTML sanitising | `mews/purifier` | All rich text is purified on write |
-| Queue | `database` driver locally, Redis in production | |
-| Cache | `database`/`file` locally, Redis in production | |
+| Queue | `database` driver, processed by a scheduler-driven worker (§11) | Shared hosting has no Redis or Supervisor |
+| Cache | `database` / `file` | |
 | Quality | Pest 3, Pint, Larastan | Larastan is still to be installed (Phase 1, step 1.0) |
 
 Sitemap, robots, `llms.txt`, feeds and JSON-LD are built in-house (small, and we need full control over the output).
@@ -222,8 +222,8 @@ Response: lead uuid + ready-made WhatsApp URL ("continue on WhatsApp")
 | Layer | Strategy |
 |---|---|
 | Settings, navigation, redirects | `Cache::rememberForever`, flushed by observers |
-| Public page data | Tagged cache per entity type and locale (e.g. `projects:en`); invalidated by model observers |
-| Full responses | Optional micro-cache (60 s) for anonymous GET requests in production |
+| Public page data | Cache keys per entity type and locale (e.g. `projects:en`), tracked in a small key registry because the database/file cache has no tags; invalidated by model observers |
+| Full responses | Full-page HTML cache for anonymous GET requests, rebuilt on content change (§11) |
 | Images | Conversions generated on a queue; `srcset` widths 480/768/1280/1920; long-lived immutable cache headers |
 | Database | Eager loading enforced; indexes on every `slug`, `status + published_at`, `sort_order`, foreign key |
 | HTTP | Brotli/gzip, `Cache-Control` for assets, `103 Early Hints`/preload for the hero image and fonts where the server supports it |
@@ -243,20 +243,50 @@ Response: lead uuid + ready-made WhatsApp URL ("continue on WhatsApp")
 
 **Local (XAMPP):** steps are in the root `README.md`. Uses MySQL on `127.0.0.1:3306`, user `root`, no password, database `auxtech`. `composer run dev` starts the PHP server, queue worker, log tail and Vite together.
 
-**Production (recommended): VPS** with Nginx, PHP-FPM 8.2+, MySQL 8 or MariaDB, Redis, Node 20+ and Supervisor running:
+### Production: shared cPanel with SSH (confirmed hosting)
+
+**Domain:** `auxtechbd.com` is added to the `auxtechsoftware.com` hosting account (addon domain or custom DNS) and is the canonical host. `auxtechsoftware.com` and `www` variants 301 to `https://auxtechbd.com`. Demo subdomains are untouched.
+
+**Layout:** the application lives outside the web root (e.g. `~/apps/auxtech`). The domain's document root points at `~/apps/auxtech/public` (set in cPanel → Domains). If the document root cannot be changed, `public/` is symlinked into it. Nothing but `public/` is ever web-accessible.
+
+**Requirements to verify on the account (Phase 1, step 1.0):** PHP 8.2+ selectable for the domain with `gd`, `intl`, `zip`, `pdo_mysql`, `fileinfo`, `exif`; Composer over SSH; MySQL/MariaDB version; cron jobs; Node.js 20+ (cPanel "Setup Node.js App", or a user-level install with `nvm`).
+
+**Deploy steps (SSH):**
 
 ```
-php artisan queue:work --tries=3
-php artisan inertia:start-ssr
+git pull
+composer install --no-dev --optimize-autoloader
+php artisan migrate --force
+php artisan storage:link        # once
+php artisan optimize
+php artisan inertia:stop-ssr    # the watchdog cron restarts it with the new bundle
 ```
 
-plus the scheduler cron (`* * * * * php artisan schedule:run`).
+Frontend assets (`public/build`, `bootstrap/ssr`) are **built on the developer machine or in CI and uploaded**, so the server never has to run `npm install`. A `scripts/deploy.sh` wraps these steps.
 
-**Fallback: shared cPanel hosting without Node.** The site still works: Inertia falls back to client-side rendering automatically, and titles, meta tags, `hreflang` and JSON-LD are still printed server-side by the Blade root template. Body content is then rendered by JavaScript, which Google handles but most AI crawlers do not. SSR on a VPS is therefore strongly recommended for goals G2 and G3.
+**Background work without Supervisor** (shared hosting has no process manager), using cPanel cron:
+
+| Cron | Command | Purpose |
+|---|---|---|
+| every minute | `php artisan schedule:run` | Scheduler |
+| via scheduler, every minute | `queue:work --stop-when-empty --max-time=50` with `withoutOverlapping()` | Processes queued jobs (lead emails, CAPI, image conversions) without a permanent worker |
+| via scheduler, every minute | SSR watchdog: if `GET http://127.0.0.1:13714/health` fails, start `php artisan inertia:start-ssr` in the background | Keeps the SSR process alive and restarts it after deploys or host restarts |
+
+Queue and cache use the `database` driver (Redis is usually unavailable on shared hosting). Sessions use `database`.
+
+**Server-side rendering on shared hosting.** SSR needs a long-running Node process bound to localhost. This works on most cPanel accounts with SSH, but hosts may kill long-running user processes. The design therefore has three safety layers:
+
+1. The watchdog above restarts SSR within a minute.
+2. If SSR is unreachable, Inertia automatically serves the client-rendered page; visitors notice nothing.
+3. Title, meta tags, `hreflang` and JSON-LD are always printed by the Blade root template, so they never depend on Node.
+
+If the host forbids persistent Node processes entirely, layer 4 is added in Phase 1: **full-page HTML caching**. A scheduled command renders every public URL once (through SSR run on demand, or from a build step) and stores the HTML; anonymous requests are served that static HTML. Crawlers and AI bots then always receive complete content.
+
+**Other shared-hosting rules:** `APP_DEBUG=false`; `.env` permissions 600; force HTTPS (AutoSSL) and HSTS; `.htaccess` adds compression and long cache headers for `/build`; daily database dump to a non-public folder with 14-day rotation.
+
+**Mail:** lead notifications are sent through SMTP. A domain mailbox on the hosting account (e.g. `hello@auxtechbd.com`) with SPF and DKIM is preferred as the sender; `auxtechbd@gmail.com` receives the notifications and is the reply-to.
 
 **Scheduled tasks:** sitemap rebuild (daily, plus on change), queue pruning, publish scheduled content (every minute), activity-log pruning (monthly), database backup (daily).
-
-**Deploy script:** `composer install --no-dev -o` → `npm ci && npm run build` → `php artisan migrate --force` → `php artisan optimize` → restart queue and SSR.
 
 ## 12. Seed data
 

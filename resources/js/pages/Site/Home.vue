@@ -7,7 +7,14 @@
 import { motion } from 'motion-v';
 
 defineProps<{
-    company: { name: string; tagline: string; address: { full: string }; phone: { local: string } };
+    company: {
+        name: string;
+        tagline: string;
+        domain: string;
+        email: string;
+        address: { full: string };
+        phone: { local: string };
+    };
     whatsappUrl: string;
     stack: { laravel: string; php: string; database: string };
 }>();
@@ -26,9 +33,7 @@ defineProps<{
             :transition="{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }"
             class="relative w-full max-w-xl rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl sm:p-10"
         >
-            <div class="inline-flex rounded-xl bg-white px-4 py-3">
-                <img src="/brand/auxtech-logo.webp" :alt="company.name" width="1125" height="174" class="h-7 w-auto" />
-            </div>
+            <img src="/brand/auxtech-logo-white.svg" :alt="company.name" width="1125" height="174" class="h-8 w-auto" />
 
             <h1 class="mt-8 font-display text-3xl font-semibold tracking-tight sm:text-4xl">Environment ready</h1>
             <p class="mt-3 text-white/70">{{ company.tagline }}.</p>
@@ -49,6 +54,7 @@ defineProps<{
             </dl>
 
             <p class="mt-8 text-sm text-white/60">{{ company.address.full }}</p>
+            <p class="mt-1 text-sm text-white/60">{{ company.email }} · {{ company.domain }}</p>
 
             <a
                 :href="whatsappUrl"

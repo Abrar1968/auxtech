@@ -10,6 +10,7 @@ Work top to bottom. Each step ends with passing tests.
 
 - [ ] Install Larastan (`composer require --dev larastan/larastan`), add `phpstan.neon` at level 6
 - [ ] Add MariaDB 10.4 job to CI (already defined in `ci.yml`), confirm green
+- [ ] Verify the cPanel account: PHP 8.2+ and extensions, Composer, MySQL/MariaDB version, cron, Node.js 20+ (`02` §11); record the results in `README.md`
 - [ ] `AppServiceProvider`: `Model::shouldBeStrict()` outside production, immutable dates, HTTPS forcing in production
 
 ## 1.1 Foundations
@@ -98,7 +99,9 @@ Migrations, models, factories, resources, policies, observers and admin controll
 
 - [ ] Settings admin: company, contact, socials, WhatsApp templates, tracking IDs, homepage sections and stats, mail
 - [ ] Activity log on all admin mutations
-- [ ] Scheduler entries; database backup command
+- [ ] Scheduler entries: queue worker (`--stop-when-empty`), SSR watchdog, backups
+- [ ] Full-page HTML cache for anonymous requests with invalidation on content change
+- [ ] `scripts/deploy.sh` for the cPanel host
 - [ ] Deployment notes in `README.md` verified on a clean machine
 
 ## 1.8 Seed data
@@ -117,4 +120,4 @@ Migrations, models, factories, resources, policies, observers and admin controll
 1. `pint --test`, `phpstan`, and `pest` pass on SQLite and MariaDB 10.4.
 2. ≥ 80% coverage on Actions, Services and Http.
 3. TypeScript types for all Resources exist in `resources/js/types/models.d.ts`.
-4. Open questions Q1–Q3 from the SRS are answered or have agreed placeholders.
+4. Open questions Q1–Q5 from the SRS are answered or have agreed placeholders.

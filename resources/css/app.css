@@ -1,0 +1,91 @@
+@import 'tailwindcss';
+
+@import '@fontsource-variable/sora';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/anek-bangla';
+
+@source '../views';
+@source '../js';
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/*
+ | Design tokens. Full specification: docs/03-FRONTEND-DESIGN.md §3.
+ | The brand scale is built around the logo colour #0145FF (brand-600).
+ */
+@theme {
+    --font-display: 'Sora Variable', 'Anek Bangla Variable', ui-sans-serif, system-ui, sans-serif;
+    --font-sans: 'Inter Variable', 'Anek Bangla Variable', ui-sans-serif, system-ui, sans-serif;
+
+    --color-brand-50: #eef4ff;
+    --color-brand-100: #d9e6ff;
+    --color-brand-200: #bcd2ff;
+    --color-brand-300: #8eb4ff;
+    --color-brand-400: #5988ff;
+    --color-brand-500: #2f61ff;
+    --color-brand-600: #0145ff;
+    --color-brand-700: #0034d6;
+    --color-brand-800: #062ea8;
+    --color-brand-900: #0b2c80;
+    --color-brand-950: #07184d;
+
+    --color-ink-950: #050816;
+    --color-ink-900: #0a0f24;
+    --color-ink-800: #111a36;
+
+    --color-whatsapp: #25d366;
+    --color-whatsapp-dark: #128c7e;
+
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@layer base {
+    :root {
+        --surface: #ffffff;
+        --surface-muted: #f5f7fb;
+        --text: #0a0f24;
+        --text-muted: #55607a;
+        --glass-bg: rgb(255 255 255 / 0.6);
+        --glass-border: rgb(255 255 255 / 0.7);
+        color-scheme: light;
+    }
+
+    [data-theme='dark'] {
+        --surface: #050816;
+        --surface-muted: #0a0f24;
+        --text: #f4f6fb;
+        --text-muted: #9aa6c1;
+        --glass-bg: rgb(17 26 54 / 0.55);
+        --glass-border: rgb(255 255 255 / 0.1);
+        color-scheme: dark;
+    }
+
+    body {
+        background: var(--surface);
+        color: var(--text);
+        font-family: var(--font-sans);
+    }
+
+    :lang(bn) {
+        line-height: 1.7;
+    }
+}
+
+@utility glass {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

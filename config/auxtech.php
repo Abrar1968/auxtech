@@ -12,6 +12,9 @@
 
 return [
 
+    // True in development and tests; production is marked installed by the browser installer.
+    'installed' => (bool) env('APP_INSTALLED', false),
+
     'company' => [
         'name' => 'Auxtech',
         'tagline' => 'Website development, app development and digital marketing',

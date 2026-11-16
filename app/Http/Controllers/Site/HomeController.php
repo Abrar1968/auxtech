@@ -1,0 +1,63 @@
+<?php
+
+namespace App\Http\Controllers\Site;
+
+use App\Http\Controllers\Controller;
+use App\Http\Resources\ClientResource;
+use App\Http\Resources\FaqResource;
+use App\Http\Resources\PostResource;
+use App\Http\Resources\PricingPlanResource;
+use App\Http\Resources\ProjectResource;
+use App\Http\Resources\ServiceResource;
+use App\Http\Resources\SolutionResource;
+use App\Http\Resources\StatResource;
+use App\Http\Resources\TestimonialResource;
+use App\Models\Client;
+use App\Models\Faq;
+use App\Models\Post;
+use App\Models\PricingPlan;
+use App\Models\Project;
+use App\Models\Service;
+use App\Models\Solution;
+use App\Models\Stat;
+use App\Models\Testimonial;
+use App\Services\WhatsApp\LinkBuilder;
+use Inertia\Inertia;
+use Inertia\Response;
+
+class HomeController extends Controller
+{
+    public function __invoke(LinkBuilder $whatsapp): Response
+    {
+        $flagship = Solution::query()->published()->where('is_flagship', true)
+            ->with('featureGroups.features')->withCount('projects')->first();
+
+        seo()->title(setting_t('seo.default_title'))->description(setting_t('seo.default_description'))
+            ->schema($flagship ? seo()->builder()->softwareApplication(
+                (string) $flagship->name, $flagship->summary, lroute('solutions.show', $flagship->slug),
+                $flagship->featureGroups->flatMap->features->map(fn ($f) => (string) $f->title)->all(),
+            ) : null);
+
+        $faqs = Faq::query()->where('is_active', true)->whereNull('faqable_id')->ordered()->limit(8)->get();
+        seo()->schema(seo()->builder()->faqPage($faqs->map(fn (Faq $f) => ['question' => $f->question, 'answer' => $f->answer])));
+
+        return Inertia::render('Site/Home', [
+            'hero' => ['title' => setting_t('home.hero_title'), 'subtitle' => setting_t('home.hero_subtitle')],
+            'sections' => collect(setting('home.sections', []))->where('enabled', true)->pluck('key')->values()->all(),
+            'clients' => ClientResource::collection(Client::query()->where('show_logo', true)->ordered()->with('media')->get())->resolve(),
+            'stats' => StatResource::collection(Stat::query()->where('is_active', true)->ordered()->get())->resolve(),
+            'services' => ServiceResource::collection(Service::query()->published()->whereNull('parent_id')->ordered()->with('media')->get())->resolve(),
+            'flagship' => $flagship ? (new SolutionResource($flagship))->resolve() : null,
+            'projects' => ProjectResource::collection(Project::query()->published()->where('is_featured', true)->ordered()
+                ->with(['client.media', 'industry', 'solution', 'media'])->limit(8)->get())->resolve(),
+            'projectCount' => Project::query()->published()->count(),
+            'solutions' => SolutionResource::collection(Solution::query()->published()->ordered()->with('media')->withCount('projects')->get())->resolve(),
+            'testimonials' => TestimonialResource::collection(Testimonial::query()->published()->where('is_featured', true)->ordered()
+                ->with(['client', 'project', 'media'])->limit(8)->get())->resolve(),
+            'plans' => PricingPlanResource::collection(PricingPlan::query()->where('is_active', true)->ordered()->limit(4)->get())->resolve(),
+            'posts' => PostResource::collection(Post::query()->published()->latest('published_at')->with(['category', 'media'])->limit(3)->get())->resolve(),
+            'faqs' => FaqResource::collection($faqs)->resolve(),
+            'whatsappUrl' => $whatsapp->url(),
+        ]);
+    }
+}

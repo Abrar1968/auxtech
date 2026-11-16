@@ -73,7 +73,7 @@ return [
     |
     */
 
-    'home' => '/home',
+    'home' => '/admin',
 
     /*
     |--------------------------------------------------------------------------
@@ -131,7 +131,7 @@ return [
     |
     */
 
-    'views' => false, // Phase 1 registers Inertia pages for login, reset and 2FA, then sets this to true.
+    'views' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -171,9 +171,6 @@ return [
             'confirm' => true,
             'confirmPassword' => true,
             // 'window' => 0,
-        ]),
-        Features::passkeys([
-            'confirmPassword' => true,
         ]),
     ],
 

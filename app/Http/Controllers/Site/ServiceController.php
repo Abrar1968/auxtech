@@ -18,7 +18,7 @@ class ServiceController extends Controller
     public function index(): Response
     {
         $services = Service::query()->published()->whereNull('parent_id')->ordered()
-            ->with(['media', 'children' => fn ($q) => $q->published()->ordered()])->get();
+            ->with(['media', 'children' => fn ($q) => $q->published()->ordered()->with('media')])->get();
 
         seo()->page('services')
             ->crumb(__('Home'), lroute('home'))->crumb(__('Services'), lroute('services.index'));
@@ -32,7 +32,7 @@ class ServiceController extends Controller
     public function show(string $slug, LinkBuilder $whatsapp): Response
     {
         $service = Service::query()->published()->where('slug', $slug)
-            ->with(['media', 'parent', 'seo', 'children' => fn ($q) => $q->published()->ordered()])->firstOrFail();
+            ->with(['media', 'parent', 'seo', 'children' => fn ($q) => $q->published()->ordered()->with('media')])->firstOrFail();
 
         $faqs = $service->faqs()->where('is_active', true)->ordered()->get();
 

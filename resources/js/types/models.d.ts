@@ -44,6 +44,8 @@ export interface Site {
     hours: string | null;
     social: Partial<Record<'facebook' | 'instagram' | 'linkedin' | 'youtube' | 'google_business', string>>;
     logo: { color: string; logo: string; logo_white: string; icon: string; icon_white: string };
+    tracking: { gtm: string | null; pixel: string | null };
+    cta: { title: string | null; lead: string | null };
     whatsapp: { number: string; url: string; templates: Record<WhatsAppTemplate, string> };
 }
 
@@ -60,7 +62,10 @@ export interface SharedProps {
     site: Site;
     navigation: { services: NavLink[]; solutions: NavLink[] };
     flash: { success: string | null; error: string | null };
-    auth: { id: number; name: string; email: string; roles: string[]; permissions: string[] } | null;
+    auth: { id: number; name: string; email: string; roles: string[]; permissions: string[]; twoFactor: boolean } | null;
+    adminMenu: { label: string; items: { label: string; href: string; icon: string }[] }[];
+    notifications: { unread: number; items: AdminNotification[] } | null;
+    realtime: { enabled?: boolean };
 }
 
 export interface Industry {
@@ -283,4 +288,28 @@ export interface AdminField {
     group: 'main' | 'side';
     options: { value: string | number; label: string }[] | null;
     children: AdminField[];
+}
+
+export interface AdminNotification {
+    id: string;
+    data: { lead_id?: number; name?: string | null; phone?: string | null; source?: string };
+    read: boolean;
+    created_at: string | null;
+}
+
+/** A section heading edited in Settings > Home page. */
+export interface SectionCopy {
+    title: string | null;
+    lead: string | null;
+}
+
+export interface PageIntro {
+    heading: string | null;
+    lead: string | null;
+}
+
+export interface TextRow {
+    icon?: string | null;
+    title: string;
+    description: string | null;
 }

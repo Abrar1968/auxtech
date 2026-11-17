@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Site;
 
+use App\Enums\ProjectType;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ClientResource;
 use App\Http\Resources\FaqResource;
@@ -51,11 +52,13 @@ class HomeController extends Controller
             'sections' => collect(setting('home.sections', []))->where('enabled', true)->pluck('key')->values()->all(),
             'clients' => ClientResource::collection(Client::query()->where('show_logo', true)->ordered()->with('media')->get())->resolve(),
             'stats' => StatResource::collection(Stat::query()->where('is_active', true)->ordered()->get())->resolve(),
-            'services' => ServiceResource::collection(Service::query()->published()->whereNull('parent_id')->ordered()->with('media')->get())->resolve(),
+            'services' => ServiceResource::collection(Service::query()->published()->whereNull('parent_id')->ordered()
+                ->with(['media', 'children' => fn ($q) => $q->published()->ordered()->with('media')])->get())->resolve(),
             'flagship' => $flagship ? (new SolutionResource($flagship))->resolve() : null,
             'projects' => ProjectResource::collection(Project::query()->published()->where('is_featured', true)->ordered()
                 ->with(['client.media', 'industry', 'solution', 'media'])->limit(8)->get())->resolve(),
             'projectCount' => Project::query()->published()->count(),
+            'liveCount' => Project::query()->published()->where('type', ProjectType::Live->value)->count(),
             'solutions' => SolutionResource::collection(Solution::query()->published()->ordered()->with('media')->withCount('projects')->get())->resolve(),
             'testimonials' => TestimonialResource::collection(Testimonial::query()->published()->where('is_featured', true)->ordered()
                 ->with(['client', 'project', 'media'])->limit(8)->get())->resolve(),

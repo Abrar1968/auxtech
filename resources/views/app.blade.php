@@ -10,6 +10,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="{{ config('auxtech.brand.color') }}">
+    {{-- Before first paint: mark JavaScript as available (hides the crawler fallback) and apply the saved theme. --}}
+    <script>
+        (function (d) {
+            d.classList.add('js');
+            var t = null;
+            try { t = localStorage.getItem('aux-theme'); } catch (e) {}
+            if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            d.dataset.theme = {{ $isAdmin ? "'light'" : 't' }};
+        })(document.documentElement);
+    </script>
 
     {{--
         SEO tags are printed here on the server from the `seo` page prop, so search engines
@@ -69,9 +79,9 @@
     @endif
 
     @routes
-    @vite(['resources/css/app.css', 'resources/js/app.ts'])
+    @vite('resources/js/app.ts')
 </head>
-<body class="antialiased">
+<body class="antialiased" data-page="{{ $page['component'] ?? '' }}">
     <script data-page="app" type="application/json">{!! json_encode($page, JSON_HEX_TAG) !!}</script>
     <div id="app">@if (! $isAdmin && view()->exists($fallback))@include('fallback._layout', ['view' => $fallback, 'props' => $page['props']])@endif</div>
 </body>

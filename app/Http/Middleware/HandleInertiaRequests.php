@@ -71,6 +71,8 @@ class HandleInertiaRequests extends Middleware
             'phoneDisplay' => $settings->get('company.phone_display'),
             'address' => $settings->translated('company.address'),
             'hours' => $settings->translated('hours.text'),
+            // Closing call to action shown at the end of inner pages.
+            'cta' => section_copy('cta'),
             'social' => array_filter($settings->group('social')),
             'logo' => config('auxtech.brand'),
             'tracking' => [

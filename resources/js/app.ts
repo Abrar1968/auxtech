@@ -1,14 +1,24 @@
+import '../css/app.css';
 import { createInertiaApp } from '@inertiajs/vue3';
+import { defineAsyncComponent } from 'vue';
 import { ZiggyVue } from 'ziggy-js';
+import SiteLayout from './layouts/SiteLayout.vue';
 
 /**
- * Browser entry. Production runs without Node, so there is no SSR:
- * crawlers read the Blade content fallback and Vue mounts over it.
+ * Browser entry. Public pages use SiteLayout (bundled here, needed on first
+ * paint); the admin layout loads on demand so it never reaches visitors.
  */
+const AdminLayout = defineAsyncComponent(() => import('./layouts/AdminLayout.vue'));
+
 createInertiaApp({
     pages: './pages',
+    layout: (name: string) => {
+        if (name.startsWith('Site/')) return SiteLayout;
+        if (name.startsWith('Admin/')) return AdminLayout;
+        return undefined;
+    },
     withApp(app) {
         app.use(ZiggyVue);
     },
-    progress: { color: '#0145FF' },
+    progress: { color: '#2f61ff', delay: 150 },
 });

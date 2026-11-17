@@ -16,6 +16,10 @@ export default tseslint.config(
             'vue/max-attributes-per-line': 'off',
             'vue/singleline-html-element-content-newline': 'off',
             'vue/html-self-closing': 'off',
+            // Optional TypeScript props are undefined by design.
+            'vue/require-default-prop': 'off',
+            // v-html only renders rich text that the server purifies on save (mews/purifier).
+            'vue/no-v-html': 'off',
         },
     },
 );

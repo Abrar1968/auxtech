@@ -184,3 +184,15 @@ it('uses the WhatsApp number saved in settings everywhere', function () {
 
     $this->get('/contact')->assertSee('https://wa.me/8801700000000', false)->assertDontSee('wa.me/8801805019415', false);
 });
+
+it('stores the in-app notification for admins and logs no failures', function () {
+    $sales = admin('Sales');
+    $editor = admin('Editor');
+
+    $this->postJson('/api/leads', leadPayload())->assertCreated();
+
+    expect($sales->notifications()->count())->toBe(1)
+        ->and($sales->notifications()->first()->data['phone'])->toBe('+8801805019415')
+        ->and($editor->notifications()->count())->toBe(0)
+        ->and(FailedTask::query()->count())->toBe(0);
+});

@@ -75,6 +75,9 @@ class InstallController extends Controller
             );
         } catch (Throwable $e) {
             report($e);
+            // Leave nothing half-installed, so the form can simply be submitted again.
+            @unlink($this->installer->environmentPath());
+            @unlink(Installation::lockFile());
 
             return $this->page($request, ['Installation stopped: '.$e->getMessage()], 500);
         }

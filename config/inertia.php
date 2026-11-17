@@ -71,7 +71,7 @@ return [
 
     'pages' => [
 
-        'ensure_pages_exist' => true,
+        'ensure_pages_exist' => env('APP_ENV', 'production') !== 'production',
 
         'paths' => [
 

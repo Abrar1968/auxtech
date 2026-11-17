@@ -2,129 +2,76 @@
 
 **Owner:** Senior Backend Developer
 **Specification:** [`../02-BACKEND-ARCHITECTURE.md`](../02-BACKEND-ARCHITECTURE.md), requirements in [`../01-SRS.md`](../01-SRS.md)
-**Outcome:** a complete, tested backend. Every public page returns real data through Inertia, the admin API is complete, and all SEO feeds work. Frontend pages in this phase are plain, unstyled placeholders that only prove the data contract.
+**Status:** complete (17 Nov 2026), with the deferred items listed at the end.
 
-Work top to bottom. Each step ends with passing tests.
+The backend is finished and tested. Every public page returns real data, the admin panel's endpoints are complete, the SEO feeds work, and the production zip installs through the browser. The pages themselves are plain placeholders that print the data they receive; Phase 2 replaces them with the designed interface.
 
-## 1.0 Preparation
+## What was built
 
-- [ ] Install Larastan (`composer require --dev larastan/larastan`), add `phpstan.neon` at level 6
-- [ ] Add MariaDB 10.4 job to CI (already defined in `ci.yml`), confirm green
-- [ ] `AppServiceProvider`: `Model::shouldBeStrict()` outside production, immutable dates, HTTPS forcing in production
+| Area | Delivered |
+|---|---|
+| Data model | 30+ tables: services, solutions and their feature groups, industries, clients, projects, testimonials, blog, pages, landing pages, FAQs, pricing plans, team, stats, leads, conversion events, settings, SEO overrides, redirects, failed tasks |
+| Languages | English at `/`, Bangla at `/bn`; translatable JSON columns with English fallback; UI strings in `lang/bn.json` |
+| Admin | One module framework (`app/Admin`) serving 20 content modules: list, search, filter, create, edit, delete, restore, reorder, image upload, SEO panel |
+| Admin extras | Dashboard metrics, leads (filters, pipeline, notes, assignment, CSV export), settings with encrypted secrets, activity log, SEO report, system tools |
+| Access | Sign-in with throttling, four roles, permission checks on every admin route, private live-updates channel |
+| Public pages | Home, work (with filters), case study, services, solutions, industries, pricing, about, FAQ, contact, estimator, blog, CMS and landing pages, search, branded errors |
+| Crawlable content | Server-printed title, description, canonical, `hreflang`, Open Graph and JSON-LD, plus a plain-HTML content fallback for every public page type |
+| Leads | Store-first capture, Bangladeshi phone normalisation, honeypot and time trap, rate limits, 24-hour de-duplication, first-touch attribution, hashed IP |
+| After-response work | Email to auxtechbd@gmail.com, in-app notifications, Pusher events, Meta Conversions API; failures recorded and retryable |
+| WhatsApp | Context- and language-aware message templates, click recording, `/go/whatsapp` for no-JavaScript visitors |
+| SEO feeds | `sitemap.xml` (both languages, images), `robots.txt` (AI crawlers allowed), `llms.txt`, `llms-full.txt`, `feed.xml`, redirect manager, automatic slug redirects |
+| Shared-hosting delivery | Browser installer at `/install`, `scripts/build-release.sh`, root `.htaccess`, uploads without a symlink, one-click database update |
+| Seed data | Roles, 8 services, 6 solutions, the 23 Auxtech Ecommerce modules in 4 groups, 11 industries, 32 clients and projects with screenshots, 4 factual FAQs, draft legal pages. No stats, testimonials or prices |
 
-## 1.1 Foundations
+## Verification
 
-- [ ] Enums: `Locale`, `PublishStatus`, `ProjectType`, `LeadStatus`, `LeadSource`, `EventType`
-- [ ] Model concerns: `HasSlug`, `Publishable` (scopes `published()`, `scheduled()`), `Sortable`, `HasSeo`
-- [ ] `settings` table + `SettingsRepository` (typed getters, cache, public subset)
-- [ ] `SetLocale` middleware and localised route group (`/` and `/bn`), `alternateUrls` helper
-- [ ] `SecurityHeaders` middleware (CSP with nonce, HSTS, etc.)
-- [ ] Shared Inertia props: locale, settings, navigation, seo, flash
-- [ ] Root Blade template prints all SEO tags and JSON-LD from the `seo` prop
-- [ ] Blade content fallback: one partial per public page type, rendered inside the app root (`02` §3.1)
-- [ ] Public upload disk at `public/uploads` (no symlink)
-- [ ] After-response task runner with a `failed_tasks` table and retry
+| Check | Result |
+|---|---|
+| Automated tests on SQLite | 173 passed |
+| Same suite on MariaDB 10.11 | 172 passed (the full-install test always uses its own SQLite file) |
+| Browser smoke tests (Chromium desktop and Pixel 7) | 6 passed: home, content without JavaScript, admin sign-in |
+| Code style (Pint), type check, ESLint, production build | Passing |
+| Fresh `migrate:fresh --seed` on MariaDB | 32 projects, 23 modules, 32 screenshots |
+| **Production zip rehearsal** on Apache + PHP 8.3 + MariaDB, no shell used | See below |
 
-**Done when:** locale switching, shared props and headers are covered by feature tests.
+**Zip rehearsal (TC-N13 to TC-N15).** The zip was extracted straight into an Apache document root.
 
-## 1.2 Auth and access control
+1. Before installing: every URL redirected to `/install`; `/.env`, `/.env.production`, `/vendor/…`, `/storage/…`, `/config/…`, `/app/…`, `/composer.json`, `/artisan` returned 403.
+2. A wrong database password produced a plain-language message and left nothing half-installed.
+3. Installation through `POST /install` took about 12 seconds; `.env` was written with mode 600.
+4. Afterwards: public pages, feeds and the admin panel returned 200, `/install` returned 404, sign-in worked, and a submitted lead was stored.
+5. A newer zip was extracted over the installed site: `.env`, the lock file and all uploads were untouched; the admin panel reported one pending database change and applied it with one click.
 
-- [ ] Fortify with Inertia pages for login, forgot/reset password, 2FA challenge (minimal markup)
-- [ ] Roles and permissions seeder (Super Admin, Admin, Editor, Sales)
-- [ ] `EnsureTwoFactorEnabled` for Admin roles; login throttling; `last_login_at`
-- [ ] Policies for every model; `can` map shared to admin pages
-- [ ] Users CRUD (Super Admin only)
+The rehearsal found three defects that the unit tests could not, all fixed: the cache pointed at the pre-install database during installation, the `notifications` table was missing, and links were forced to HTTPS on an HTTP address.
 
-**Done when:** the role × module authorisation matrix test passes (TC-A01–A04).
+MariaDB also exposed a case-sensitive search on translated columns, fixed in `App\Support\Search`.
 
-## 1.3 Content domain
+## Deferred
 
-Migrations, models, factories, resources, policies, observers and admin controllers for:
+None of these block Phase 2. Each is recorded so it is not forgotten.
 
-- [ ] Industries, technologies
-- [ ] Services (nested) with features and process steps
-- [ ] Solutions, feature groups, features
-- [ ] Clients
-- [ ] Projects (relations, metrics, media collections, ordering, featured)
-- [ ] Testimonials
-- [ ] Posts, categories, tags
-- [ ] Pages (blocks), FAQs (morph), pricing plans, team members
-- [ ] Locations and SEO landing pages
-- [ ] Careers: openings and applications (private CV storage)
-- [ ] Media library: conversions (WebP, responsive widths), alt text per locale, admin endpoints
-- [ ] Rich-text purification on write
-- [ ] Publish scheduling command (every minute)
+| Item | State | Planned for |
+|---|---|---|
+| Two-factor authentication | Fortify's endpoints are enabled; there is no enforcement rule or screen yet | Phase 2 (screens), then enforce for admin roles |
+| Larastan (static analysis) | Not installed: it cannot be downloaded in the build sandbox | First step on a developer machine |
+| Content Security Policy header | Other security headers are sent; CSP needs the final script list from Phase 2 | End of Phase 2 |
+| Google Tag Manager, Meta Pixel, consent banner | Settings keys exist; the tags are loaded by the frontend | Phase 2 |
+| Meta Conversions API | Implemented and called after each lead when a pixel ID and token are saved; not yet verified against Meta | Phase 3 |
+| Generated Open Graph images | Not built; pages use their cover image or the site icon | Phase 2 if wanted |
+| Standalone media library | Not built; images are managed inside each record | Phase 2 if wanted |
+| Page builder blocks | CMS pages have one rich-text body | Later, if needed |
+| Careers, newsletter, IndexNow | Not built (all "could have") | Later |
+| Cloudflare Turnstile | Not built; honeypot, time trap and rate limits are active | If spam appears |
+| Database backup button | Not built; use cPanel's backup | Later |
+| Full-page HTML cache | Not built; navigation, settings, redirects and feeds are cached | Phase 3 if load testing asks for it |
+| Clean screenshots | Seeded screenshots are research captures; some show promotional popups, and there are no mobile versions | Replace through the admin panel or re-capture |
+| Test coverage percentage | Not measured (no coverage driver in the sandbox) | Phase 3 |
+| Bangla default texts | Written by the developer; need review by a native speaker | Before launch |
 
-**Done when:** CRUD feature tests pass for every module (success, validation, authorisation) and N+1 assertions pass on list endpoints.
+## Notes for Phase 2
 
-## 1.4 Public site controllers
-
-- [ ] Home (sections driven by settings), Work index with filters, Case study
-- [ ] Services index/detail, Solutions index/detail, Ecommerce flagship, Auxify
-- [ ] Industries, Pricing, About, FAQ, Contact, Estimator, Careers
-- [ ] Blog index, category, tag, post
-- [ ] CMS pages and landing pages (catch-all, last in route order)
-- [ ] Search endpoint
-- [ ] Tagged caching per entity and locale with observer invalidation
-- [ ] Custom 404/500/503 responses through Inertia
-
-**Done when:** every route returns 200 in both locales with the documented prop shape (TC-P01), and drafts are never exposed (TC-P05).
-
-## 1.5 Leads and tracking
-
-- [ ] `leads`, `lead_notes`, `conversion_events`, `newsletter_subscribers`
-- [ ] `CaptureAttribution` middleware (first-touch cookie)
-- [ ] `StoreLeadRequest`: honeypot, time trap, throttle, optional Turnstile, BD phone normaliser
-- [ ] `CaptureLead` action with 24-hour de-duplication
-- [ ] `LeadCaptured` event → email to auxtechbd@gmail.com + database notification, Pusher broadcast, Meta CAPI (all after the response)
-- [ ] Broadcast events `lead.captured`, `whatsapp.clicked`, `lead.updated` on the private `admin` channel with permission-based authorisation
-- [ ] `WhatsApp\LinkBuilder` with templates per context and locale
-- [ ] `/api/events` beacon endpoint and `/go/whatsapp` redirect
-- [ ] Admin: leads list, filters, kanban data, detail, notes, status, assignment, CSV export, spam
-- [ ] Dashboard metrics queries
-
-**Done when:** TC-L01–L13 pass, including the "mail server down" case.
-
-## 1.6 SEO and feeds
-
-- [ ] `seo_metas` + admin SEO endpoints; missing-meta report
-- [ ] `SchemaBuilder` for all page types
-- [ ] Sitemap index and child sitemaps with `hreflang` and images; regeneration job
-- [ ] `robots.txt` from settings; `llms.txt` and `llms-full.txt`
-- [ ] Blog RSS feed
-- [ ] Redirects table, `HandleRedirects` middleware, automatic slug redirects
-- [ ] Open Graph image generator
-- [ ] IndexNow job
-
-**Done when:** TC-S01–S09 pass at the HTTP level.
-
-## 1.7 Settings, activity and operations
-
-- [ ] Settings admin: company, contact, socials, WhatsApp templates, tracking IDs, homepage sections and stats, mail
-- [ ] Activity log on all admin mutations
-- [ ] Mail settings: Gmail SMTP with app password (encrypted), "send test email"
-- [ ] System tools: database update, cache clear, backup now, failed-task retry
-- [ ] **Web installer** at `/install` (requirements, database, admin account, migrate + seed, self-lock)
-- [ ] **`scripts/build-release.sh`** producing `auxtech-production.zip` (production vendor, built assets, `.env.production`, no dev files)
-- [ ] Rehearse: extract the zip on a clean Apache + PHP 8.2 + MySQL server with no shell and install through the browser
-- [ ] Deployment notes in `README.md` verified on a clean machine
-
-## 1.8 Seed data
-
-- [ ] Roles, admin user, settings
-- [ ] Services, solutions, **23 Auxtech Ecommerce modules in 4 groups**
-- [ ] Industries, technologies
-- [ ] **32 clients and projects** with screenshots from `resources/seed/portfolio/` (demo projects typed `demo`; case-study text left as draft)
-- [ ] Starter FAQs and legal pages
-- [ ] No seeded stats, testimonials or prices: those sections stay hidden until Auxtech enters them in the admin panel
-- [ ] Re-capture screenshots with popups dismissed, plus mobile versions (`scripts/capture-sites.cjs`)
-
-**Done when:** `php artisan migrate:fresh --seed` yields a browsable site on XAMPP MySQL.
-
-## Phase 1 exit criteria
-
-1. `pint --test`, `phpstan`, and `pest` pass on SQLite and MariaDB 10.4.
-2. ≥ 80% coverage on Actions, Services and Http.
-3. TypeScript types for all Resources exist in `resources/js/types/models.d.ts`.
-4. The release zip installs through the browser on a clean server (TC-N13).
-5. Every public text and number is backed by an admin-editable field (FR-A25).
+- Page components are in `resources/js/pages`; every one currently renders `components/dev/Placeholder.vue`.
+- Data shapes are typed in `resources/js/types/models.d.ts`.
+- The admin form and list screens are schema-driven: the backend sends `fields`, `columns` and `filters`, so one well-built pair of screens (`Admin/Crud/Index`, `Admin/Crud/Form`) serves all 20 modules.
+- Each public page type has a Blade fallback in `resources/views/fallback/site`. When a page's content changes in Phase 2, keep its fallback in step.

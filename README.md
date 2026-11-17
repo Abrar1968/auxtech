@@ -11,7 +11,7 @@ Company website and admin panel for **Auxtech** — website development, app dev
 | Motion | Motion for Vue (`motion-v`), GSAP, Lenis |
 | Tests | Pest, Vitest, Playwright |
 
-Documentation is in [`docs/`](docs/README.md). The project is at the end of **Phase 0** (setup and documentation); Phase 1 is the backend.
+Documentation is in [`docs/`](docs/README.md). **Phase 1 (backend) is complete.** The pages are plain placeholders that show the data they receive; Phase 2 builds the designed interface.
 
 ## Local setup (Windows + XAMPP)
 
@@ -31,23 +31,35 @@ Documentation is in [`docs/`](docs/README.md). The project is at the end of **Ph
    composer run setup
    ```
 
-   This installs PHP and Node packages, creates `.env` from `.env.example` (already set to XAMPP's defaults: host `127.0.0.1`, port `3306`, user `root`, empty password, database `auxtech`), generates the app key, runs migrations, links storage and builds assets.
+   This installs PHP and Node packages, creates `.env` from `.env.example` (already set to XAMPP's defaults: host `127.0.0.1`, port `3306`, user `root`, empty password, database `auxtech`), generates the app key, runs migrations and builds assets.
 
-5. Start everything for development:
+5. Open `.env`, set `ADMIN_PASSWORD` (at least 10 characters) and `PUSHER_APP_SECRET`, then load the starter content (services, the 23 e-commerce modules, 32 projects with screenshots):
+
+   ```bash
+   php artisan migrate:fresh --seed
+   ```
+
+6. Start everything for development:
 
    ```bash
    composer run dev
    ```
 
-   Open `http://localhost:8000`. You should see the "Environment ready" page.
+   Open `http://localhost:8000` for the site and `http://localhost:8000/admin` for the admin panel (sign in with `ADMIN_EMAIL` and `ADMIN_PASSWORD` from `.env`).
 
 If your MySQL has a password or a different port, edit the `DB_*` lines in `.env` and run `php artisan migrate`.
 
-**Pusher secret:** `.env.example` has the Pusher app ID, key and cluster but not the secret (secrets are never committed). After setup, open `.env` and fill in `PUSHER_APP_SECRET`.
-
 ## Production
 
-The site is delivered as one file, `auxtech-production.zip`: upload it to the hosting account, extract it, and open `/install` in the browser. No SSH, Composer, Node or cron is needed on the server. Details: [`docs/02-BACKEND-ARCHITECTURE.md`](docs/02-BACKEND-ARCHITECTURE.md) §11. The installer and the zip build script are built in Phase 1.
+The site is delivered as one file. Build it with:
+
+```bash
+bash scripts/build-release.sh
+```
+
+This writes `release/auxtech-production.zip`. On the hosting account: create a MySQL database and user in cPanel, upload the zip to the domain's folder, extract it, and open `/install` in the browser. No SSH, Composer, Node or cron is needed on the server. To update later, extract a newer zip over the old files and press "Update database" in Admin → System. Details: [`docs/02-BACKEND-ARCHITECTURE.md`](docs/02-BACKEND-ARCHITECTURE.md) §11.
+
+The build script needs a Unix shell (Git Bash or WSL on Windows) with `zip`.
 
 ## Commands
 
@@ -56,6 +68,8 @@ The site is delivered as one file, `auxtech-production.zip`: upload it to the ho
 | Dev server + queue + logs + Vite | `composer run dev` |
 | Production build | `npm run build` |
 | Backend tests | `composer test` |
+| Reload starter content | `php artisan migrate:fresh --seed` |
+| Build the production zip | `bash scripts/build-release.sh` |
 | PHP code style check / fix | `composer lint` / `composer format` |
 | Type check, lint, unit tests (JS) | `npm run typecheck`, `npm run lint`, `npm test` |
 | End-to-end tests | `npm run test:e2e` (first run: `npx playwright install`) |
@@ -63,14 +77,15 @@ The site is delivered as one file, `auxtech-production.zip`: upload it to the ho
 ## Project layout
 
 ```
-app/                Laravel application code
+app/                Laravel application code (admin modules in app/Admin)
 config/auxtech.php  Company facts (name, address, WhatsApp number, locales)
 docs/               SRS, architecture, design, testing, SEO, phase plans
-resources/js/       Vue app (pages/, later components/, layouts/, composables/)
+resources/js/       Vue app (pages/, types/, later components/, layouts/, composables/)
+resources/views/    Root template, installer, and plain-HTML fallbacks for crawlers
 resources/css/      Tailwind v4 entry with design tokens
 resources/brand/    Logo
 resources/seed/     Portfolio screenshots used by the seeder
-scripts/            Tooling (site capture script)
+scripts/            Release build and site capture scripts
 tests/              Pest (Unit, Feature) and Playwright (e2e)
 ```
 

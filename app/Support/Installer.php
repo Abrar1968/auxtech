@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use PDO;
 use RuntimeException;
+use Spatie\Permission\PermissionRegistrar;
 use Throwable;
 
 /**
@@ -110,8 +111,12 @@ class Installer
             'database.default' => $driver,
             "database.connections.{$driver}" => array_merge(config("database.connections.{$driver}", []), $connection),
             'auxtech.install_admin' => $admin,
+            // Anything cached so far points at the pre-install database; use memory for this request.
+            'cache.default' => 'array',
         ]);
         app()->forgetInstance('encrypter');
+        app('cache')->forgetDriver(['database', 'file', 'array']);
+        app()->forgetInstance(PermissionRegistrar::class);
         DB::purge($driver);
         DB::reconnect($driver);
 

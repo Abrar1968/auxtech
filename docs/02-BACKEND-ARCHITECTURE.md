@@ -30,40 +30,63 @@ Sitemap, robots, `llms.txt`, feeds and JSON-LD are built in-house (small, and we
 
 ## 2. Application structure
 
-Domain logic is kept out of controllers. Controllers validate (Form Request), call an Action, and return an Inertia response or redirect.
-
 ```
 app/
-├── Actions/                 One class per use case, single public handle()
-│   ├── Leads/               CaptureLead, UpdateLeadStatus, AssignLead, ExportLeads
-│   ├── Tracking/            RecordConversionEvent, ResolveAttribution
-│   ├── Seo/                 BuildSitemap, BuildLlmsTxt, BuildSchemaGraph, GenerateOgImage
-│   └── Content/             PublishProject, ReorderItems, SyncSlugRedirect
-├── Data/                    Readonly DTOs passed between layers (LeadData, AttributionData, SeoData)
-├── Enums/                   LeadStatus, LeadSource, PublishStatus, ProjectType, EventType, Locale
-├── Events/ Listeners/       LeadCaptured → NotifySales, SendMetaCapiEvent
+├── Actions/                 Use cases with a single handle(): Content/SaveRecord, Leads/CaptureLead, Tracking/RecordConversionEvent
+├── Admin/                   Admin module framework
+│   ├── Field.php            One form field: describes itself to the UI and produces its validation rules
+│   ├── Module.php           Base class: model, fields, list columns, filters, hooks
+│   ├── ModuleRegistry.php   Modules listed in config/admin.php
+│   └── Modules/             One small class per content type (ProjectModule, PostModule, UserModule ...)
+├── Enums/                   PublishStatus, ProjectType, LeadStatus, LeadSource, EventType
+├── Events/                  Pusher broadcasts: LeadCaptured, LeadUpdated, WhatsAppClicked
 ├── Http/
-│   ├── Controllers/Site/    Public pages (invokable or small resource controllers)
-│   ├── Controllers/Admin/   Admin CRUD
-│   ├── Controllers/Feeds/   Sitemap, Robots, Llms, Rss, OgImage
-│   ├── Middleware/          SetLocale, HandleInertiaRequests, CaptureAttribution, SecurityHeaders, HandleRedirects
-│   ├── Requests/            Form Requests (Site/, Admin/)
-│   └── Resources/           API Resources shaping Inertia props (never pass raw models)
-├── Jobs/                    SendLeadNotification, SendMetaCapiEvent, PingIndexNow, RegenerateSitemap
-├── Models/  (+ Concerns/)   HasSeo, HasSlug, Publishable, Sortable, HasTranslatableSlug
-├── Notifications/           NewLeadNotification (mail + database)
-├── Observers/               Cache invalidation, slug-change redirects, sitemap regeneration
-├── Policies/                One per model
-├── Services/                WhatsApp\LinkBuilder, Seo\SchemaBuilder, Settings\SettingsRepository, Meta\ConversionsApi
-└── Support/                 Phone normaliser, helpers
+│   ├── Controllers/Site/    Public pages and the lead/event endpoints
+│   ├── Controllers/Admin/   CrudController (all modules), Dashboard, Lead, Settings, System, Report
+│   ├── Controllers/Feeds/   Sitemap, robots, llms.txt, RSS
+│   ├── Controllers/InstallController.php
+│   ├── Middleware/          EnsureInstalled, SetLocale, HandleInertiaRequests, HandleRedirects, CaptureAttribution, SecurityHeaders, EnsureAdmin
+│   ├── Requests/            StoreLeadRequest, Admin/CrudRequest
+│   └── Resources/           Public data shapes (never pass raw models to pages)
+├── Models/ (+ Concerns/)    HasSlug, Publishable, Sortable, HasSeo, HasImages
+├── Notifications/           NewLeadNotification (mail + in-app)
+├── Services/                Settings\SettingsRepository, Seo\SeoManager, Seo\SchemaBuilder, WhatsApp\LinkBuilder, Meta\ConversionsApi
+├── Support/                 AfterResponse, Installer, Installation, MailConfigurator, Realtime, Search, Phone, SiteCache, helpers
+└── Tasks/                   Work run after the response: SendLeadEmail, NotifyAdminsOfLead, SendMetaLeadEvent, BroadcastConversion
 ```
+
+### 2.1 Admin modules
+
+Twenty content types share one controller, one form request and one save action. A module is a short class:
+
+```php
+class StatModule extends Module
+{
+    public function key(): string { return 'stats'; }
+    public function model(): string { return Stat::class; }
+    public function fields(): array
+    {
+        return [
+            Field::text('value')->max(40)->required(),
+            Field::text('label')->translatable()->required(),
+            Field::toggle('is_active', 'Visible')->default(true),
+        ];
+    }
+}
+```
+
+From that definition the framework derives the validation rules (`CrudRequest`), saves attributes, translations, relations, images and SEO overrides (`SaveRecord`), sanitises rich text, writes the activity log, clears caches, and sends the field schema to the admin UI. Routes are `/admin/{module}`; permissions are `{module}.view|create|update|delete`.
+
+**To add a content type:** create the migration and model, write a module class, add it to `config/admin.php`, and run `php artisan db:seed --class=PermissionSeeder`.
+
+Leads, settings, the dashboard and system tools have their own controllers because they are not plain CRUD.
 
 Rules:
 
-- Strict types and `final` classes by default; constructor injection; no facades inside Actions where an injected contract exists.
-- Models never leave the backend raw. Every Inertia prop goes through a Resource so the frontend contract is explicit and lazy relations cannot leak.
-- Every query that feeds a list page is eager-loaded; `Model::preventLazyLoading()` is on outside production.
-- Enums are backed strings and cast on the model.
+- Controllers stay thin: validate, call an action, return a resource or redirect.
+- Models never reach a page raw. Public data goes through a Resource; admin data through the module's field list.
+- `Model::shouldBeStrict()` is on outside production, so lazy loading and missing attributes fail loudly in tests.
+- Authorisation is permission-based and checked in the controller for every admin action; Super Admin passes through `Gate::before`.
 
 ## 3. Request lifecycle
 
@@ -245,9 +268,9 @@ Response: lead uuid + ready-made WhatsApp URL ("continue on WhatsApp")
 
 - `SecurityHeaders` middleware: CSP with nonces (allow-list for GTM, GA, Meta, Turnstile, Maps), HSTS, `X-Content-Type-Options`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy`, frame-ancestors `'self'`.
 - CSRF on every state-changing route; `SameSite=Lax`, `Secure`, `HttpOnly` cookies.
-- Validation in Form Requests only; mass assignment guarded by explicit `$fillable`.
+- Validation in Form Requests only; only validated fields that a module declares are ever written.
 - Rich text purified on write with an allow-list; output escaped by Vue by default; `v-html` only for purified fields.
-- Uploads: MIME + extension + size checks, images re-encoded, SVG uploads sanitised or rejected, CVs on a private disk served through signed URLs.
+- Uploads: JPG, PNG and WebP only, 6 MB limit, and each file is opened as an image before it is accepted, so a renamed script or an SVG is rejected.
 - Rate limits: leads 5/min and 30/day per IP; events 60/min; search 30/min; login 5/min.
 - Secrets only in `.env`; tracking tokens (CAPI) stored encrypted in settings.
 - `/admin` responses send `X-Robots-Tag: noindex, nofollow`.

@@ -36,7 +36,8 @@ class AppServiceProvider extends ServiceProvider
         Date::use(CarbonImmutable::class);
         JsonResource::withoutWrapping();
 
-        if ($this->app->isProduction()) {
+        // Follow the address the site was installed on; force HTTPS once it uses it.
+        if (str_starts_with((string) config('app.url'), 'https://')) {
             URL::forceScheme('https');
         }
 

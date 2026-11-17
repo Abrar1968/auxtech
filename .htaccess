@@ -6,8 +6,8 @@
 
     # Never serve dotfiles (.env, .git, ...) or application folders.
     RewriteRule (^|/)\.(?!well-known/) - [F,L]
-    RewriteRule ^(app|bootstrap|config|database|docs|resources|routes|scripts|storage|tests|vendor)(/|$) - [F,L]
-    RewriteRule ^(artisan|composer\.(json|lock)|package(-lock)?\.json|phpunit\.xml|.*\.md)$ - [F,L]
+    RewriteRule ^(app|bootstrap|config|database|docs|lang|resources|routes|scripts|storage|tests|vendor)(/|$) - [F,L]
+    RewriteRule ^(artisan|VERSION|composer\.(json|lock)|package(-lock)?\.json|phpunit\.xml|.*\.md)$ - [F,L]
 
     # Everything else is handled by Laravel's public folder.
     RewriteCond %{REQUEST_URI} !^/public/

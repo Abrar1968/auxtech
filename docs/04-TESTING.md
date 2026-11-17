@@ -234,13 +234,16 @@ A red pipeline blocks merging. Tests are never skipped or disabled to get a gree
 6. Submit sitemap in Google Search Console and Bing Webmaster Tools; request indexing for Home.
 7. GTM preview shows `whatsapp_click` and `generate_lead` events; Meta Events Manager shows deduplicated Pixel + CAPI events.
 
-## 11. Current status
+## 11. Current status (end of Phase 1)
 
 | Item | Status |
 |---|---|
-| Pest configured, 14 environment tests (config, brand assets, Pusher config, Clarity, no-SSR) | Passing |
-| Pusher credentials | Verified with a live test event |
-| Playwright configured with 6 device projects, 1 smoke spec | Passing on Chromium desktop and Pixel 7 |
-| Vitest, ESLint, `vue-tsc`, Pint configured | Passing |
-| Larastan | **Not installed yet** (see root `README.md`, "Known gaps"); install as the first step of Phase 1 |
+| Pest: unit, feature (site, SEO, leads, admin) and full-install suites | 173 tests passing on SQLite, 172 on MariaDB 10.11 |
+| Test cases covered by automation so far | TC-L01–L13, TC-P01–P08, P11, P12 (HTTP level), P14; TC-S01–S09 (HTTP level); TC-A01, A03–A11, A13, A14, A16; TC-N05–N07 (in part), N10, N14, N16 |
+| Zip rehearsal on Apache + PHP 8.3 + MariaDB (TC-N13, N15) | Passed manually; steps in `phases/PHASE-1-BACKEND.md` |
+| Playwright: 3 smoke specs on Chromium desktop and Pixel 7 | Passing |
+| Vitest, ESLint, `vue-tsc`, Pint | Passing |
+| Pusher credentials | Verified with a live test event; broadcasts worked in the zip rehearsal |
+| Not yet tested | Two-factor sign-in (TC-A02), scheduled publishing in the admin UI (TC-A12), real Gmail delivery, Meta Conversions API against Meta, everything in §7.5 and most of §7.6 (Phase 3) |
+| Larastan | Not installed yet |
 | Firefox and WebKit browsers | Install locally with `npx playwright install` |

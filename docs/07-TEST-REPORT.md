@@ -18,6 +18,7 @@ The site is ready for user acceptance testing and launch. Every automated check 
 | Load (`ab`, Apache + MariaDB, 20 concurrent users) | 0 failed requests; lead burst limited correctly with no errors after the deadlock fix |
 | Release zip | 73 MB. Clean install through `/install`, update over an existing site, private paths 403: pass |
 | Production-mode browser check | No CSP violations or console errors; Clarity records; Pusher live updates arrive in the admin |
+| GitHub Actions | All four jobs green on PHP 8.2 and MariaDB 10.4: backend (both databases, migration rollback), frontend, browser tests (83 passed) and SEO crawl. The OPcache JIT is disabled for the browser job (see `phases/PHASE-3-TESTING.md`) |
 
 ## Defects found and fixed in Phase 3
 
@@ -84,4 +85,3 @@ Shared hosting will differ; the numbers show the application has no errors under
 | Firefox, Safari, Samsung Internet, real iPhone | Only Chromium is available in the test sandbox | UAT on staff phones and laptops |
 | Screen reader (TalkBack, VoiceOver) | Manual | UAT |
 | Real hosting performance and HTTPS | The domain auxtechbd.com has expired | After renewal |
-| CI browser-test job | Added in Phase 3; see the CI note in `PHASE-3-TESTING.md` | — |

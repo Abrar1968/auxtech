@@ -10,7 +10,7 @@
 - [x] Staging matches production: Apache with `.htaccess`, PHP 8.3 (8.2 in CI), MariaDB, production mode, installed from the release zip through `/install`
 - [x] Deterministic seed data (`DatabaseSeeder`: 32 projects, services, solutions, industries)
 - [x] Traceability: every SRS requirement mapped (`06-TRACEABILITY.md`)
-- [x] Browser tests, SEO crawl and migration rollback added to CI (see the CI note below)
+- [x] Browser tests, SEO crawl and migration rollback added to CI; all jobs green (see the CI note below)
 
 ## 3.2 Backend verification
 
@@ -64,7 +64,11 @@
 
 ## CI note
 
-CI_NOTE_PLACEHOLDER
+GitHub Actions runs four jobs on every push, all green since run 21 (17 Nov 2026): backend tests on SQLite, backend tests plus a migration reset and re-apply on MariaDB 10.4, frontend checks, and a browser job (83 Playwright tests on Chromium desktop and Android, then the SEO crawl).
+
+The browser job first failed on every test. Diagnostics showed PHP 8.2's built-in server answering the first request and dying on the second with no PHP or Laravel error: a native crash. `setup-php` enables the OPcache JIT by default; with `opcache.jit=disable` the job passes. The local sandbox (PHP 8.3, no JIT) never showed it. Shared hosting and XAMPP do not normally enable the JIT, so this is not expected in production; if a host ever turns it on and the site starts dropping requests, disabling the JIT is the first thing to try.
+
+The job starts `php -S` itself (from `public/`, as `artisan serve` does) and prints the server's state and logs at the end, so a future failure shows its cause.
 
 ## Phase 3 exit criteria
 

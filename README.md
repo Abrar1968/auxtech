@@ -72,7 +72,9 @@ The build script needs a Unix shell (Git Bash or WSL on Windows) with `zip`.
 | Build the production zip | `bash scripts/build-release.sh` |
 | PHP code style check / fix | `composer lint` / `composer format` |
 | Type check, lint, unit tests (JS) | `npm run typecheck`, `npm run lint`, `npm test` |
-| End-to-end tests | `php artisan migrate:fresh --seed`, then `npm run test:e2e` (first run: `npx playwright install`) |
+| End-to-end tests | `php artisan migrate:fresh --seed`, then `ADMIN_PASSWORD=… npm run test:e2e` (first run: `npx playwright install`). Includes the responsive sweep and axe scan (`tests/e2e/quality.spec.ts`) |
+| SEO crawl of every sitemap URL | `node scripts/seo-crawl.mjs http://127.0.0.1:8000` |
+| Coverage (needs pcov or Xdebug) | `php -d pcov.enabled=1 vendor/bin/pest --coverage` |
 
 ## Project layout
 
@@ -91,7 +93,8 @@ tests/              Pest (Unit, Feature) and Playwright (e2e)
 
 ## Known gaps
 
-- **Larastan (PHPStan) is not installed yet.** It could not be downloaded in the environment where the project was scaffolded. On your machine run `composer require --dev larastan/larastan` (first task of Phase 1).
+- **Larastan (PHPStan) is not installed.** It could not be downloaded in the build sandbox. On your machine run `composer require --dev larastan/larastan`.
+- **Testing status and open items** are in [`docs/07-TEST-REPORT.md`](docs/07-TEST-REPORT.md); the launch steps for Auxtech staff are in [`docs/08-UAT-AND-LAUNCH.md`](docs/08-UAT-AND-LAUNCH.md).
 - **Playwright** is pinned to 1.63.0. Firefox and WebKit must be installed locally with `npx playwright install`.
 - The SVG logo was traced from the 1125 px WebP. It is accurate at normal sizes; if the designer's original vector file exists, drop it into `resources/brand/` and `public/brand/` for perfectly sharp corners.
 - **`auxtechbd.com` is expired** (checked 16 Nov 2026) and must be renewed before launch. See `docs/00-RESEARCH.md` §2.1.

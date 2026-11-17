@@ -8,7 +8,7 @@ Laravel 12 (lock pinned to PHP 8.2 via `config.platform`), MySQL/MariaDB 10.4+ (
 
 ## Conventions
 
-- Phases: 1 backend (done) → 2 frontend (done) → 3 testing. Plans in `docs/phases/`. Do not start a later phase early.
+- Phases: 1 backend (done) → 2 frontend (done) → 3 testing (done; UAT and launch with Auxtech). Plans in `docs/phases/`; results in `docs/07-TEST-REPORT.md`, traceability in `docs/06-TRACEABILITY.md`.
 - Production: `auxtechbd.com` on shared cPanel. Delivered as a zip + browser installer. **Nothing may require SSH, Composer, Node, cron, a queue worker, Redis or a storage symlink on the server** (`docs/02-BACKEND-ARCHITECTURE.md` §11).
 - No SSR. Crawlable content comes from the Blade content fallback inside the app root (`docs/02` §3.1); every public page type needs its fallback partial.
 - Fully dynamic: no hard-coded public copy, stats, testimonials or prices; everything is admin-editable and optional sections hide when empty.
@@ -28,17 +28,23 @@ Laravel 12 (lock pinned to PHP 8.2 via `config.platform`), MySQL/MariaDB 10.4+ (
 - Keep public bundles small: admin-only code stays under `pages/Admin` or `components/admin`; anything not needed for first paint is `defineAsyncComponent`.
 - Every public page type has a Blade fallback in `resources/views/fallback/site`; keep it in step with the page.
 - No invented stats, testimonials or client quotes. Demo/staging projects are labelled as demos.
+- CSP uses per-request nonces: every inline `<script>` in Blade needs `nonce="{{ Vite::cspNonce() }}"`. Scripts added at runtime are trusted through `'strict-dynamic'`.
+- The app shell (`resources/views/shell/_hero.blade.php`) mirrors the hero markup of `HomeHero.vue` and `PageHero.vue`; change them together.
+- Brand blue as text on page surfaces is `text-link` (theme-aware), not `text-brand-600` (fails contrast in dark theme).
+- Never add files under `public/` whose path matches a route (Apache serves the file instead). Files a past release shipped that must go are listed in `App\Support\ObsoleteFiles`.
 
 ## Checks before committing
 
 ```
 vendor/bin/pint --test && vendor/bin/pest          # SQLite; also run on MariaDB (see Sandbox notes)
 npm run typecheck && npm run lint && npm test && npm run build
+npx playwright test --project=desktop-chrome --project=android   # after migrate:fresh --seed, with ADMIN_PASSWORD
+node scripts/seo-crawl.mjs http://127.0.0.1:8000
 ```
 
 ## Release
 
-`bash scripts/build-release.sh` writes `release/auxtech-production.zip` (git-ignored; contains the Pusher secret). After changing the installer, `.htaccess` or migrations, rehearse it: extract into an Apache document root, install through `/install`, then extract a second build over it and run the database update from Admin > System.
+`bash scripts/build-release.sh` writes `release/auxtech-production.zip` (git-ignored; contains the Pusher secret). Check the zip size (about 73 MB); local runtime folders such as `storage/inertia-devtools` must stay excluded. After changing the installer, `.htaccess` or migrations, rehearse it: extract into an Apache document root, install through `/install`, then extract a second build over it and run the database update from Admin > System.
 
 ## Sandbox notes
 

@@ -25,7 +25,8 @@ export default defineConfig({
     webServer: {
         command: 'php artisan serve --host=127.0.0.1 --port=8000',
         url: baseURL,
-        reuseExistingServer: !process.env.CI,
+        // CI starts the PHP server itself (see .github/workflows/ci.yml) and sets PW_EXTERNAL_SERVER.
+        reuseExistingServer: !process.env.CI || !!process.env.PW_EXTERNAL_SERVER,
         timeout: 60_000,
         stdout: 'pipe',
         stderr: 'pipe',

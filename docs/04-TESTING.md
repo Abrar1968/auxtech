@@ -234,14 +234,17 @@ A red pipeline blocks merging. Tests are never skipped or disabled to get a gree
 6. Submit sitemap in Google Search Console and Bing Webmaster Tools; request indexing for Home.
 7. GTM preview shows `whatsapp_click` and `generate_lead` events; Meta Events Manager shows deduplicated Pixel + CAPI events.
 
-## 11. Current status (end of Phase 2)
+## 11. Current status (end of Phase 3)
+
+Full results, defects and open items: [`07-TEST-REPORT.md`](07-TEST-REPORT.md). Requirement coverage: [`06-TRACEABILITY.md`](06-TRACEABILITY.md).
 
 | Item | Status |
 |---|---|
-| Pest (unit, feature, full install) | 174 passing on SQLite, 173 on MariaDB 10.11 |
-| Vitest | 5 passing (translation and icon coverage, i18n helpers) |
-| Playwright (`tests/e2e/site.spec.ts`, `admin.spec.ts`) | 29 passing on Chromium desktop and Pixel 7. Admin specs sign in once per worker because sign-in is limited to five attempts a minute. They need a freshly seeded database and `ADMIN_PASSWORD` from `.env` |
-| Lighthouse mobile | Accessibility, best practices and SEO 100 on tested pages; performance 81–95 (English), 72–74 (Bangla). Details in `phases/PHASE-2-FRONTEND.md` |
-| Zip rehearsal on Apache + MariaDB | Passed for the Phase 1 and Phase 2 builds |
-| Not yet tested | Firefox, Safari, Samsung Internet; screen readers; real Gmail delivery; Meta Conversions API against Meta; two-factor sign-in end to end; load testing |
+| Pest (unit, feature, full install) | 216 passing on SQLite and MariaDB; 95.0% line coverage |
+| Vitest | 5 passing |
+| Playwright | 83 passing on Chromium desktop and Pixel 7: 29 journeys, responsive sweep (18 pages × 5 widths), axe WCAG 2.2 AA in light and dark. Admin specs sign in once per worker (sign-in is limited to five attempts a minute) and need a freshly seeded database and `ADMIN_PASSWORD` |
+| SEO crawl (`scripts/seo-crawl.mjs`) | 134 URLs, 0 errors |
+| Lighthouse mobile (production mode) | Accessibility and SEO 100; performance 82–99; best practices 77 because of Clarity's cookies |
+| Zip rehearsal on Apache + MariaDB | Install and update passed for 1.2.0 |
+| Not yet tested | Firefox, Safari, Samsung Internet; screen readers; real Gmail delivery; Meta Conversions API against Meta; GTM; Search Console; the real host |
 | Larastan | Not installed |

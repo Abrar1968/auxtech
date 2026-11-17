@@ -139,32 +139,31 @@ jobs:
       - run: cp .env.example .env && php artisan key:generate
       - run: php artisan migrate:fresh --force --seed
 
-      # Diagnostic: the PHP built-in server died on the first page in an earlier run (PHP 8.2).
-      - name: Smoke-test the PHP server before the browser tests
-        run: |
-          check() {
-            php -S 127.0.0.1:8001 -t public vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php > server.log 2>&1 &
-            pid=$!
-            sleep 2
-            for path in / /work /work/gearzen /bn /contact /login; do
-              curl -s -o /dev/null -w "$path %{http_code} %{size_download} bytes\n" "http://127.0.0.1:8001$path" || echo "$path no response"
-            done
-            if kill -0 $pid 2>/dev/null; then echo "server still running"; kill $pid; else wait $pid; echo "server exited with code $?"; fi
-            tail -n 20 server.log
-          }
-          echo "== with defaults"; check
-          echo "== with INERTIA_DEVTOOLS_ENABLED=false"; INERTIA_DEVTOOLS_ENABLED=false check
-          tail -n 40 storage/logs/laravel.log 2>/dev/null || echo "no laravel.log"
-
       # Firefox and WebKit projects are listed in playwright.config.ts but run locally, not here.
       - run: npx playwright install --with-deps chromium
+      # PHP's built-in server, started directly (as `artisan serve` does, from public/) so that
+      # its exit status and errors are visible. Playwright reuses it.
+      - name: Start the PHP server
+        run: |
+          cd public
+          nohup php -S 127.0.0.1:8000 ../vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php > ../server.log 2>&1 &
+          echo $! > ../server.pid
+          sleep 2
+          curl -sf -o /dev/null http://127.0.0.1:8000/ && echo "server is up"
+
       - run: npx playwright test --project=desktop-chrome --project=android --trace off
+        env:
+          PW_EXTERNAL_SERVER: '1'
 
       - name: SEO crawl
+        run: node scripts/seo-crawl.mjs http://127.0.0.1:8000
+
+      - name: Server status and errors
+        if: always()
         run: |
-          php artisan serve --host=127.0.0.1 --port=8000 > /dev/null 2>&1 &
-          sleep 3
-          node scripts/seo-crawl.mjs http://127.0.0.1:8000
+          if kill -0 "$(cat server.pid)" 2>/dev/null; then echo "server still running"; else echo "server process has exited"; fi
+          grep -vE 'Accepted|Closing|\[(200|204|301|302|304|404|419|422|429)\]' server.log | tail -n 80 || true
+          tail -n 80 storage/logs/laravel.log 2>/dev/null || echo "no laravel.log"
 
       - uses: actions/upload-artifact@v4
         if: failure()

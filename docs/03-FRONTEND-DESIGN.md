@@ -51,6 +51,8 @@ Implemented in `resources/css/app.css` (`@theme`). Brand scale is built around t
 
 Text on white uses `ink-900` (contrast 17:1) and muted `#55607A` (6.6:1). White on `brand-600` is 6.1:1. All pairs meet WCAG AA.
 
+**Brand blue as text** uses the theme-aware `text-link` token, not `text-brand-600`: `#0145FF` in the light theme and `#8EB4FF` (brand-300) in the dark theme, where `#0145FF` on the dark surface fails contrast. `text-brand-600` stays correct for text on white cards in both themes and for backgrounds. The axe scan in `tests/e2e/quality.spec.ts` checks both themes.
+
 **Typography**
 
 | Role | Font | Notes |

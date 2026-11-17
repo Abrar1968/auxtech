@@ -112,6 +112,8 @@ The site is deployed by unzipping a file on shared hosting, so no Node process c
 
 The fallback contains exactly the content the visitor sees, so it is not cloaking. It is unstyled apart from a minimal inline style that avoids a flash before Vue mounts. Feature tests assert that every public page's fallback contains its `h1`, main text and internal links (FR-S01).
 
+**App shell (added in Phase 3).** Without SSR the largest paint waited for the JavaScript bundle. `resources/views/shell/_hero.blade.php` now prints the top of each public page (the hero: eyebrow, title, lead) inside `#app` with the same Tailwind classes Vue uses, marked `aria-hidden` and `data-shell`. Vue replaces it on mount, so the visitor sees styled content at once and nothing shifts. With JavaScript off the shell is hidden (`html:not(.js) [data-shell]`) and the fallback is the page. Keep the shell's classes in step with `HomeHero.vue` and `PageHero.vue`.
+
 ## 4. Data model
 
 All content tables carry `id`, timestamps, and where stated `status`, `published_at`, `sort_order`, soft deletes. Columns marked **(t)** are translatable JSON.
@@ -266,7 +268,7 @@ Response: lead uuid + ready-made WhatsApp URL ("continue on WhatsApp")
 
 ## 10. Security (NFR-09, NFR-10)
 
-- `SecurityHeaders` middleware: CSP with nonces (allow-list for GTM, GA, Meta, Turnstile, Maps), HSTS, `X-Content-Type-Options`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy`, frame-ancestors `'self'`.
+- `SecurityHeaders` middleware: Content Security Policy with a fresh nonce per request (`Vite::useCspNonce()`): `script-src 'self' 'nonce-…' 'strict-dynamic'`, so the Vite bundle, the inline theme script and Clarity run, and any script they add (GTM, Meta Pixel, Pusher) is trusted through `strict-dynamic` instead of a host list; `object-src 'none'`, `base-uri 'self'`, `form-action 'self'`, `frame-ancestors 'self'`. Over HTTPS also HSTS and `upgrade-insecure-requests`. Plus `X-Content-Type-Options`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy`. Every inline `<script>` in Blade must carry `nonce="{{ Vite::cspNonce() }}"` (a test checks this).
 - CSRF on every state-changing route; `SameSite=Lax`, `Secure`, `HttpOnly` cookies.
 - Validation in Form Requests only; only validated fields that a module declares are ever written.
 - Rich text purified on write with an allow-list; output escaped by Vue by default; `v-html` only for purified fields.

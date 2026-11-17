@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="{{ config('auxtech.brand.color') }}">
     {{-- Before first paint: mark JavaScript as available (hides the crawler fallback) and apply the saved theme. --}}
-    <script>
+    <script nonce="{{ Vite::cspNonce() }}">
         (function (d) {
             d.classList.add('js');
             var t = null;
@@ -76,7 +76,7 @@
 
     @if (app()->isProduction() && ! $isAdmin && ($clarity = setting('tracking.clarity_id')))
         {{-- Microsoft Clarity: public pages in production only. --}}
-        <script>
+        <script nonce="{{ Vite::cspNonce() }}">
             (function(c,l,a,r,i,t,y){
                 c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
                 t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
@@ -89,6 +89,13 @@
 </head>
 <body class="antialiased" data-page="{{ $page['component'] ?? '' }}">
     <script data-page="app" type="application/json">{!! json_encode($page, JSON_HEX_TAG) !!}</script>
-    <div id="app">@if (! $isAdmin && view()->exists($fallback))@include('fallback._layout', ['view' => $fallback, 'props' => $page['props']])@endif</div>
+    <div id="app">
+        @if (! $isAdmin && str_starts_with($page['component'] ?? '', 'Site/'))
+            @include('shell._hero', ['props' => $page['props'], 'component' => $page['component']])
+        @endif
+        @if (! $isAdmin && view()->exists($fallback))
+            @include('fallback._layout', ['view' => $fallback, 'props' => $page['props']])
+        @endif
+    </div>
 </body>
 </html>

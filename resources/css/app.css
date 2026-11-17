@@ -179,6 +179,11 @@
     display: none;
 }
 
+/* The app shell only stands in for the Vue page; without JavaScript the fallback is the page. */
+html:not(.js) [data-shell] {
+    display: none;
+}
+
 @utility glass {
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);

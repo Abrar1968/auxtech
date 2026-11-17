@@ -165,7 +165,6 @@ return [
         // Features::registration(), // Disabled: admin users are created by a Super Admin.
         Features::resetPasswords(),
         // Features::emailVerification(),
-        Features::updateProfileInformation(),
         Features::updatePasswords(),
         Features::twoFactorAuthentication([
             'confirm' => true,

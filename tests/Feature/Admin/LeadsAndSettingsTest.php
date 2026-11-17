@@ -149,3 +149,16 @@ it('shows the activity log to permitted roles', function () {
     $this->get('/admin/activity')->assertInertia(fn (Assert $page) => $page
         ->where('entries.data.0.description', 'Created Home Stat')->where('entries.data.0.user', $user->name));
 });
+
+it('describes each setting to the admin form, including which are translatable', function () {
+    $this->actingAs(admin('Admin'))->get('/admin/settings')->assertInertia(fn (Assert $page) => $page
+        ->where('schema', function ($schema) {
+            $fields = collect($schema)->flatMap(fn ($group) => $group['fields'])->keyBy('key');
+
+            return $fields['company.tagline']['translatable'] === true
+                && $fields['company.email']['translatable'] === false
+                && $fields['home.sections']['type'] === 'sections'
+                && $fields['mail.password']['type'] === 'secret';
+        })
+        ->has('icons'));
+});

@@ -17,7 +17,7 @@
             var t = null;
             try { t = localStorage.getItem('aux-theme'); } catch (e) {}
             if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            d.dataset.theme = {{ $isAdmin ? "'light'" : 't' }};
+            d.dataset.theme = {!! $isAdmin ? "'light'" : 't' !!};
         })(document.documentElement);
     </script>
 

@@ -37,7 +37,8 @@ class SettingsController extends Controller
                     'label' => $field[1],
                     'help' => $field[2] ?? null,
                     'item' => $field[3] ?? null,
-                    'translatable' => $this->isTranslatable(config("settings.defaults.{$name}")),
+                    // Keys contain dots, so read the defaults array directly rather than through config('a.b.c').
+                    'translatable' => $this->isTranslatable(config('settings.defaults')[$name] ?? null),
                 ])->values(),
             ])->values(),
             'icons' => json_decode((string) file_get_contents(resource_path('data/icons.json')), true),

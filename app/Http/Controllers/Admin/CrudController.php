@@ -203,7 +203,8 @@ class CrudController extends Controller
             $values[$field->name] = match (true) {
                 $field->type === 'password' => null,
                 $field->type === 'date' => $record->getAttribute($field->name)?->format('Y-m-d'),
-                $field->type === 'image' => $record->image($field->name),
+                $field->type === 'image' => $record->image($field->name) === null ? null : $record->image($field->name)
+                    + ['alts' => (array) $record->getFirstMedia($field->name)?->getCustomProperty('alt', [])],
                 $field->type === 'images' => $record->images($field->name),
                 $field->isRelationSync() => $record->{$field->name}()->pluck($record->{$field->name}()->getRelated()->getQualifiedKeyName())->all(),
                 $field->translatable => $record->getTranslations($field->name) + ['en' => null, 'bn' => null],

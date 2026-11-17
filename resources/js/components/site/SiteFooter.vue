@@ -73,7 +73,7 @@ const company = computed(() => [
                 <span class="flex gap-2.5"><Phone :size="18" class="mt-0.5 shrink-0 text-brand-300" aria-hidden="true" />{{ site.phoneDisplay }} ({{ t('WhatsApp') }})</span>
                 <span v-if="site.hours" class="flex gap-2.5"><Clock :size="18" class="mt-0.5 shrink-0 text-brand-300" aria-hidden="true" />{{ site.hours }}</span>
             </address>
-            <p class="mt-8 text-sm text-white/40">© {{ n(new Date().getFullYear()) }} {{ site.name }}. {{ site.tagline }}.</p>
+            <p class="mt-8 text-sm text-white/60">© {{ n(new Date().getFullYear()) }} {{ site.name }}. {{ site.tagline }}.</p>
         </div>
     </footer>
 </template>

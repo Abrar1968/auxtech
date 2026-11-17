@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { animate, useInView } from 'motion-v';
-import { computed, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useI18n } from '@/lib/i18n';
 
 /**
  * Counts up to a number once it is visible. Non-numeric values (e.g.
- * "24/7") are shown as they are.
+ * "24/7") are shown as they are. Plain requestAnimationFrame: no library.
  */
 const props = defineProps<{ value: string }>();
 const { n } = useI18n();
@@ -19,19 +18,33 @@ const rest = computed(() => (target.value === null ? props.value : props.value.s
 
 const element = ref<HTMLElement>();
 const shown = ref<number | null>(target.value);
-const inView = useInView(element, { once: true });
+let observer: IntersectionObserver | undefined;
 
-watch(inView, (visible) => {
-    if (!visible || target.value === null || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        return;
-    }
+function run(): void {
+    const end = target.value ?? 0;
+    const start = performance.now();
+    const duration = 1600;
+    const step = (now: number) => {
+        const t = Math.min(1, (now - start) / duration);
+        shown.value = Math.round(end * (1 - Math.pow(1 - t, 4)));
+        if (t < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+}
 
-    animate(0, target.value, {
-        duration: 1.6,
-        ease: [0.16, 1, 0.3, 1],
-        onUpdate: (latest) => (shown.value = Math.round(latest)),
+onMounted(() => {
+    if (target.value === null || window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+
+    shown.value = 0;
+    observer = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+            observer?.disconnect();
+            run();
+        }
     });
+    if (element.value) observer.observe(element.value);
 });
+onBeforeUnmount(() => observer?.disconnect());
 </script>
 
 <template>

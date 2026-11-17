@@ -44,13 +44,13 @@ function selectGroup(key: string): void {
                     class="absolute inset-0 rounded-full bg-brand-600 shadow-[0_8px_30px_-8px_rgb(1_69_255/0.9)]"
                     :transition="{ type: 'spring', stiffness: 380, damping: 32 }"
                 />
-                <span class="relative">{{ item.name }} <span class="opacity-60">{{ n(item.features.length) }}</span></span>
+                <span class="relative">{{ item.name }} <span :class="item.key === activeGroup ? 'text-white/80' : 'text-white/60'">{{ n(item.features.length) }}</span></span>
             </button>
-            <span class="ml-auto hidden self-center text-sm text-white/45 sm:block">{{ t(':count modules in one admin panel', { count: n(total) }) }}</span>
+            <span class="ml-auto hidden self-center text-sm text-white/60 sm:block">{{ t(':count modules in one admin panel', { count: n(total) }) }}</span>
         </div>
 
         <div class="mt-8 grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-            <ul role="tabpanel" class="grid content-start gap-1.5">
+            <div role="tabpanel"><ul class="grid content-start gap-1.5">
                 <li v-for="item in group?.features ?? []" :key="item.slug">
                     <button
                         :class="[
@@ -72,12 +72,12 @@ function selectGroup(key: string): void {
                         <span class="font-medium">{{ item.title }}</span>
                     </button>
                 </li>
-            </ul>
+            </ul></div>
 
             <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-ink-900 p-2 shadow-[0_40px_100px_-40px_rgb(1_69_255/0.6)]">
                 <div class="flex items-center gap-2 px-3 py-2">
                     <span class="size-2.5 rounded-full bg-white/15" /><span class="size-2.5 rounded-full bg-white/15" /><span class="size-2.5 rounded-full bg-white/15" />
-                    <span class="ml-3 text-xs text-white/40">{{ group?.name }}</span>
+                    <span class="ml-3 text-xs text-white/60">{{ group?.name }}</span>
                 </div>
                 <div class="relative min-h-[22rem] overflow-hidden rounded-2xl bg-gradient-to-br from-ink-800 to-ink-950 p-7 sm:p-9">
                     <div aria-hidden="true" class="absolute -top-24 -right-24 size-72 rounded-full bg-brand-600/30 blur-3xl" />

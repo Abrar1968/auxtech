@@ -33,8 +33,8 @@ const crumbs = computed(() => seo.value.breadcrumbs ?? []);
             </nav>
 
             <motion.div
-                :initial="{ opacity: 0, y: 24 }"
-                :animate="{ opacity: 1, y: 0 }"
+                :initial="{ y: 18 }"
+                :animate="{ y: 0 }"
                 :transition="{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }"
                 class="max-w-4xl"
             >

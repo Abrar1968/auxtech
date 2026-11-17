@@ -132,9 +132,10 @@ function isActive(href: string): boolean {
                             'grid min-h-10 min-w-10 place-items-center rounded-full px-2.5 text-sm font-semibold transition',
                             scrolled ? 'text-fg/75 hover:bg-surface-muted' : 'text-white/80 hover:bg-white/10',
                         ]"
-                        :aria-label="otherLocale === 'bn' ? 'বাংলায় দেখুন' : 'View in English'"
+                        :title="otherLocale === 'bn' ? 'বাংলা' : 'English'"
                     >
-                        {{ otherLocale === 'bn' ? 'বাং' : 'EN' }}
+                        <!-- System font: keeps the Bangla web font off English pages. -->
+                        <span :style="otherLocale === 'bn' ? { fontFamily: 'system-ui, sans-serif' } : undefined">{{ otherLocale === 'bn' ? 'বাং' : 'EN' }}</span>
                     </a>
                     <button
                         :class="['grid size-10 place-items-center rounded-full transition', scrolled ? 'text-fg/75 hover:bg-surface-muted' : 'text-white/80 hover:bg-white/10']"

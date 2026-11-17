@@ -63,6 +63,7 @@ class WorkController extends Controller
 
         $cover = $project->image('cover');
 
+        seo()->preloadImage($cover);
         seo()->for($project, $project->title.($project->industry ? ' — '.$project->industry->name.' '.__('Project') : ''), $project->summary ?: $project->tagline, $cover['large'] ?? null)
             ->type('article')
             ->crumb(__('Home'), lroute('home'))->crumb(__('Work'), lroute('work.index'))->crumb((string) $project->title, lroute('work.show', $project->slug))

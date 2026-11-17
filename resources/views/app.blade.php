@@ -62,6 +62,13 @@
         @endif
     @endif
 
+    @unless ($isAdmin)
+        <link rel="preload" as="font" type="font/woff2" crossorigin href="{{ Vite::asset('node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2') }}">
+        <link rel="preload" as="font" type="font/woff2" crossorigin href="{{ Vite::asset('node_modules/@fontsource-variable/sora/files/sora-latin-wght-normal.woff2') }}">
+        @if (! empty($seo['preload']))
+            <link rel="preload" as="image" href="{{ $seo['preload']['href'] }}" imagesrcset="{{ $seo['preload']['srcset'] }}" imagesizes="(min-width: 1024px) 34vw, 70vw" fetchpriority="high">
+        @endif
+    @endunless
     <link rel="icon" href="/favicon.ico" sizes="48x48">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -78,8 +85,7 @@
         </script>
     @endif
 
-    @routes
-    @vite('resources/js/app.ts')
+    @vite(['resources/js/app.ts', "resources/js/pages/{$page['component']}.vue"])
 </head>
 <body class="antialiased" data-page="{{ $page['component'] ?? '' }}">
     <script data-page="app" type="application/json">{!! json_encode($page, JSON_HEX_TAG) !!}</script>

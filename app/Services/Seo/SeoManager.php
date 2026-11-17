@@ -24,6 +24,9 @@ class SeoManager
 
     private string $type = 'website';
 
+    /** @var array{href: string, srcset: string}|null */
+    private ?array $preload = null;
+
     /** @var list<array{name: string, url: string}> */
     private array $breadcrumbs = [];
 
@@ -61,6 +64,24 @@ class SeoManager
     public function image(?string $url): static
     {
         $this->image = $url;
+
+        return $this;
+    }
+
+    /**
+     * Ask the browser to fetch the page's main image straight away (it is the
+     * largest element on screen, and the page itself renders with JavaScript).
+     *
+     * @param  array{medium: string, thumb: string, large: string}|null  $image
+     */
+    public function preloadImage(?array $image): static
+    {
+        if ($image) {
+            $this->preload = [
+                'href' => $image['medium'],
+                'srcset' => "{$image['thumb']} 480w, {$image['medium']} 960w, {$image['large']} 1600w",
+            ];
+        }
 
         return $this;
     }
@@ -157,6 +178,7 @@ class SeoManager
             'locale' => app()->getLocale(),
             'alternates' => $this->alternates(),
             'breadcrumbs' => $this->breadcrumbs,
+            'preload' => $this->preload,
             'jsonLd' => ['@context' => 'https://schema.org', '@graph' => array_merge($graph, $this->schemas)],
         ];
     }

@@ -20,10 +20,11 @@ const { scrollYProgress } = useScroll({ target: list, offset: ['start 75%', 'end
             <div class="lg:sticky lg:top-32 lg:self-start">
                 <SectionHeading :title="copy?.title" :lead="copy?.lead" />
             </div>
-            <ol ref="list" class="relative grid gap-10 pl-16 sm:pl-20">
+            <div ref="list" class="relative">
                 <div aria-hidden="true" class="absolute top-2 bottom-2 left-[1.375rem] w-px bg-line sm:left-[1.625rem]">
                     <motion.div class="w-px origin-top bg-gradient-to-b from-brand-500 to-cyan-accent" :style="{ scaleY: scrollYProgress, height: '100%' }" />
                 </div>
+                <ol class="relative grid gap-10 pl-16 sm:pl-20">
                 <Reveal v-for="(step, index) in steps" :key="index" as="li" :delay="0.05" class="relative">
                     <span
                         class="absolute top-0 -left-16 grid size-11 place-items-center rounded-full border border-line bg-surface-raised font-display text-sm font-semibold text-brand-600 shadow-sm sm:-left-20 sm:size-13 sm:text-base"
@@ -33,7 +34,8 @@ const { scrollYProgress } = useScroll({ target: list, offset: ['start 75%', 'end
                     <h3 class="font-display text-2xl font-semibold text-fg">{{ step.title }}</h3>
                     <p v-if="step.description" class="mt-2 max-w-xl text-lg text-muted">{{ step.description }}</p>
                 </Reveal>
-            </ol>
+                </ol>
+            </div>
         </div>
     </section>
 </template>

@@ -40,6 +40,9 @@ class HomeController extends Controller
                 $flagship->featureGroups->flatMap->features->map(fn ($f) => (string) $f->title)->all(),
             ) : null);
 
+        $featured = Project::query()->published()->where('is_featured', true)->ordered()->with('media')->first();
+        seo()->preloadImage($featured?->image('cover'));
+
         $faqs = Faq::query()->where('is_active', true)->whereNull('faqable_id')->ordered()->limit(8)->get();
         seo()->schema(seo()->builder()->faqPage($faqs->map(fn (Faq $f) => ['question' => $f->question, 'answer' => $f->answer])));
 

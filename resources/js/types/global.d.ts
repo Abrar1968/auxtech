@@ -6,12 +6,6 @@ declare module '*.vue' {
     export default component;
 }
 
-declare module 'ziggy-js' {
-    import type { Plugin } from 'vue';
-    export const ZiggyVue: Plugin;
-    export function route(name?: string, params?: unknown, absolute?: boolean): string;
-}
-
 interface ImportMetaEnv {
     readonly VITE_APP_NAME: string;
     readonly VITE_PUSHER_APP_KEY: string;

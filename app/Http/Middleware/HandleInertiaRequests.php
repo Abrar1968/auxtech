@@ -11,7 +11,6 @@ use App\Support\Realtime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
-use Tighten\Ziggy\Ziggy;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -26,7 +25,6 @@ class HandleInertiaRequests extends Middleware
 
         return [
             ...parent::share($request),
-            'ziggy' => fn (): array => [...(new Ziggy)->toArray(), 'location' => $request->url()],
             'locale' => fn (): string => app()->getLocale(),
             'locales' => config('auxtech.locales.supported'),
             'flash' => fn (): array => [

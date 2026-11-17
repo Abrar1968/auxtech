@@ -62,7 +62,7 @@ const otherLocale = computed(() => (locale.value === 'en' ? 'bn' : 'en'));
                     :lang="otherLocale"
                     class="mt-8 inline-flex min-h-11 items-center self-start rounded-full border border-white/15 px-5 text-sm font-medium"
                 >
-                    {{ otherLocale === 'bn' ? 'বাংলায় দেখুন' : 'View in English' }}
+                    <span :style="otherLocale === 'bn' ? { fontFamily: 'system-ui, sans-serif' } : undefined">{{ otherLocale === 'bn' ? 'বাংলায় দেখুন' : 'View in English' }}</span>
                 </a>
 
                 <div class="mt-auto grid gap-3 pt-10">

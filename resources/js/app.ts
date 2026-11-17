@@ -1,7 +1,6 @@
 import '../css/app.css';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { defineAsyncComponent } from 'vue';
-import { ZiggyVue } from 'ziggy-js';
 import SiteLayout from './layouts/SiteLayout.vue';
 
 /**
@@ -16,9 +15,6 @@ createInertiaApp({
         if (name.startsWith('Site/')) return SiteLayout;
         if (name.startsWith('Admin/')) return AdminLayout;
         return undefined;
-    },
-    withApp(app) {
-        app.use(ZiggyVue);
     },
     progress: { color: '#2f61ff', delay: 150 },
 });

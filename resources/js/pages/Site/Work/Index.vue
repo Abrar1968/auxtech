@@ -68,7 +68,7 @@ const chip = (selected: boolean) => [
                             @click="apply({ industry: filters.industry === industry.slug ? null : industry.slug })"
                         >
                             {{ industry.name }}
-                            <span class="opacity-60">{{ n(industry.projects_count ?? 0) }}</span>
+                            <span :class="filters.industry === industry.slug ? 'text-white/80' : 'text-muted'">{{ n(industry.projects_count ?? 0) }}</span>
                         </button>
                     </div>
                     <div class="grid grid-cols-2 gap-2 lg:ml-auto lg:flex">
@@ -104,6 +104,7 @@ const chip = (selected: boolean) => [
                 </button>
             </div>
 
+            <h2 class="sr-only">{{ t('Projects') }}</h2>
             <motion.div layout class="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
                 <AnimatePresence mode="popLayout">
                     <motion.div

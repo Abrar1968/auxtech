@@ -69,9 +69,9 @@ const ease = [0.16, 1, 0.3, 1] as const;
                         :key="index"
                         class="inline-block"
                         :class="index >= words.length - 2 ? 'text-gradient' : ''"
-                        :initial="{ opacity: 0, y: '0.6em', filter: 'blur(8px)' }"
-                        :animate="{ opacity: 1, y: '0em', filter: 'blur(0px)' }"
-                        :transition="{ duration: 0.8, delay: 0.08 + index * 0.06, ease }"
+                        :initial="{ y: '0.35em', filter: 'blur(6px)' }"
+                        :animate="{ y: '0em', filter: 'blur(0px)' }"
+                        :transition="{ duration: 0.7, delay: index * 0.04, ease }"
                     >
                         {{ word }}&nbsp;
                     </motion.span>

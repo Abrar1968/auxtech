@@ -8,7 +8,7 @@ import { useI18n } from '@/lib/i18n';
 import type { Industry, Project } from '@/types/models';
 
 defineProps<{ industry: Industry; projects: Project[] }>();
-const { tc } = useI18n();
+const { t, tc } = useI18n();
 </script>
 
 <template>
@@ -16,6 +16,7 @@ const { tc } = useI18n();
         <WhatsAppButton placement="industry-hero" />
     </PageHero>
     <section class="section-y bg-surface">
+        <h2 class="sr-only">{{ t('Projects') }}</h2>
         <div class="container-page grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
             <Reveal v-for="(project, index) in projects" :key="project.id" :delay="(index % 3) * 0.08"><ProjectCard :project="project" :priority="index < 3" /></Reveal>
         </div>

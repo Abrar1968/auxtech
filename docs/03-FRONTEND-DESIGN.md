@@ -242,7 +242,7 @@ resources/js/
 
 ### 13. Rules
 
-1. **Fast first paint.** The Blade fallback already shows the page's text; Vue must mount without a visible jump. Heavy browser-only libraries (GSAP, Lenis) are imported dynamically inside `onMounted`, never in the entry bundle.
+1. **Fast first paint.** The Blade fallback already shows the page's text; Vue must mount without a visible jump. Heavy browser-only libraries (Lenis) are imported dynamically inside `onMounted`, never in the entry bundle.
 2. **The server owns `<head>`.** Title, meta, `hreflang` and JSON-LD are printed by Blade from the `seo` prop. Pages do not use `<Head>` for these. `useSeoSync()` in `SiteLayout` updates `document.title` and meta tags on client-side navigation.
 3. **Props are typed** from `types/models.d.ts`, which mirrors backend Resources one-to-one.
 4. **Text comes from props or i18n files**, never hard-coded in components, so both languages work.

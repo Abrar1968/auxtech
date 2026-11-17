@@ -45,7 +45,7 @@ Build Auxtech's public website: a bilingual, animated, search-optimised portfoli
 | Bridge | Inertia.js v3; crawlable HTML from a server-rendered Blade content fallback (no Node on the server) |
 | Real-time | Pusher Channels |
 | Frontend | Vue 3 (Composition API, TypeScript), Tailwind CSS v4 |
-| Motion | Motion for Vue (`motion-v`, the Vue port of Framer Motion), GSAP ScrollTrigger, Lenis |
+| Motion | Motion for Vue (`motion-v`, the Vue port of Framer Motion), Lenis |
 | Tests | Pest, Vitest, Playwright |
 
 Rationale and alternatives are in documents 02 and 03.

@@ -139,6 +139,23 @@ jobs:
       - run: cp .env.example .env && php artisan key:generate
       - run: php artisan migrate:fresh --force --seed
 
+      # Diagnostic: the PHP built-in server died on the first page in an earlier run (PHP 8.2).
+      - name: Smoke-test the PHP server before the browser tests
+        run: |
+          check() {
+            php -S 127.0.0.1:8001 -t public vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php > server.log 2>&1 &
+            pid=$!
+            sleep 2
+            for path in / /work /work/gearzen /bn /contact /login; do
+              curl -s -o /dev/null -w "$path %{http_code} %{size_download} bytes\n" "http://127.0.0.1:8001$path" || echo "$path no response"
+            done
+            if kill -0 $pid 2>/dev/null; then echo "server still running"; kill $pid; else wait $pid; echo "server exited with code $?"; fi
+            tail -n 20 server.log
+          }
+          echo "== with defaults"; check
+          echo "== with INERTIA_DEVTOOLS_ENABLED=false"; INERTIA_DEVTOOLS_ENABLED=false check
+          tail -n 40 storage/logs/laravel.log 2>/dev/null || echo "no laravel.log"
+
       # Firefox and WebKit projects are listed in playwright.config.ts but run locally, not here.
       - run: npx playwright install --with-deps chromium
       - run: npx playwright test --project=desktop-chrome --project=android --trace off

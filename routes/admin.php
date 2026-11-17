@@ -4,12 +4,16 @@ use App\Admin\ModuleRegistry;
 use App\Http\Controllers\Admin\CrudController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LeadController;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\SystemController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', DashboardController::class)->name('dashboard');
+
+Route::get('profile', [ProfileController::class, 'show'])->name('profile');
+Route::post('notifications/read', [ProfileController::class, 'readNotifications'])->name('notifications.read');
 
 Route::get('leads/export', [LeadController::class, 'export'])->name('leads.export');
 Route::get('leads', [LeadController::class, 'index'])->name('leads.index');

@@ -1,3 +1,3 @@
-<h1>{{ $seo['breadcrumbs'][1]['name'] ?? __('Estimate') }}</h1>
-<p>{{ $seo['description'] }}</p>
+<h1>{{ $intro['heading'] }}</h1>
+<p>{{ $intro['lead'] }}</p>
 <ul>@foreach ($services as $service)<li>{{ $service['title'] }}</li>@endforeach</ul>

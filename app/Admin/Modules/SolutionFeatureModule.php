@@ -26,7 +26,7 @@ class SolutionFeatureModule extends Module
             Field::text('title')->translatable()->required(),
             Field::slug(),
             Field::textarea('description')->translatable(),
-            Field::text('icon')->max(60)->side(),
+            Field::icon(),
         ];
     }
 

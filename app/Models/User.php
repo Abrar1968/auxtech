@@ -20,6 +20,12 @@ class User extends Authenticatable
     /** @var list<string> */
     protected $hidden = ['password', 'remember_token', 'two_factor_secret', 'two_factor_recovery_codes'];
 
+    /** Two-factor sign-in is set up and confirmed. */
+    public function hasTwoFactor(): bool
+    {
+        return filled($this->getAttributes()['two_factor_confirmed_at'] ?? null);
+    }
+
     protected function casts(): array
     {
         return [

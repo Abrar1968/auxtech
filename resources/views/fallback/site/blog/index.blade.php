@@ -1,4 +1,5 @@
-<h1>{{ $heading ?? ($seo['breadcrumbs'][1]['name'] ?? __('Blog')) }}</h1>
+<h1>{{ $intro['heading'] }}</h1>
+@if ($intro['lead'])<p>{{ $intro['lead'] }}</p>@endif
 @foreach ($posts as $post)
     <article>
         <h2><a href="{{ $post['url'] }}">{{ $post['title'] }}</a></h2>

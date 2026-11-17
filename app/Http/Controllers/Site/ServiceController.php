@@ -24,6 +24,7 @@ class ServiceController extends Controller
             ->crumb(__('Home'), lroute('home'))->crumb(__('Services'), lroute('services.index'));
 
         return Inertia::render('Site/Services/Index', [
+            'intro' => page_intro('services'),
             'services' => ServiceResource::collection($services)->resolve(),
         ]);
     }

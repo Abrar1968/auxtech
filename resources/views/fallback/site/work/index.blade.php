@@ -1,5 +1,5 @@
-<h1>{{ $seo['breadcrumbs'][1]['name'] ?? __('Work') }}</h1>
-<p>{{ $seo['description'] }}</p>
+<h1>{{ $intro['heading'] }}</h1>
+<p>{{ $intro['lead'] }}</p>
 <nav aria-label="{{ __('Industries') }}">
     @foreach ($industries as $industry)
         <a href="{{ $industry['url'] }}">{{ $industry['name'] }} ({{ $industry['projects_count'] }})</a>

@@ -1,5 +1,5 @@
-<h1>{{ $seo['breadcrumbs'][1]['name'] ?? __('Pricing') }}</h1>
-<p>{{ $seo['description'] }}</p>
+<h1>{{ $intro['heading'] }}</h1>
+<p>{{ $intro['lead'] }}</p>
 @foreach ($groups as $group)
     @if ($group['name'])<h2>{{ $group['name'] }}</h2>@endif
     @include('fallback._plans', ['plans' => $group['plans']])

@@ -14,6 +14,7 @@ use App\Http\Resources\StatResource;
 use App\Http\Resources\TestimonialResource;
 use App\Models\Client;
 use App\Models\Faq;
+use App\Models\Industry;
 use App\Models\Post;
 use App\Models\PricingPlan;
 use App\Models\Project;
@@ -43,6 +44,10 @@ class HomeController extends Controller
 
         return Inertia::render('Site/Home', [
             'hero' => ['title' => setting_t('home.hero_title'), 'subtitle' => setting_t('home.hero_subtitle')],
+            'copy' => collect(setting('home.sections', []))->pluck('key')->mapWithKeys(fn (string $key) => [$key => section_copy($key)])->all(),
+            'process' => tr_rows(setting('home.process_steps')),
+            'reasons' => tr_rows(setting('home.reasons')),
+            'industryCount' => Industry::query()->whereHas('projects', fn ($q) => $q->published())->count(),
             'sections' => collect(setting('home.sections', []))->where('enabled', true)->pluck('key')->values()->all(),
             'clients' => ClientResource::collection(Client::query()->where('show_logo', true)->ordered()->with('media')->get())->resolve(),
             'stats' => StatResource::collection(Stat::query()->where('is_active', true)->ordered()->get())->resolve(),

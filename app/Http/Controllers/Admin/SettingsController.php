@@ -28,7 +28,19 @@ class SettingsController extends Controller
         return Inertia::render('Admin/Settings', [
             'values' => $values,
             'secrets' => collect(config('settings.secret'))->mapWithKeys(fn (string $key) => [$key => filled($this->settings->get($key))]),
-            'groups' => collect(array_keys(config('settings.defaults')))->groupBy(fn (string $key) => str($key)->before('.')->toString()),
+            'schema' => collect(config('settings.schema'))->map(fn (array $group, string $key) => [
+                'key' => $key,
+                'label' => $group['label'],
+                'fields' => collect($group['fields'])->map(fn (array $field, string $name) => [
+                    'key' => $name,
+                    'type' => $field[0],
+                    'label' => $field[1],
+                    'help' => $field[2] ?? null,
+                    'item' => $field[3] ?? null,
+                    'translatable' => $this->isTranslatable(config("settings.defaults.{$name}")),
+                ])->values(),
+            ])->values(),
+            'icons' => json_decode((string) file_get_contents(resource_path('data/icons.json')), true),
         ]);
     }
 
@@ -60,6 +72,11 @@ class SettingsController extends Controller
             ->log('Updated Settings');
 
         return back()->with('success', 'Settings saved.');
+    }
+
+    private function isTranslatable(mixed $default): bool
+    {
+        return is_array($default) && array_key_exists('en', $default);
     }
 
     private function sanitize(string $key, mixed $value): mixed

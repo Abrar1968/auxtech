@@ -30,7 +30,7 @@ class ServiceModule extends Module
             Field::repeater('features', [Field::text('title')->translatable()->required(), Field::textarea('description')->translatable()], 'What is included'),
             Field::repeater('process_steps', [Field::text('title')->translatable()->required(), Field::textarea('description')->translatable()], 'Process steps'),
             Field::belongsTo('parent_id', Service::class, 'title', 'Parent service'),
-            Field::text('icon')->max(60)->side(),
+            Field::icon(),
             Field::image('cover'),
             Field::toggle('is_featured', 'Featured on home page'),
             ...Field::publishing(),

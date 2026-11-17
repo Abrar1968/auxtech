@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ClientResource;
 use App\Http\Resources\FaqResource;
 use App\Http\Resources\IndustryResource;
 use App\Http\Resources\PricingPlanResource;
@@ -11,6 +12,7 @@ use App\Http\Resources\ServiceResource;
 use App\Http\Resources\SolutionResource;
 use App\Http\Resources\StatResource;
 use App\Http\Resources\TeamMemberResource;
+use App\Models\Client;
 use App\Models\Faq;
 use App\Models\Industry;
 use App\Models\LandingPage;
@@ -49,6 +51,7 @@ class PageController extends Controller
             ->crumb(__('Home'), lroute('home'))->crumb(__('Pricing'), lroute('pricing'));
 
         return Inertia::render('Site/Pricing', [
+            'intro' => page_intro('pricing'),
             'groups' => $plans->groupBy(fn (PricingPlan $p) => $p->planable ? (string) ($p->planable->name ?? $p->planable->title) : '')
                 ->map(fn ($group, $name) => ['name' => $name ?: null, 'plans' => PricingPlanResource::collection($group)->resolve()])->values()->all(),
         ]);
@@ -60,10 +63,15 @@ class PageController extends Controller
             ->crumb(__('Home'), lroute('home'))->crumb(__('About'), lroute('about'));
 
         return Inertia::render('Site/About', [
+            'intro' => page_intro('about'),
             'team' => TeamMemberResource::collection(TeamMember::query()->where('is_active', true)->ordered()->with('media')->get())->resolve(),
             'stats' => StatResource::collection(Stat::query()->where('is_active', true)->ordered()->get())->resolve(),
             'projectCount' => Project::query()->published()->count(),
-            'industries' => IndustryResource::collection(Industry::query()->ordered()->get())->resolve(),
+            'industries' => IndustryResource::collection(Industry::query()->ordered()
+                ->withCount(['projects' => fn ($q) => $q->published()])->get()->where('projects_count', '>', 0)->values())->resolve(),
+            'story' => setting_t('about.story'),
+            'reasons' => tr_rows(setting('home.reasons')),
+            'clients' => ClientResource::collection(Client::query()->where('show_logo', true)->ordered()->with('media')->get())->resolve(),
         ]);
     }
 
@@ -76,6 +84,7 @@ class PageController extends Controller
             ->schema(seo()->builder()->faqPage($faqs->map(fn (Faq $f) => ['question' => $f->question, 'answer' => $f->answer])));
 
         return Inertia::render('Site/Faq', [
+            'intro' => page_intro('faq'),
             'groups' => $faqs->groupBy(fn (Faq $f) => $f->group ?: 'general')
                 ->map(fn ($group, $name) => ['group' => $name, 'faqs' => FaqResource::collection($group)->resolve()])->values()->all(),
         ]);
@@ -87,8 +96,10 @@ class PageController extends Controller
             ->crumb(__('Home'), lroute('home'))->crumb(__('Contact'), lroute('contact'));
 
         return Inertia::render('Site/Contact', [
+            'intro' => page_intro('contact'),
             'services' => Service::query()->published()->ordered()->get()->map(fn (Service $s) => ['id' => $s->id, 'title' => $s->title])->all(),
             'whatsappUrl' => $whatsapp->url(),
+            'mapUrl' => setting('company.map_url') ?: 'https://www.google.com/maps/search/?api=1&query='.rawurlencode((string) tr(setting('company.address'), 'en')),
         ]);
     }
 
@@ -98,6 +109,7 @@ class PageController extends Controller
             ->crumb(__('Home'), lroute('home'))->crumb(__('Estimate'), lroute('estimate'));
 
         return Inertia::render('Site/Estimate', [
+            'intro' => page_intro('estimate'),
             'services' => Service::query()->published()->ordered()->get()->map(fn (Service $s) => ['id' => $s->id, 'title' => $s->title])->all(),
             'solutions' => Solution::query()->published()->ordered()->with('featureGroups.features')->get()
                 ->map(fn (Solution $s) => (new SolutionResource($s))->resolve())->all(),

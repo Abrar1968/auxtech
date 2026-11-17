@@ -21,11 +21,26 @@ trait Sortable
         return $query->orderBy($this->qualifyColumn('sort_order'))->orderBy($this->qualifyColumn('id'));
     }
 
-    /** @param list<int|string> $ids */
+    /**
+     * Reorder the given rows among the positions they already hold, so
+     * dragging within one page of a list never disturbs the other pages.
+     *
+     * @param  list<int|string>  $ids
+     */
     public static function reorder(array $ids): void
     {
-        foreach (array_values($ids) as $position => $id) {
-            static::query()->whereKey($id)->update(['sort_order' => $position + 1]);
+        $slots = static::query()->whereKey($ids)->orderBy('sort_order')->orderBy('id')->pluck('sort_order')->all();
+
+        // Rows sharing a position (e.g. never ordered) get distinct ones.
+        if (count(array_unique($slots)) !== count($slots)) {
+            $start = (int) ($slots[0] ?? 1);
+            $slots = range($start, $start + count($ids) - 1);
+        }
+
+        foreach (array_values($ids) as $index => $id) {
+            if (isset($slots[$index])) {
+                static::query()->whereKey($id)->update(['sort_order' => $slots[$index]]);
+            }
         }
     }
 }

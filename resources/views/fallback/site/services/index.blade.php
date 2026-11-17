@@ -1,5 +1,5 @@
-<h1>{{ $seo['breadcrumbs'][1]['name'] ?? __('Services') }}</h1>
-<p>{{ $seo['description'] }}</p>
+<h1>{{ $intro['heading'] }}</h1>
+<p>{{ $intro['lead'] }}</p>
 @foreach ($services as $service)
     <h2><a href="{{ $service['url'] }}">{{ $service['title'] }}</a></h2>
     @if ($service['excerpt'])<p>{{ $service['excerpt'] }}</p>@endif

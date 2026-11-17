@@ -40,6 +40,7 @@ class WorkController extends Controller
             ->schema(seo()->builder()->itemList('Auxtech projects', $projects->map(fn (Project $p) => ['name' => (string) $p->title, 'url' => lroute('work.show', $p->slug)])->all()));
 
         return Inertia::render('Site/Work/Index', [
+            'intro' => page_intro('work'),
             'projects' => ProjectResource::collection($projects)->resolve(),
             'filters' => $filters,
             'industries' => IndustryResource::collection(Industry::query()->ordered()->withCount(['projects' => $published])->get()->where('projects_count', '>', 0)->values())->resolve(),

@@ -5,6 +5,7 @@ use App\Http\Middleware\EnsureAdmin;
 use App\Http\Middleware\EnsureInstalled;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\HandleRedirects;
+use App\Http\Middleware\RequireTwoFactor;
 use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\SetLocale;
 use Illuminate\Foundation\Application;
@@ -24,7 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
         then: function (): void {
             Route::middleware([])->group(base_path('routes/install.php'));
 
-            Route::middleware(['web', 'auth', 'admin'])->prefix('admin')->name('admin.')
+            Route::middleware(['web', 'auth', 'admin', 'two-factor'])->prefix('admin')->name('admin.')
                 ->group(base_path('routes/admin.php'));
         },
     )
@@ -39,7 +40,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->group('site', [HandleRedirects::class, CaptureAttribution::class]);
-        $middleware->alias(['admin' => EnsureAdmin::class]);
+        $middleware->alias(['admin' => EnsureAdmin::class, 'two-factor' => RequireTwoFactor::class]);
 
         // Click beacons are sent with navigator.sendBeacon, which cannot attach a CSRF header.
         $middleware->validateCsrfTokens(except: ['api/events']);

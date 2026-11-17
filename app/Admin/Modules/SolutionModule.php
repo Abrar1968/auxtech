@@ -28,7 +28,7 @@ class SolutionModule extends Module
             Field::richtext('body')->translatable(),
             Field::url('demo_url', 'Live demo URL'),
             Field::url('external_url', 'Product website')->help('For products with their own site, such as Auxify.'),
-            Field::text('icon')->max(60)->side(),
+            Field::icon(),
             Field::image('cover'),
             Field::toggle('is_flagship', 'Flagship product'),
             ...Field::publishing(),

@@ -110,6 +110,16 @@ final class Field
         return self::make('select', $name, $label)->options($options);
     }
 
+    /** Icon picker limited to the icons the site can draw (resources/data/icons.json). */
+    public static function icon(string $name = 'icon'): self
+    {
+        return self::select($name, function (): array {
+            $names = json_decode((string) file_get_contents(resource_path('data/icons.json')), true) ?: [];
+
+            return array_combine($names, $names);
+        })->side();
+    }
+
     /** @param class-string<Model> $related */
     public static function belongsTo(string $name, string $related, string $labelColumn = 'name', ?string $label = null): self
     {

@@ -84,7 +84,7 @@ class CatalogueSeeder extends Seeder
                 'Sell and deliver online courses with separate student and trainer portals.'],
             ['corporate-website', 'Corporate Website', 'কর্পোরেট ওয়েবসাইট', 'building-2', false, null, null,
                 'A professional company website that presents your services, projects and contact details.'],
-            ['custom-software', 'Custom Software', 'কাস্টম সফটওয়্যার', 'code-2', false, null, null,
+            ['custom-software', 'Custom Software', 'কাস্টম সফটওয়্যার', 'code-xml', false, null, null,
                 'Software designed around your process, from calculators and portals to multi-role platforms.'],
             ['auxify', 'Auxify', 'Auxify', 'cloud', false, null, 'https://auxify.store',
                 'Auxtech\'s own store builder: open an online shop in minutes with ready-made themes, no coding and no server.'],

@@ -37,6 +37,38 @@ if (! function_exists('seo')) {
     }
 }
 
+if (! function_exists('page_intro')) {
+    /** @return array{heading: ?string, lead: ?string} on-page heading of a listing page */
+    function page_intro(string $key): array
+    {
+        return ['heading' => setting_t("pages.{$key}.heading"), 'lead' => setting_t("pages.{$key}.lead")];
+    }
+}
+
+if (! function_exists('section_copy')) {
+    /** @return array{title: ?string, lead: ?string} heading of a home page section */
+    function section_copy(string $key): array
+    {
+        $copy = (array) setting("home.copy.{$key}", []);
+
+        return ['title' => tr($copy['title'] ?? null), 'lead' => tr($copy['lead'] ?? null)];
+    }
+}
+
+if (! function_exists('tr_rows')) {
+    /**
+     * Resolve the translatable fields of a settings list for the current locale.
+     *
+     * @param  array<int, array<string, mixed>>|null  $rows
+     * @return list<array<string, mixed>>
+     */
+    function tr_rows(?array $rows): array
+    {
+        return collect($rows ?? [])->map(fn (array $row) => array_map(fn ($value) => is_array($value) ? tr($value) : $value, $row))
+            ->filter(fn (array $row) => filled($row['title'] ?? null))->values()->all();
+    }
+}
+
 if (! function_exists('tr')) {
     /**
      * Resolve a translatable value ({"en": "...", "bn": "..."}) for the

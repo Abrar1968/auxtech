@@ -68,6 +68,7 @@ class BlogController extends Controller
         $posts = $query->published()->latest('published_at')->with(['author', 'category', 'media'])->paginate(12)->withQueryString();
 
         return Inertia::render('Site/Blog/Index', [
+            'intro' => $heading ? ['heading' => $heading, 'lead' => null] : page_intro('blog'),
             'heading' => $heading,
             'posts' => PostResource::collection($posts->getCollection())->resolve(),
             'pagination' => [

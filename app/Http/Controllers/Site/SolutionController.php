@@ -21,6 +21,7 @@ class SolutionController extends Controller
             ->crumb(__('Home'), lroute('home'))->crumb(__('Solutions'), lroute('solutions.index'));
 
         return Inertia::render('Site/Solutions/Index', [
+            'intro' => page_intro('solutions'),
             'solutions' => SolutionResource::collection(Solution::query()->published()->ordered()->with('media')
                 ->withCount(['projects' => fn ($q) => $q->published()])->get())->resolve(),
         ]);

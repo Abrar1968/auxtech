@@ -1,5 +1,7 @@
-<h1>{{ __('About') }} {{ $site['name'] }}</h1>
-<p>{{ $site['description'] }}</p>
+<h1>{{ $intro['heading'] }}</h1>
+<p>{{ $intro['lead'] }}</p>
+@foreach (preg_split('/\n\s*\n/', (string) $story) as $paragraph)<p>{{ $paragraph }}</p>@endforeach
+@if ($reasons)<ul>@foreach ($reasons as $reason)<li>{{ $reason['title'] }}: {{ $reason['description'] }}</li>@endforeach</ul>@endif
 @if ($site['slogan'])<p><em>{{ $site['slogan'] }}</em></p>@endif
 <ul>
     <li>{{ $site['address'] }}</li>

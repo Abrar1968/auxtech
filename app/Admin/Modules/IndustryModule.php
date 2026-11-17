@@ -24,7 +24,7 @@ class IndustryModule extends Module
             Field::text('name')->translatable()->required(),
             Field::slug(),
             Field::textarea('description')->translatable(),
-            Field::text('icon')->max(60)->help('Lucide icon name, e.g. "shirt".')->side(),
+            Field::icon(),
         ];
     }
 

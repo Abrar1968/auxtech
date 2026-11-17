@@ -4,6 +4,7 @@ namespace App\Admin;
 
 use Closure;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\Rule;
 
 /**
@@ -281,11 +282,11 @@ final class Field
         };
 
         if ($this->type === 'image') {
-            return [$key => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:6144']];
+            return [$key => ['nullable', ...self::imageRules()]];
         }
 
         if ($this->type === 'images') {
-            return [$key => ['nullable', 'array', 'max:20'], $key.'.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:6144']];
+            return [$key => ['nullable', 'array', 'max:20'], $key.'.*' => self::imageRules()];
         }
 
         if ($this->type === 'multiselect') {
@@ -320,6 +321,21 @@ final class Field
         }
 
         return [$key => [$presence, ...$scalar, ...$this->extraRules]];
+    }
+
+    /**
+     * Raster images only. The last rule opens the file, so a script renamed
+     * to .jpg is rejected whatever its reported type.
+     *
+     * @return list<mixed>
+     */
+    public static function imageRules(): array
+    {
+        return ['file', 'mimes:jpg,jpeg,png,webp', 'max:6144', function (string $attribute, mixed $value, Closure $fail): void {
+            if (! $value instanceof UploadedFile || @getimagesize($value->getRealPath()) === false) {
+                $fail('The file must be a valid JPG, PNG or WebP image.');
+            }
+        }];
     }
 
     /** @return array<string, mixed> */

@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Lead;
 use App\Models\User;
 use App\Support\Realtime;
+use App\Support\Search;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -154,11 +155,7 @@ class LeadController extends Controller
             ->when(in_array($request->query('status'), LeadStatus::values(), true), fn (Builder $q) => $q->where('status', $request->query('status')))
             ->when(in_array($request->query('source'), LeadSource::values(), true), fn (Builder $q) => $q->where('source', $request->query('source')))
             ->when($request->filled('assigned_to'), fn (Builder $q) => $q->where('assigned_to', (int) $request->query('assigned_to')))
-            ->when(trim((string) $request->query('search')) !== '', function (Builder $q) use ($request): void {
-                $term = '%'.addcslashes(trim((string) $request->query('search')), '%_').'%';
-                $q->where(fn (Builder $w) => $w->where('name', 'like', $term)->orWhere('phone', 'like', $term)
-                    ->orWhere('email', 'like', $term)->orWhere('company', 'like', $term));
-            });
+            ->when(trim((string) $request->query('search')) !== '', fn (Builder $q) => Search::apply($q, ['name', 'phone', 'email', 'company'], (string) $request->query('search')));
     }
 
     /** @return array<string, mixed> */

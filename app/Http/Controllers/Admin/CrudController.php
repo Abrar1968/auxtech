@@ -8,10 +8,10 @@ use App\Admin\Module;
 use App\Admin\ModuleRegistry;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CrudRequest;
+use App\Support\Search;
 use App\Support\SiteCache;
 use BackedEnum;
 use DateTimeInterface;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -37,11 +37,7 @@ class CrudController extends Controller
         }
 
         if (($search = trim((string) $request->query('search'))) !== '' && $definition->searchable() !== []) {
-            $query->where(function (Builder $q) use ($definition, $search): void {
-                foreach ($definition->searchable() as $column) {
-                    $q->orWhere($column, 'like', '%'.addcslashes($search, '%_').'%');
-                }
-            });
+            Search::apply($query, $definition->searchable(), $search);
         }
 
         foreach ($definition->filters() as $name => $options) {

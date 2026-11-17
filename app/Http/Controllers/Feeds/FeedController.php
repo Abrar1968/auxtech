@@ -12,8 +12,8 @@ use App\Models\PostCategory;
 use App\Models\Project;
 use App\Models\Service;
 use App\Models\Solution;
+use Carbon\CarbonInterface;
 use Illuminate\Http\Response;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -192,10 +192,10 @@ class FeedController extends Controller
         return response($xml, 200, ['Content-Type' => 'application/rss+xml; charset=UTF-8']);
     }
 
-    /** @return list<array{route: string, params: array<int|string, mixed>, lastmod: ?Carbon, image: ?string}> */
+    /** @return list<array{route: string, params: array<int|string, mixed>, lastmod: ?CarbonInterface, image: ?string}> */
     private function entries(): array
     {
-        $entry = fn (string $route, array $params = [], ?Carbon $lastmod = null, ?string $image = null): array => compact('route', 'params', 'lastmod', 'image');
+        $entry = fn (string $route, array $params = [], ?CarbonInterface $lastmod = null, ?string $image = null): array => compact('route', 'params', 'lastmod', 'image');
         $entries = [];
 
         foreach (['home', 'work.index', 'services.index', 'solutions.index', 'pricing', 'about', 'faq', 'contact', 'estimate', 'blog.index'] as $route) {

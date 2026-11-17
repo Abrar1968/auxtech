@@ -11,8 +11,8 @@ use App\Models\Lead;
 use App\Models\Post;
 use App\Models\Project;
 use App\Support\Realtime;
+use Carbon\CarbonInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -26,12 +26,12 @@ class DashboardController extends Controller
         $since = now()->subDays($days)->startOfDay();
         $previous = now()->subDays($days * 2)->startOfDay();
 
-        $leads = fn (Carbon $from, ?Carbon $to = null) => Lead::query()
+        $leads = fn (CarbonInterface $from, ?CarbonInterface $to = null) => Lead::query()
             ->where('status', '!=', LeadStatus::Spam->value)
             ->where('created_at', '>=', $from)
             ->when($to, fn ($q) => $q->where('created_at', '<', $to));
 
-        $clicks = fn (Carbon $from, ?Carbon $to = null) => ConversionEvent::query()
+        $clicks = fn (CarbonInterface $from, ?CarbonInterface $to = null) => ConversionEvent::query()
             ->where('type', EventType::WhatsAppClick->value)
             ->where('created_at', '>=', $from)
             ->when($to, fn ($q) => $q->where('created_at', '<', $to));

@@ -7,6 +7,7 @@ use App\Models\FailedTask;
 use App\Support\AfterResponse;
 use App\Support\Installation;
 use App\Support\MailConfigurator;
+use App\Support\ObsoleteFiles;
 use App\Support\Realtime;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -44,6 +45,7 @@ class SystemController extends Controller
         $this->authorizeSystem($request);
 
         Artisan::call('migrate', ['--force' => true]);
+        ObsoleteFiles::remove();
         $this->clearCaches();
 
         return back()->with('success', 'Database is up to date.');

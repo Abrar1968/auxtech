@@ -34,7 +34,12 @@ class PageController extends Controller
         $industry = Industry::query()->where('slug', $slug)->with('seo')->firstOrFail();
         $projects = $industry->projects()->published()->ordered()->with(['client.media', 'industry', 'solution', 'media'])->get();
 
-        seo()->for($industry, __(':name Website Development in Bangladesh', ['name' => $industry->name]), $industry->description)
+        // Without a description of its own, each industry page still gets a distinct one.
+        $description = $industry->description ?: __(':company builds websites and online stores for :name businesses in Bangladesh. See our :name projects and chat with us on WhatsApp.', [
+            'company' => setting_t('company.name'), 'name' => $industry->name,
+        ]);
+
+        seo()->for($industry, __(':name Website Development in Bangladesh', ['name' => $industry->name]), $description)
             ->crumb(__('Home'), lroute('home'))->crumb(__('Work'), lroute('work.index'))->crumb((string) $industry->name, lroute('industries.show', $industry->slug));
 
         return Inertia::render('Site/Industries/Show', [

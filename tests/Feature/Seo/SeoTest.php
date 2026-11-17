@@ -154,3 +154,10 @@ it('keeps admin pages out of search engines', function () {
         ->assertHeader('X-Robots-Tag', 'noindex, nofollow')
         ->assertSee('<meta name="robots" content="noindex, nofollow">', false);
 });
+
+it('gives every industry page its own description when none is written', function () {
+    industry();
+
+    $this->get('/industries/fashion')->assertSee('<meta name="description" content="Auxtech builds websites and online stores for Fashion &amp; Apparel businesses in Bangladesh.', false);
+    $this->get('/bn/industries/fashion')->assertSee('<meta name="description" content="Auxtech বাংলাদেশের ', false)->assertSee('ব্যবসার জন্য ওয়েবসাইট ও অনলাইন স্টোর তৈরি করে', false);
+});

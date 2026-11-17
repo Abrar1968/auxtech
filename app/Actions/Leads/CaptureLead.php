@@ -32,6 +32,8 @@ class CaptureLead
                 ->where('status', '!=', LeadStatus::Spam->value)
                 ->where('created_at', '>=', now()->subDay())
                 ->latest('id')
+                // Identical submissions arriving together (a double tap) queue here instead of deadlocking.
+                ->lockForUpdate()
                 ->first() : null;
 
             // The same person writing again within a day adds to their lead.
@@ -61,7 +63,7 @@ class CaptureLead
                 'user_agent' => Str::limit((string) $request->userAgent(), 480, ''),
                 ...CaptureAttribution::read($request),
             ]);
-        });
+        }, attempts: 3); // MariaDB can still pick a deadlock victim; a retry then finds the first lead.
 
         if ($lead->wasRecentlyCreated) {
             AfterResponse::run(NotifyAdminsOfLead::class, ['lead_id' => $lead->id]);

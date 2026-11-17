@@ -149,7 +149,13 @@ jobs:
           nohup php -S 127.0.0.1:8000 ../vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php > ../server.log 2>&1 &
           echo $! > ../server.pid
           sleep 2
-          curl -sf -o /dev/null http://127.0.0.1:8000/ && echo "server is up"
+          cd ..
+          php -v | head -1; php -m | tr '\n' ' '; echo
+          for path in / / /login /work /bn; do
+            curl -s -m 30 -o body.html -w "$path status %{http_code} in %{time_total}s\n" "http://127.0.0.1:8000$path" || echo "$path curl exit code $?"
+          done
+          head -c 600 body.html; echo
+          curl -sf -m 30 -o /dev/null http://127.0.0.1:8000/ && echo "server is up"
 
       - run: npx playwright test --project=desktop-chrome --project=android --trace off
         env:
@@ -162,8 +168,9 @@ jobs:
         if: always()
         run: |
           if kill -0 "$(cat server.pid)" 2>/dev/null; then echo "server still running"; else echo "server process has exited"; fi
-          grep -vE 'Accepted|Closing|\[(200|204|301|302|304|404|419|422|429)\]' server.log | tail -n 80 || true
-          tail -n 80 storage/logs/laravel.log 2>/dev/null || echo "no laravel.log"
+          tail -n 120 server.log || true
+          ls -la storage/logs
+          for f in storage/logs/*.log; do echo "== $f"; tail -n 60 "$f"; done
 
       - uses: actions/upload-artifact@v4
         if: failure()

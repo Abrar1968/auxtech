@@ -32,7 +32,7 @@ const { t } = useI18n();
                         <span class="block text-sm text-muted">
                             {{ item.author_role }}
                             <template v-if="item.project_url">
-                                · <Link :href="item.project_url" class="text-brand-600 hover:underline">{{ item.client ?? t('See the project') }}</Link>
+                                · <Link :href="item.project_url" class="text-link hover:underline">{{ item.client ?? t('See the project') }}</Link>
                             </template>
                         </span>
                     </span>

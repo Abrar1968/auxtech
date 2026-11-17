@@ -90,6 +90,8 @@
     --color-fg: var(--text);
     --color-muted: var(--text-muted);
     --color-line: var(--line);
+    /* Brand blue as text on a page surface; lighter in the dark theme to keep 4.5:1 contrast. */
+    --color-link: var(--link);
 }
 
 @layer base {
@@ -100,6 +102,7 @@
         --text: #0a0f24;
         --text-muted: #55607a;
         --line: #e4e8f0;
+        --link: #0145ff;
         --glass-bg: rgb(255 255 255 / 0.72);
         --glass-border: rgb(10 15 36 / 0.08);
         color-scheme: light;
@@ -112,6 +115,7 @@
         --text: #f4f6fb;
         --text-muted: #9aa6c1;
         --line: #1f2a4a;
+        --link: #8eb4ff;
         --glass-bg: rgb(10 15 36 / 0.66);
         --glass-border: rgb(255 255 255 / 0.1);
         color-scheme: dark;

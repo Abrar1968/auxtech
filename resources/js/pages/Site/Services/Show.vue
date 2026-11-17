@@ -32,7 +32,7 @@ const { t, lp, n } = useI18n();
                 <h2 class="font-display text-2xl font-semibold text-fg">{{ t('What is included') }}</h2>
                 <ul class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
                     <Reveal v-for="(feature, index) in service.features" :key="index" as="li" :delay="index * 0.04" class="flex gap-4 rounded-2xl border border-line bg-surface-raised p-5">
-                        <Check :size="22" class="mt-0.5 shrink-0 text-brand-600" aria-hidden="true" />
+                        <Check :size="22" class="mt-0.5 shrink-0 text-link" aria-hidden="true" />
                         <span>
                             <span class="block font-medium text-fg">{{ feature.title }}</span>
                             <span v-if="feature.description" class="mt-1 block text-muted">{{ feature.description }}</span>
@@ -49,10 +49,10 @@ const { t, lp, n } = useI18n();
             <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <Reveal v-for="(child, index) in service.children" :key="child.id" :delay="index * 0.06">
                     <Link :href="child.url" class="group flex h-full flex-col rounded-3xl border border-line bg-surface-raised p-7 transition hover:-translate-y-1 hover:border-brand-300">
-                        <span class="grid size-12 place-items-center rounded-2xl bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-200"><Icon :name="child.icon" :size="22" /></span>
+                        <span class="grid size-12 place-items-center rounded-2xl bg-brand-50 text-link dark:bg-brand-950 dark:text-brand-200"><Icon :name="child.icon" :size="22" /></span>
                         <h3 class="mt-6 font-display text-xl font-semibold text-fg">{{ child.title }}</h3>
                         <p v-if="child.excerpt" class="mt-2 text-muted">{{ child.excerpt }}</p>
-                        <ArrowUpRight :size="20" class="mt-auto self-end pt-4 text-brand-600 transition group-hover:rotate-45" aria-hidden="true" />
+                        <ArrowUpRight :size="20" class="mt-auto self-end pt-4 text-link transition group-hover:rotate-45" aria-hidden="true" />
                     </Link>
                 </Reveal>
             </div>

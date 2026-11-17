@@ -28,11 +28,11 @@ function date(value: string | null): string {
                 </div>
             </div>
             <div class="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted">
-                <span v-if="post.category" class="font-medium text-brand-600">{{ post.category.name }}</span>
+                <span v-if="post.category" class="font-medium text-link">{{ post.category.name }}</span>
                 <time v-if="post.published_at" :datetime="post.published_at">{{ date(post.published_at) }}</time>
                 <span>{{ t(':count min read', { count: n(post.reading_minutes) }) }}</span>
             </div>
-            <h3 class="mt-2 font-display text-xl leading-snug font-semibold text-fg transition group-hover:text-brand-600">{{ post.title }}</h3>
+            <h3 class="mt-2 font-display text-xl leading-snug font-semibold text-fg transition group-hover:text-link">{{ post.title }}</h3>
             <p v-if="post.excerpt" class="mt-2 line-clamp-2 text-muted">{{ post.excerpt }}</p>
         </Link>
     </article>

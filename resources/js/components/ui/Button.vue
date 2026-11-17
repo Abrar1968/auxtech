@@ -37,7 +37,7 @@ const classes = computed(() => [
             'bg-brand-600 text-white shadow-[0_8px_30px_-8px_rgb(1_69_255/0.7)] hover:bg-brand-500 hover:shadow-[0_10px_40px_-8px_rgb(1_69_255/0.9)]',
         whatsapp:
             'bg-whatsapp text-ink-950 shadow-[0_8px_30px_-8px_rgb(37_211_102/0.65)] hover:brightness-105 hover:shadow-[0_10px_40px_-6px_rgb(37_211_102/0.8)]',
-        secondary: 'border border-line bg-surface-raised text-fg hover:border-brand-400 hover:text-brand-600',
+        secondary: 'border border-line bg-surface-raised text-fg hover:border-brand-400 hover:text-link',
         glass: 'glass-dark text-white hover:bg-white/12',
         ghost: 'text-fg hover:bg-surface-muted',
         danger: 'bg-red-600 text-white hover:bg-red-500',

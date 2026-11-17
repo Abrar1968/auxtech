@@ -99,13 +99,13 @@ const chip = (selected: boolean) => [
             <div class="mb-8 flex items-center gap-3 text-sm text-muted" aria-live="polite">
                 <LoaderCircle v-if="loading" :size="16" class="animate-spin" aria-hidden="true" />
                 <span>{{ tc(':count project', ':count projects', projects.length) }}</span>
-                <button v-if="active" class="inline-flex items-center gap-1 font-medium text-brand-600 hover:underline" @click="apply({ industry: null, solution: null, service: null })">
+                <button v-if="active" class="inline-flex items-center gap-1 font-medium text-link hover:underline" @click="apply({ industry: null, solution: null, service: null })">
                     <X :size="14" aria-hidden="true" />{{ t('Clear filters') }}
                 </button>
             </div>
 
             <h2 class="sr-only">{{ t('Projects') }}</h2>
-            <motion.div layout class="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+            <motion.div layout class="grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
                 <AnimatePresence mode="popLayout">
                     <motion.div
                         v-for="(project, index) in projects"

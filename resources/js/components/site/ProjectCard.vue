@@ -20,7 +20,7 @@ const { t } = useI18n();
             <div class="mt-5 flex items-start justify-between gap-4">
                 <div class="min-w-0">
                     <div class="flex flex-wrap items-center gap-2 text-xs font-medium">
-                        <span v-if="project.industry" :class="dark ? 'text-brand-200' : 'text-brand-600'">{{ project.industry.name }}</span>
+                        <span v-if="project.industry" :class="dark ? 'text-brand-200' : 'text-link'">{{ project.industry.name }}</span>
                         <span
                             v-if="project.is_demo"
                             :class="['rounded-full px-2 py-0.5', dark ? 'bg-white/10 text-white/70' : 'bg-surface-muted text-muted']"

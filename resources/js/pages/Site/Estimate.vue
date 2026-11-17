@@ -101,7 +101,7 @@ const option = (selected: boolean) => [
                         <div class="h-1.5 overflow-hidden rounded-full bg-surface-muted">
                             <motion.div class="h-full rounded-full bg-brand-600" :animate="{ width: index <= step || done ? '100%' : '0%' }" :transition="{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }" />
                         </div>
-                        <p :class="['mt-2 hidden text-xs font-medium sm:block', index === step ? 'text-brand-600' : 'text-muted']" :aria-current="index === step ? 'step' : undefined">
+                        <p :class="['mt-2 hidden text-xs font-medium sm:block', index === step ? 'text-link' : 'text-muted']" :aria-current="index === step ? 'step' : undefined">
                             {{ n(index + 1) }}. {{ label }}
                         </p>
                     </li>

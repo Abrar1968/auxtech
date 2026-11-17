@@ -96,7 +96,7 @@ const visible = computed(() => props.sections.filter((key) => has[key]?.()));
                     <Reveal v-for="(stat, index) in stats" :key="index" :delay="index * 0.08" class="flex flex-col text-center lg:border-l lg:border-line lg:first:border-0">
                         <dt class="order-2 mt-2 text-muted">{{ stat.label }}</dt>
                         <dd class="font-display text-5xl font-semibold tracking-tight text-fg sm:text-6xl">
-                            <CountUp :value="stat.value" /><span class="text-brand-600">{{ stat.suffix }}</span>
+                            <CountUp :value="stat.value" /><span class="text-link">{{ stat.suffix }}</span>
                         </dd>
                     </Reveal>
                 </dl>

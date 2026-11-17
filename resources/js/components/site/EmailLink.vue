@@ -20,7 +20,7 @@ const href = computed(() => `mailto:${site.value.email}?subject=${encodeURICompo
         :href="href"
         :class="[
             'inline-flex min-h-11 items-center gap-2 font-medium underline-offset-4 transition hover:underline',
-            dark ? 'text-white/80 hover:text-white' : 'text-fg/80 hover:text-brand-600',
+            dark ? 'text-white/80 hover:text-white' : 'text-fg/80 hover:text-link',
         ]"
         @click="track('email_click', placement, locale)"
     >

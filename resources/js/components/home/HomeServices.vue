@@ -39,7 +39,7 @@ defineProps<{ services: Service[]; copy?: SectionCopy }>();
                         <span
                             :class="[
                                 'relative grid size-13 place-items-center rounded-2xl transition duration-500 group-hover:scale-110',
-                                index === 0 ? 'bg-brand-600 text-white' : 'bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-200',
+                                index === 0 ? 'bg-brand-600 text-white' : 'bg-brand-50 text-link dark:bg-brand-950 dark:text-brand-200',
                             ]"
                         >
                             <Icon :name="service.icon" :size="24" />
@@ -53,7 +53,7 @@ defineProps<{ services: Service[]; copy?: SectionCopy }>();
                         </ul>
                         <ArrowUpRight
                             :size="22"
-                            :class="['relative mt-auto self-end pt-6 transition duration-300 group-hover:translate-x-1 group-hover:-translate-y-1', index === 0 ? 'text-white' : 'text-brand-600']"
+                            :class="['relative mt-auto self-end pt-6 transition duration-300 group-hover:translate-x-1 group-hover:-translate-y-1', index === 0 ? 'text-white' : 'text-link']"
                             aria-hidden="true"
                         />
                     </Link>

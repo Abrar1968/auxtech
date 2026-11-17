@@ -38,7 +38,7 @@ const paragraphs = computed(() => (props.story ?? '').split(/\n\s*\n/).filter(Bo
     <section class="section-y bg-surface">
         <div class="container-page grid gap-14 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
             <Reveal>
-                <p v-if="site.slogan" class="font-display text-2xl leading-snug font-medium text-brand-600 sm:text-3xl">“{{ site.slogan }}”</p>
+                <p v-if="site.slogan" class="font-display text-2xl leading-snug font-medium text-link sm:text-3xl">“{{ site.slogan }}”</p>
                 <div class="mt-8 grid gap-5 text-lg leading-relaxed text-fg/85">
                     <p v-for="(paragraph, index) in paragraphs" :key="index">{{ paragraph }}</p>
                 </div>
@@ -49,14 +49,14 @@ const paragraphs = computed(() => (props.story ?? '').split(/\n\s*\n/).filter(Bo
                     <p class="mt-2 text-white/65">{{ t('Published projects') }}</p>
                 </div>
                 <div v-for="(stat, index) in stats" :key="index" class="rounded-3xl border border-line bg-surface-raised p-8">
-                    <p class="font-display text-5xl font-semibold tracking-tight text-fg"><CountUp :value="stat.value" /><span class="text-brand-600">{{ stat.suffix }}</span></p>
+                    <p class="font-display text-5xl font-semibold tracking-tight text-fg"><CountUp :value="stat.value" /><span class="text-link">{{ stat.suffix }}</span></p>
                     <p class="mt-2 text-muted">{{ stat.label }}</p>
                 </div>
                 <div v-if="industries.length" class="rounded-3xl border border-line bg-surface-raised p-8">
                     <p class="font-medium text-fg">{{ t('Industries we work in') }}</p>
                     <ul class="mt-4 flex flex-wrap gap-2">
                         <li v-for="industry in industries" :key="industry.slug">
-                            <Link :href="industry.url" class="inline-block rounded-full border border-line px-3.5 py-1.5 text-sm text-fg/80 transition hover:border-brand-400 hover:text-brand-600">
+                            <Link :href="industry.url" class="inline-block rounded-full border border-line px-3.5 py-1.5 text-sm text-fg/80 transition hover:border-brand-400 hover:text-link">
                                 {{ industry.name }} <span class="text-muted">{{ n(industry.projects_count ?? 0) }}</span>
                             </Link>
                         </li>
@@ -90,7 +90,7 @@ const paragraphs = computed(() => (props.story ?? '').split(/\n\s*\n/).filter(Bo
                     <h3 class="mt-4 font-display text-lg font-semibold text-fg">{{ member.name }}</h3>
                     <p v-if="member.role" class="text-muted">{{ member.role }}</p>
                     <ul v-if="member.socials.length" class="mt-2 flex gap-3 text-sm">
-                        <li v-for="social in member.socials" :key="social.url"><a :href="social.url" target="_blank" rel="noopener" class="text-brand-600 hover:underline">{{ social.label }}</a></li>
+                        <li v-for="social in member.socials" :key="social.url"><a :href="social.url" target="_blank" rel="noopener" class="text-link hover:underline">{{ social.label }}</a></li>
                     </ul>
                 </Reveal>
             </ul>

@@ -43,7 +43,7 @@ const featureCount = computed(() => groups.value.reduce((sum, g) => sum + g.feat
                     <p v-if="group.description" class="mt-1 text-sm text-muted">{{ group.description }}</p>
                     <ul class="mt-4 grid gap-2">
                         <li v-for="feature in group.features" :key="feature.slug" class="flex items-center gap-3 rounded-2xl border border-line bg-surface-raised px-4 py-3">
-                            <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-200"><Icon :name="feature.icon" :size="16" /></span>
+                            <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-brand-50 text-link dark:bg-brand-950 dark:text-brand-200"><Icon :name="feature.icon" :size="16" /></span>
                             <span class="text-[0.95rem] text-fg">{{ feature.title }}</span>
                         </li>
                     </ul>

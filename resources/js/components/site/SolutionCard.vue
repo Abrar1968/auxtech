@@ -19,11 +19,11 @@ const { tc } = useI18n();
             <span class="grid size-12 place-items-center rounded-2xl bg-gradient-to-br from-brand-500 to-brand-700 text-white shadow-[0_10px_30px_-10px_rgb(1_69_255)]">
                 <Icon :name="solution.icon" :size="22" />
             </span>
-            <ArrowUpRight :size="20" class="text-muted transition group-hover:rotate-45 group-hover:text-brand-600" aria-hidden="true" />
+            <ArrowUpRight :size="20" class="text-muted transition group-hover:rotate-45 group-hover:text-link" aria-hidden="true" />
         </div>
         <h3 class="mt-6 font-display text-xl font-semibold text-fg">{{ solution.name }}</h3>
         <p v-if="solution.summary" class="mt-2 leading-relaxed text-muted">{{ solution.summary }}</p>
-        <p v-if="solution.projects_count" class="mt-auto pt-6 text-sm font-medium text-brand-600">
+        <p v-if="solution.projects_count" class="mt-auto pt-6 text-sm font-medium text-link">
             {{ tc(':count project', ':count projects', solution.projects_count) }}
         </p>
     </Link>

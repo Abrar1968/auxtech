@@ -27,7 +27,7 @@ const { scrollYProgress } = useScroll({ target: list, offset: ['start 75%', 'end
                 <ol class="relative grid gap-10 pl-16 sm:pl-20">
                 <Reveal v-for="(step, index) in steps" :key="index" as="li" :delay="0.05" class="relative">
                     <span
-                        class="absolute top-0 -left-16 grid size-11 place-items-center rounded-full border border-line bg-surface-raised font-display text-sm font-semibold text-brand-600 shadow-sm sm:-left-20 sm:size-13 sm:text-base"
+                        class="absolute top-0 -left-16 grid size-11 place-items-center rounded-full border border-line bg-surface-raised font-display text-sm font-semibold text-link shadow-sm sm:-left-20 sm:size-13 sm:text-base"
                     >
                         {{ n(String(index + 1).padStart(2, '0')) }}
                     </span>

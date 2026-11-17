@@ -28,10 +28,10 @@ const { t } = useI18n();
                             <Icon :name="service.icon" :size="26" />
                         </span>
                         <h2 class="mt-6 font-display text-3xl font-semibold text-fg sm:text-4xl">
-                            <Link :href="service.url" class="hover:text-brand-600">{{ service.title }}</Link>
+                            <Link :href="service.url" class="hover:text-link">{{ service.title }}</Link>
                         </h2>
                         <p v-if="service.excerpt" class="mt-4 max-w-lg text-lg leading-relaxed text-muted">{{ service.excerpt }}</p>
-                        <Link :href="service.url" class="mt-6 inline-flex items-center gap-2 font-medium text-brand-600">
+                        <Link :href="service.url" class="mt-6 inline-flex items-center gap-2 font-medium text-link">
                             {{ t('Learn more') }} <ArrowRight :size="18" class="transition group-hover:translate-x-1" aria-hidden="true" />
                         </Link>
                     </div>
@@ -42,7 +42,7 @@ const { t } = useI18n();
                                     <span class="block font-medium text-fg">{{ child.title }}</span>
                                     <span v-if="child.excerpt" class="mt-0.5 block text-sm text-muted">{{ child.excerpt }}</span>
                                 </span>
-                                <ArrowUpRight :size="18" class="shrink-0 text-brand-600" aria-hidden="true" />
+                                <ArrowUpRight :size="18" class="shrink-0 text-link" aria-hidden="true" />
                             </Link>
                         </li>
                     </ul>

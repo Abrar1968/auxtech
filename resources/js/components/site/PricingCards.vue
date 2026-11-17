@@ -44,7 +44,7 @@ function price(plan: PricingPlan): string {
                 </p>
                 <ul v-if="plan.features.length" class="mt-6 grid gap-3 text-[0.95rem]">
                     <li v-for="feature in plan.features" :key="feature" class="flex gap-3">
-                        <Check :size="18" :class="['mt-0.5 shrink-0', plan.is_popular ? 'text-whatsapp' : 'text-brand-600']" aria-hidden="true" />
+                        <Check :size="18" :class="['mt-0.5 shrink-0', plan.is_popular ? 'text-whatsapp' : 'text-link']" aria-hidden="true" />
                         {{ feature }}
                     </li>
                 </ul>

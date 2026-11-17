@@ -90,7 +90,7 @@ const crumbs = computed(() => seo.value.breadcrumbs.slice(0, -1));
 
             <div v-if="post.tags?.length" class="container-page mt-12 max-w-6xl">
                 <ul class="flex flex-wrap gap-2">
-                    <li v-for="tag in post.tags" :key="tag.url"><Link :href="tag.url" class="rounded-full border border-line px-3 py-1.5 text-sm text-muted hover:text-brand-600">#{{ tag.name }}</Link></li>
+                    <li v-for="tag in post.tags" :key="tag.url"><Link :href="tag.url" class="rounded-full border border-line px-3 py-1.5 text-sm text-muted hover:text-link">#{{ tag.name }}</Link></li>
                 </ul>
             </div>
         </div>

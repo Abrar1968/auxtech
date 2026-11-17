@@ -11,7 +11,7 @@ defineProps<{ faqs: Faq[] }>();
         <AccordionItem v-for="faq in faqs" :key="faq.id" :value="String(faq.id)" class="group">
             <AccordionHeader as="h3">
                 <AccordionTrigger
-                    class="flex w-full items-center justify-between gap-6 py-6 text-left font-display text-lg font-medium text-fg transition hover:text-brand-600"
+                    class="flex w-full items-center justify-between gap-6 py-6 text-left font-display text-lg font-medium text-fg transition hover:text-link"
                 >
                     {{ faq.question }}
                     <span

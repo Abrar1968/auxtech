@@ -87,7 +87,7 @@ const scale = useTransform(scrollYProgress, [0, 0.5], [0.92, 1]);
 
                 <dl v-if="project.metrics?.length" class="mt-12 grid grid-cols-2 gap-6 sm:grid-cols-3">
                     <Reveal v-for="(metric, index) in project.metrics" :key="index" :delay="index * 0.06" class="rounded-3xl border border-line bg-surface-muted p-6">
-                        <dd class="font-display text-4xl font-semibold text-brand-600">{{ metric.value ? n(metric.value) : '' }}</dd>
+                        <dd class="font-display text-4xl font-semibold text-link">{{ metric.value ? n(metric.value) : '' }}</dd>
                         <dt class="mt-1 text-muted">{{ metric.label }}</dt>
                     </Reveal>
                 </dl>
@@ -116,7 +116,7 @@ const scale = useTransform(scrollYProgress, [0, 0.5], [0.92, 1]);
                         <h2 class="font-display text-lg font-semibold text-fg">{{ t('Services') }}</h2>
                         <ul class="mt-3 grid gap-2">
                             <li v-for="service in project.services" :key="service.url">
-                                <Link :href="service.url" class="inline-flex items-center gap-1 text-brand-600 hover:underline">{{ service.title }} <ArrowUpRight :size="14" aria-hidden="true" /></Link>
+                                <Link :href="service.url" class="inline-flex items-center gap-1 text-link hover:underline">{{ service.title }} <ArrowUpRight :size="14" aria-hidden="true" /></Link>
                             </li>
                         </ul>
                     </template>

@@ -60,7 +60,7 @@ function isActive(href: string): boolean {
         <div class="container-page pt-3">
             <div
                 :class="[
-                    'flex h-16 items-center gap-4 rounded-2xl px-3 pl-4 transition-all duration-500',
+                    'flex h-16 items-center gap-2 rounded-2xl pr-1.5 pl-3 transition-all duration-500 sm:gap-4 sm:px-3 sm:pl-4',
                     scrolled ? 'glass shadow-[0_10px_40px_-20px_rgb(5_8_22/0.35)]' : 'border border-transparent',
                 ]"
             >
@@ -70,7 +70,7 @@ function isActive(href: string): boolean {
                         :alt="site.name"
                         width="1125"
                         height="174"
-                        class="h-6 w-auto sm:h-7"
+                        class="h-5 w-auto min-[360px]:h-6 sm:h-7"
                     />
                 </Link>
 
@@ -89,7 +89,7 @@ function isActive(href: string): boolean {
                                 :class="[
                                     'inline-flex min-h-10 items-center gap-1 rounded-full px-3.5 text-sm font-medium transition',
                                     scrolled ? 'text-fg/75 hover:bg-surface-muted hover:text-fg' : 'text-white/75 hover:bg-white/10 hover:text-white',
-                                    isActive(link.href) && (scrolled ? '!text-brand-600' : '!text-white'),
+                                    isActive(link.href) && (scrolled ? '!text-link' : '!text-white'),
                                 ]"
                                 :aria-current="isActive(link.href) ? 'page' : undefined"
                                 :aria-expanded="link.menu ? openMenu === link.menu : undefined"
@@ -123,7 +123,7 @@ function isActive(href: string): boolean {
                     </ul>
                 </nav>
 
-                <div class="ml-auto flex items-center gap-1.5">
+                <div class="ml-auto flex items-center gap-1 sm:gap-1.5">
                     <a
                         :href="switchHref"
                         :hreflang="otherLocale"

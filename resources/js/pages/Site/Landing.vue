@@ -31,10 +31,10 @@ const { t, lp } = useI18n();
             <div class="prose-aux" v-html="landing.body" />
             <aside class="grid content-start gap-3">
                 <Link v-if="service" :href="service.url" class="flex items-center justify-between rounded-2xl border border-line p-5 font-medium text-fg hover:border-brand-400">
-                    {{ service.title }} <ArrowRight :size="18" class="text-brand-600" aria-hidden="true" />
+                    {{ service.title }} <ArrowRight :size="18" class="text-link" aria-hidden="true" />
                 </Link>
                 <Link v-if="solution" :href="solution.url" class="flex items-center justify-between rounded-2xl border border-line p-5 font-medium text-fg hover:border-brand-400">
-                    {{ solution.name }} <ArrowRight :size="18" class="text-brand-600" aria-hidden="true" />
+                    {{ solution.name }} <ArrowRight :size="18" class="text-link" aria-hidden="true" />
                 </Link>
             </aside>
         </div>

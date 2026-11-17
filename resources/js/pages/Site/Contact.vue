@@ -32,27 +32,27 @@ const { t } = useI18n();
 
                 <Reveal :delay="0.06" class="rounded-3xl border border-line bg-surface-raised p-7">
                     <div class="flex items-start gap-4">
-                        <span class="grid size-11 shrink-0 place-items-center rounded-2xl bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-200"><Mail :size="20" aria-hidden="true" /></span>
+                        <span class="grid size-11 shrink-0 place-items-center rounded-2xl bg-brand-50 text-link dark:bg-brand-950 dark:text-brand-200"><Mail :size="20" aria-hidden="true" /></span>
                         <div>
                             <h2 class="font-display text-lg font-semibold text-fg">{{ t('Email') }}</h2>
-                            <EmailLink placement="contact-email" :show-icon="false" class="!min-h-0 text-brand-600" />
+                            <EmailLink placement="contact-email" :show-icon="false" class="!min-h-0 text-link" />
                         </div>
                     </div>
                 </Reveal>
 
                 <Reveal :delay="0.12" class="rounded-3xl border border-line bg-surface-raised p-7">
                     <div class="flex items-start gap-4">
-                        <span class="grid size-11 shrink-0 place-items-center rounded-2xl bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-200"><MapPin :size="20" aria-hidden="true" /></span>
+                        <span class="grid size-11 shrink-0 place-items-center rounded-2xl bg-brand-50 text-link dark:bg-brand-950 dark:text-brand-200"><MapPin :size="20" aria-hidden="true" /></span>
                         <div>
                             <h2 class="font-display text-lg font-semibold text-fg">{{ t('Office') }}</h2>
                             <address class="mt-1 text-muted not-italic">{{ site.address }}</address>
-                            <a :href="mapUrl" target="_blank" rel="noopener" class="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-brand-600 hover:underline">
+                            <a :href="mapUrl" target="_blank" rel="noopener" class="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-link hover:underline">
                                 {{ t('Open in Google Maps') }} <ExternalLink :size="14" aria-hidden="true" />
                             </a>
                         </div>
                     </div>
                     <div v-if="site.hours" class="mt-6 flex items-start gap-4 border-t border-line pt-6">
-                        <span class="grid size-11 shrink-0 place-items-center rounded-2xl bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-200"><Clock :size="20" aria-hidden="true" /></span>
+                        <span class="grid size-11 shrink-0 place-items-center rounded-2xl bg-brand-50 text-link dark:bg-brand-950 dark:text-brand-200"><Clock :size="20" aria-hidden="true" /></span>
                         <div>
                             <h2 class="font-display text-lg font-semibold text-fg">{{ t('Hours') }}</h2>
                             <p class="mt-1 text-muted">{{ site.hours }}</p>

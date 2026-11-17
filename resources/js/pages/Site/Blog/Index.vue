@@ -28,7 +28,7 @@ const { t, lp } = useI18n();
 
     <section class="section-y bg-surface">
         <div class="container-page">
-            <div v-if="posts.length" class="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+            <div v-if="posts.length" class="grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
                 <Reveal v-for="(post, index) in posts" :key="post.id" :delay="(index % 3) * 0.07" :class="index === 0 && pagination.current === 1 ? 'sm:col-span-2' : ''">
                     <PostCard :post="post" />
                 </Reveal>

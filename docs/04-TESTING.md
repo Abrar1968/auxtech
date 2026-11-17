@@ -234,16 +234,14 @@ A red pipeline blocks merging. Tests are never skipped or disabled to get a gree
 6. Submit sitemap in Google Search Console and Bing Webmaster Tools; request indexing for Home.
 7. GTM preview shows `whatsapp_click` and `generate_lead` events; Meta Events Manager shows deduplicated Pixel + CAPI events.
 
-## 11. Current status (end of Phase 1)
+## 11. Current status (end of Phase 2)
 
 | Item | Status |
 |---|---|
-| Pest: unit, feature (site, SEO, leads, admin) and full-install suites | 173 tests passing on SQLite, 172 on MariaDB 10.11 |
-| Test cases covered by automation so far | TC-L01–L13, TC-P01–P08, P11, P12 (HTTP level), P14; TC-S01–S09 (HTTP level); TC-A01, A03–A11, A13, A14, A16; TC-N05–N07 (in part), N10, N14, N16 |
-| Zip rehearsal on Apache + PHP 8.3 + MariaDB (TC-N13, N15) | Passed manually; steps in `phases/PHASE-1-BACKEND.md` |
-| Playwright: 3 smoke specs on Chromium desktop and Pixel 7 | Passing |
-| Vitest, ESLint, `vue-tsc`, Pint | Passing |
-| Pusher credentials | Verified with a live test event; broadcasts worked in the zip rehearsal |
-| Not yet tested | Two-factor sign-in (TC-A02), scheduled publishing in the admin UI (TC-A12), real Gmail delivery, Meta Conversions API against Meta, everything in §7.5 and most of §7.6 (Phase 3) |
-| Larastan | Not installed yet |
-| Firefox and WebKit browsers | Install locally with `npx playwright install` |
+| Pest (unit, feature, full install) | 174 passing on SQLite, 173 on MariaDB 10.11 |
+| Vitest | 5 passing (translation and icon coverage, i18n helpers) |
+| Playwright (`tests/e2e/site.spec.ts`, `admin.spec.ts`) | 29 passing on Chromium desktop and Pixel 7. Admin specs sign in once per worker because sign-in is limited to five attempts a minute. They need a freshly seeded database and `ADMIN_PASSWORD` from `.env` |
+| Lighthouse mobile | Accessibility, best practices and SEO 100 on tested pages; performance 81–95 (English), 72–74 (Bangla). Details in `phases/PHASE-2-FRONTEND.md` |
+| Zip rehearsal on Apache + MariaDB | Passed for the Phase 1 and Phase 2 builds |
+| Not yet tested | Firefox, Safari, Samsung Internet; screen readers; real Gmail delivery; Meta Conversions API against Meta; two-factor sign-in end to end; load testing |
+| Larastan | Not installed |

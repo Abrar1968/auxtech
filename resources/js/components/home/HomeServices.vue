@@ -27,7 +27,7 @@ defineProps<{ services: Service[]; copy?: SectionCopy }>();
                         :class="[
                             'group relative flex h-full flex-col overflow-hidden rounded-3xl border p-7 transition duration-500 ease-out-expo hover:-translate-y-1 sm:p-8',
                             index === 0
-                                ? 'border-transparent bg-ink-950 text-white hover:shadow-[0_40px_80px_-40px_rgb(1_69_255/0.9)]'
+                                ? 'border-transparent bg-ink-950 text-white hover:shadow-[0_40px_80px_-40px_rgb(1_69_255/0.9)] dark:border-white/10 dark:bg-ink-800'
                                 : 'border-line bg-surface-raised text-fg hover:border-brand-300 hover:shadow-[0_30px_60px_-30px_rgb(1_69_255/0.35)]',
                         ]"
                     >

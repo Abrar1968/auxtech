@@ -8,10 +8,10 @@ Company website and admin panel for **Auxtech** — website development, app dev
 | Database | MySQL / MariaDB (XAMPP locally) |
 | Frontend | Vue 3 + TypeScript, Inertia v3, Tailwind CSS v4 |
 | Real-time / analytics | Pusher Channels, Microsoft Clarity |
-| Motion | Motion for Vue (`motion-v`), GSAP, Lenis |
+| Motion | Motion for Vue (`motion-v`), Lenis |
 | Tests | Pest, Vitest, Playwright |
 
-Documentation is in [`docs/`](docs/README.md). **Phase 1 (backend) is complete.** The pages are plain placeholders that show the data they receive; Phase 2 builds the designed interface.
+Documentation is in [`docs/`](docs/README.md). **Phases 1 (backend) and 2 (frontend) are complete.** Phase 3 is full testing and launch.
 
 ## Local setup (Windows + XAMPP)
 
@@ -72,7 +72,7 @@ The build script needs a Unix shell (Git Bash or WSL on Windows) with `zip`.
 | Build the production zip | `bash scripts/build-release.sh` |
 | PHP code style check / fix | `composer lint` / `composer format` |
 | Type check, lint, unit tests (JS) | `npm run typecheck`, `npm run lint`, `npm test` |
-| End-to-end tests | `npm run test:e2e` (first run: `npx playwright install`) |
+| End-to-end tests | `php artisan migrate:fresh --seed`, then `npm run test:e2e` (first run: `npx playwright install`) |
 
 ## Project layout
 

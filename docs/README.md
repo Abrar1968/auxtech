@@ -15,8 +15,8 @@
 |---|---|---|---|
 | 0 | — | Research, environment, project setup, documentation | **Done** |
 | 1 | [Full Backend](phases/PHASE-1-BACKEND.md) | Data model, admin API, public controllers, leads, SEO feeds, installer, seed data | **Done** |
-| 2 | [Full Frontend](phases/PHASE-2-FRONTEND.md) | Design system, public site, admin panel UI, Bangla, performance | Ready to start |
-| 3 | [Full Testing & Launch](phases/PHASE-3-TESTING.md) | Backend + frontend verification, non-functional testing, UAT, launch | After Phase 2 |
+| 2 | [Full Frontend](phases/PHASE-2-FRONTEND.md) | Design system, public site, admin panel UI, Bangla, performance | **Done** |
+| 3 | [Full Testing & Launch](phases/PHASE-3-TESTING.md) | Backend + frontend verification, non-functional testing, UAT, launch | Ready to start |
 
 ## Research data
 

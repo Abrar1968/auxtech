@@ -8,6 +8,7 @@
 @source '../js';
 
 @custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+@custom-variant lang-bn (&:where(:lang(bn), :lang(bn) *));
 
 /*
  | Design tokens. Specification: docs/03-FRONTEND-DESIGN.md §3.
@@ -141,11 +142,12 @@
         text-wrap: pretty;
     }
 
-    :lang(bn) {
+    /* Bangla needs more room between lines. Set once on body so headings and utilities still win. */
+    html:lang(bn) body {
         line-height: 1.75;
     }
 
-    :lang(bn) :is(h1, h2, h3, h4) {
+    html:lang(bn) :is(h1, h2, h3, h4) {
         letter-spacing: 0;
         line-height: 1.3;
     }

@@ -50,7 +50,8 @@ function selectGroup(key: string): void {
         </div>
 
         <div class="mt-8 grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-            <div role="tabpanel"><ul class="grid content-start gap-1.5">
+            <div role="tabpanel">
+<ul class="grid content-start gap-1.5">
                 <li v-for="item in group?.features ?? []" :key="item.slug">
                     <button
                         :class="[
@@ -72,7 +73,8 @@ function selectGroup(key: string): void {
                         <span class="font-medium">{{ item.title }}</span>
                     </button>
                 </li>
-            </ul></div>
+            </ul>
+</div>
 
             <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-ink-900 p-2 shadow-[0_40px_100px_-40px_rgb(1_69_255/0.6)]">
                 <div class="flex items-center gap-2 px-3 py-2">

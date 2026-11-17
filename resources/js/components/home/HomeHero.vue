@@ -63,11 +63,11 @@ const ease = [0.16, 1, 0.3, 1] as const;
                     {{ site.tagline }}
                 </motion.p>
 
-                <h1 class="mt-7 font-display text-[2.6rem] leading-[1.05] font-semibold tracking-tight sm:text-6xl xl:text-7xl">
+                <h1 class="mt-7 font-display text-[2.6rem] leading-[1.05] font-semibold tracking-tight sm:text-6xl xl:text-7xl lang-bn:leading-[1.35]">
                     <motion.span
                         v-for="(word, index) in words"
                         :key="index"
-                        class="inline-block"
+                        class="inline-block align-top"
                         :class="index >= words.length - 2 ? 'text-gradient' : ''"
                         :initial="{ y: '0.35em', filter: 'blur(6px)' }"
                         :animate="{ y: '0em', filter: 'blur(0px)' }"

@@ -2,78 +2,55 @@
 
 **Owner:** Senior Frontend Developer with the UI/UX Designer
 **Specification:** [`../03-FRONTEND-DESIGN.md`](../03-FRONTEND-DESIGN.md)
-**Starts when:** Phase 1 exit criteria are met.
-**Outcome:** the complete public site and admin panel, responsive, animated, bilingual and within performance budgets.
+**Status:** complete (17 Nov 2026), with the gaps listed at the end.
 
-## 2.1 Design system
+## What was built
 
-- [ ] Finalise tokens in `app.css` (colour, type scale, spacing, radii, shadows, motion)
-- [ ] Fonts: subsets, preloads, Bangla line-height rules
-- [ ] `components/ui`: Button, Input, Textarea, Select, Checkbox, Badge, Card, Tabs, Accordion, Dialog, Sheet, Tooltip, Toast, Skeleton
-- [ ] `AppImage`, `DeviceFrame`, `SectionHeading`, `Breadcrumbs`, `Pagination`
-- [ ] Motion primitives: `Reveal`, `Stagger`, `Parallax`, `Magnetic`, `CountUp`, `PageTransition`
-- [ ] Composables: `useTheme`, `useLocale`, `useReducedMotion`, `useDeviceTier`, `useSeoSync`
-- [ ] Internal `/styleguide` page (dev only) showing every component in both themes
+| Area | Delivered |
+|---|---|
+| Design system | Tokens in `resources/css/app.css` (brand scale from #0145FF, theme-aware surfaces, glass, aurora, grid, Bangla typography), `Button`, `Reveal`, `SectionHeading`, `AppImage`, `Icon`, motion helpers |
+| Site shell | Header (glass on scroll, hides on scroll down, mega menus, language and theme switch), full-screen mobile menu, footer, floating WhatsApp button with one-time hint, phone action bar (WhatsApp, email, estimate), consent banner loading GTM and Meta Pixel with Consent Mode v2, Lenis smooth scrolling on pointer devices, client-side SEO tag sync |
+| Home | Sections in the order set in Settings; hero with stacked client screenshots and live module chips, client marquee, stats, services bento, module explorer for the 23 modules, pinned horizontal work showcase, solutions, scroll-drawn process, testimonials, reasons, pricing and estimator band, posts, FAQ, closing CTA. Empty sections hide themselves |
+| Inner pages | Work (animated filters, shareable URLs), case study, services, service detail, solutions, solution detail, industries, pricing, about, FAQ, contact (WhatsApp first, lead form), four-step estimator, blog index and article (reading progress, table of contents), CMS page, SEO landing page, branded error pages |
+| Conversion | Every WhatsApp and email click is recorded (`sendBeacon`) with its placement; WhatsApp messages are pre-filled per page and language; lead form with inline validation, spam traps and a WhatsApp hand-off; Meta Pixel `Lead` event shares its ID with the server-side Conversions API call |
+| Bangla | Every interface string translated in `lang/bn.json` (also used by the server fallback); Bangla digits and dates; a test fails if a string is missing |
+| Admin | Sidebar layout, notifications, live lead toasts with sound over Pusher, schema-driven list and form screens for all 20 content types (English/Bangla tabs, rich text, images with alt text, galleries, repeaters, search-appearance panel, drag ordering, trash, unsaved-changes guard, Ctrl/Cmd+S), dashboard with KPIs, charts and live click feed, leads table, pipeline board and detail, tabbed settings, system tools, activity log, SEO report, account page with password change and two-factor setup, sign-in screens |
+| Admin-editable copy | Added settings for every home-section heading, listing-page headings, process steps, reasons, about story and the closing call to action, so no public text is fixed in code apart from interface labels |
 
-**Done when:** components have Vitest tests and pass axe in the style guide.
+## Verification
 
-## 2.2 Site shell
+| Check | Result |
+|---|---|
+| Backend tests | 174 passed on SQLite, 173 on MariaDB |
+| Frontend unit tests (Vitest) | 5 passed: translations complete, icons complete, i18n helpers |
+| Browser tests (Playwright, Chromium desktop and Pixel 7) | 29 passed: home, WhatsApp click recording, work filters, contact form success and validation, estimator, language switch, no-JavaScript content, 404, reduced motion, phone menu and action bar, admin sign-in, dashboard, create stat, edit project with validation, settings |
+| Type check, lint, Pint, production build | Clean |
+| Lighthouse, mobile, through Apache with compression | See below |
+| Production zip | Rebuilt and installed on Apache + MariaDB through `/install`; every page returned 200, private files 403 |
+| Visual review | Desktop, phone and tablet; light and dark; English and Bangla |
 
-- [ ] `SiteLayout`: header (glass on scroll, mega menu), mobile navigation sheet, footer
-- [ ] Language switch, theme switch
-- [ ] WhatsApp (primary) and email (secondary) CTAs: header button, floating button, sticky mobile bar; `useWhatsApp` + `useTracking`
-- [ ] Consent banner with Google Consent Mode v2; GTM loader
-- [ ] Lenis smooth scroll and page transitions
-- [ ] Error pages
+**Lighthouse (mobile preset: slow 4G, 4x CPU slowdown).**
 
-## 2.3 Home page
+| Page | Performance | Accessibility | Best practices | SEO |
+|---|---|---|---|---|
+| Home | 82–83 | 100 | 100 | 100 |
+| Work | 81–85 | 100 | 100 | 100 |
+| Case study | 90–91 | 100 | 100 | 100 |
+| Auxtech Ecommerce | 88–89 | 100 | 100 | 100 |
+| Contact | 94–95 | 100 | 100 | 100 |
+| Home (Bangla) | 72–74 | 100 | 100 | 100 |
 
-- [ ] Hero with device frames, aurora background and entrance sequence
-- [ ] Client marquee, stats band
-- [ ] Services bento grid
-- [ ] Auxtech Ecommerce module explorer
-- [ ] Featured work (pinned horizontal on desktop, carousel on mobile)
-- [ ] Beyond e-commerce, process timeline, testimonials, why Auxtech
-- [ ] Estimator teaser, insights, FAQ, closing CTA
+Cumulative layout shift is 0 everywhere. JavaScript on the home page is about 190 kB compressed.
 
-**Done when:** Home meets the Lighthouse thresholds on mobile, works with reduced motion, and its content is readable without JavaScript.
+## Gaps against the plan
 
-## 2.4 Inner pages
-
-- [ ] Work index with animated filters; Case study
-- [ ] Services index and detail; Solutions index and detail; Ecommerce flagship; Auxify
-- [ ] Industries, Pricing, About, FAQ
-- [ ] Blog index, category/tag, article with table of contents
-- [ ] Contact with lead form and map; Estimator wizard
-- [ ] Careers; CMS block renderer; SEO landing page template
-- [ ] Search overlay
-
-## 2.5 Admin panel
-
-- [ ] `AdminLayout`: sidebar, top bar, command palette, toasts
-- [ ] Real-time: Echo connection in the admin layout, new-lead toast and sound, live badge, live leads table/kanban, dashboard activity feed, connection indicator
-- [ ] Installer screens and System screens (update, cache, backup, failed tasks, test email)
-- [ ] Auth screens (login, 2FA, reset)
-- [ ] Shared admin components: DataTable, FormSection, LocaleTabs, SeoPanel, MediaPicker, RichEditor, SortableList, StatusBadge, ConfirmDialog
-- [ ] Dashboard with KPI cards and charts
-- [ ] CRUD screens for every content module
-- [ ] Leads: table, kanban, detail drawer, export
-- [ ] Media library; SEO tools (meta report, redirects, robots, sitemap status)
-- [ ] Settings screens; users and roles; activity log
-
-## 2.6 Bangla, polish and performance
-
-- [ ] Complete `bn.json`; review every page in Bangla for overflow and tone
-- [ ] Dark theme pass on every page
-- [ ] Bundle analysis; lazy-load GSAP, Lenis, Embla, Tiptap; hit the 170 kB budget
-- [ ] Image audit (LCP preload, `sizes`), font audit
-- [ ] Low-end device pass (throttled) and reduced-motion pass
-- [ ] Cross-browser pass on the matrix in `04-TESTING.md` §6
-
-## Phase 2 exit criteria
-
-1. Every page in the SRS information architecture is implemented in EN and BN, light and dark.
-2. `typecheck`, `lint`, Vitest and the Playwright smoke suite pass; no console errors or hydration warnings.
-3. Lighthouse mobile thresholds met on Home, Work, Case study, Ecommerce, Blog post and Contact.
-4. axe: no serious or critical issues.
-5. Auxtech has reviewed the design on a real phone and desktop.
+| Item | State |
+|---|---|
+| Performance 90+ on every page | Not met on Home, Work and Bangla pages. The page is drawn by JavaScript because the host cannot run Node (no SSR), so the largest paint waits for the bundle (about 4 s in Lighthouse's slow-4G simulation). Bangla pages also download a 152 kB font. Options: a full-page HTML cache that pre-renders pages, a subset Bangla font, or trimming the animation library from the hero |
+| GSAP | Not used. Scroll effects (pinned showcase, drawn timeline, parallax) are built with `motion-v`, which was already needed; GSAP was removed |
+| Style guide page | Not built |
+| Command palette in the admin | Not built |
+| Firefox, Safari and Samsung Internet | Not tested in this environment (only Chromium is installed); Phase 3 |
+| Screen-reader pass | Not done; automated accessibility checks pass |
+| Admin panel language | English only, as staff tooling |
+| Two-factor enforcement | Available as a setting (off by default); the dashboard reminds users who have not set it up |

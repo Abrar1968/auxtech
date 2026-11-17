@@ -137,14 +137,14 @@ About (story, team, office map, values), Pricing (toggle by solution, comparison
 | Hero entrance sequence | Home hero | Motion variants with `staggerChildren` |
 | Aurora drift | Hero / CTA backgrounds | CSS keyframes on blurred gradients (GPU only) |
 | Parallax and tilt on device frames | Hero, case study | Motion `useScroll` + `useTransform`; pointer tilt on desktop only |
-| Pinned horizontal showcase | Home featured work | GSAP ScrollTrigger (desktop ≥ 1024 px) |
-| Scroll-drawn timeline | Process | GSAP ScrollTrigger scrub on SVG path |
+| Pinned horizontal showcase | Home featured work | `motion-v` `useScroll` on a sticky section (desktop ≥ 1024 px) |
+| Scroll-drawn timeline | Process | `motion-v` `useScroll` driving a line's scale |
 | Shared layout transitions | Work filters, tabs, accordion, nav indicator | Motion `layout` / `layoutId` |
 | Page transitions | Between Inertia pages | Motion `AnimatePresence` with a 250 ms fade/slide; View Transitions API where supported |
 | Count-up numbers | Stats | Motion `animate` on a motion value |
 | Magnetic buttons, cursor glow on cards | Desktop pointer devices | Motion springs |
 | Marquee | Client logos | Pure CSS |
-| Smooth scrolling | Whole site, desktop | Lenis, synced with ScrollTrigger |
+| Smooth scrolling | Whole site, pointer devices | Lenis |
 
 **Guardrails**
 
@@ -153,7 +153,7 @@ About (story, team, office map, values), Pricing (toggle by solution, comparison
 - Low-end guard: if `navigator.deviceMemory ≤ 4` or `hardwareConcurrency ≤ 4`, disable blur-heavy layers, tilt and pinning.
 - Hidden initial states are applied by JavaScript on mount, never by CSS alone, so content cannot be stuck invisible if a script fails.
 - No animation delays the LCP element. Hero text is visible in the first paint.
-- GSAP and Lenis are dynamically imported after first paint and only on pages that use them.
+- Lenis, the mobile menu and the consent banner are loaded after first paint. The page's own code is preloaded with the entry (`@vite` receives the page component).
 
 ### 7. Conversion design (WhatsApp first)
 
@@ -209,7 +209,7 @@ A separate, calmer interface: light by default, dense, no decorative animation.
 | Routing/data | Inertia v3 (`@inertiajs/vue3` + `@inertiajs/vite`). No SSR: the server prints a Blade content fallback that Vue mounts over (`02` §3.1) |
 | Real-time (admin) | `laravel-echo` + `pusher-js`, loaded lazily through `lib/echo.ts` in the admin layout only |
 | Styling | Tailwind CSS v4 (CSS-first `@theme`), no component CSS files unless unavoidable |
-| Motion | `motion-v` (Motion for Vue), GSAP + ScrollTrigger, Lenis |
+| Motion | `motion-v` (Motion for Vue) for entrances, layout animation and scroll-linked effects; Lenis for smooth scrolling. GSAP was planned and dropped: `motion-v` covers the same effects |
 | Primitives | Reka UI (dialog, popover, tabs, accordion, select, toast) |
 | Utilities | VueUse, Embla carousel, Lucide icons |
 | Editor (admin) | Tiptap, loaded only in admin |
@@ -274,3 +274,12 @@ Techniques: route-level splitting, `defineAsyncComponent` for below-the-fold int
 - Lighthouse mobile thresholds from SRS §6.1 met for the page.
 - Keyboard-only walkthrough passes; axe reports no serious or critical issues.
 - Reduced-motion mode verified.
+
+### 16. As built (Phase 2)
+
+- **Layouts** are chosen in `resources/js/app.ts`: `Site/*` pages use `SiteLayout`, `Admin/*` pages use `AdminLayout` (loaded on demand), `Auth/*` pages have none.
+- **Interface strings** use `useI18n().t()` with English as the key; Bangla lives in `lang/bn.json`. `resources/js/lib/translations.test.ts` fails when a public string lacks a translation.
+- **Icons** that content can choose are listed in `resources/data/icons.json` (the admin picker) and mapped in `resources/js/lib/icons.ts`; a test keeps the two in step.
+- **Admin forms** are generated from the backend field list (`App\Admin\Field::toArray()`), so adding a field to a module needs no frontend change.
+- **Head tags**: the server prints them; `useSeoSync()` updates them on client-side navigation; the hero image and Latin fonts are preloaded.
+- **Measured results** are in `phases/PHASE-2-FRONTEND.md`.

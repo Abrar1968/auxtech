@@ -75,7 +75,7 @@
     <link rel="manifest" href="/site.webmanifest">
 
     @if (app()->isProduction() && ! $isAdmin && ($clarity = setting('tracking.clarity_id')))
-        {{-- Microsoft Clarity: public pages in production only. --}}
+        {{-- Microsoft Clarity: public pages in production only. Consent is passed from ConsentBanner.vue. --}}
         <script nonce="{{ Vite::cspNonce() }}">
             (function(c,l,a,r,i,t,y){
                 c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};

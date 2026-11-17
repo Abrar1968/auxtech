@@ -28,6 +28,7 @@ tar -C "$ROOT" \
     --exclude='./storage/logs/*.log' --exclude='./storage/framework/cache/data/*' \
     --exclude='./storage/framework/sessions/*' --exclude='./storage/framework/views/*' \
     --exclude='./storage/framework/testing*' --exclude='./storage/media-library' \
+    --exclude=./storage/inertia-devtools --exclude=./test-results --exclude=./playwright-report --exclude=./coverage --exclude='./storage/app/private/*' --exclude='./storage/app/purifier/*' \
     --exclude='./database/*.sqlite*' --exclude='./bootstrap/cache/*.php' \
     --exclude=./phpunit.xml --exclude=./playwright.config.ts --exclude=./vitest.config.ts \
     --exclude=./eslint.config.js --exclude=./.prettierrc --exclude=./tsconfig.json \

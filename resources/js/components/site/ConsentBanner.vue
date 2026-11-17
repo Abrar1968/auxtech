@@ -6,7 +6,9 @@ import { useI18n } from '@/lib/i18n';
 
 /**
  * Consent for marketing tags (Google Tag Manager, Meta Pixel), using Google
- * Consent Mode v2. Shown only when such tags are configured in Settings.
+ * Consent Mode v2, also passed to Microsoft Clarity (consentv2), which
+ * records without cookies until consent when its project's cookie setting is
+ * off. Shown only when GTM or the Pixel is configured in Settings.
  */
 const { site } = useShared();
 const { t } = useI18n();
@@ -14,13 +16,14 @@ const show = ref(false);
 const KEY = 'aux-consent';
 
 function loadTags(granted: boolean): void {
-    const w = window as Window & { gtag?: (...args: unknown[]) => void; _fbq?: unknown };
+    const w = window as Window & { gtag?: (...args: unknown[]) => void; _fbq?: unknown; clarity?: (...args: unknown[]) => void };
     w.dataLayer = w.dataLayer || [];
     w.gtag = function gtag() {
         w.dataLayer!.push(arguments as unknown as Record<string, unknown>);
     };
     const state = granted ? 'granted' : 'denied';
     w.gtag('consent', 'default', { ad_storage: state, analytics_storage: state, ad_user_data: state, ad_personalization: state });
+    w.clarity?.('consentv2', { ad_Storage: state, analytics_Storage: state });
 
     if (!granted) {
         return;

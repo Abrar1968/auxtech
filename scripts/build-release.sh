@@ -18,23 +18,24 @@ trap 'rm -rf "$BUILD"' EXIT
 echo "1/5 Building frontend assets"
 (cd "$ROOT" && npm run build >/dev/null)
 
-echo "2/5 Copying application files"
+echo "2/5 Copying the whole project"
+# Everything in the project goes in, dotfiles included (.htaccess, .env,
+# .env.example, .editorconfig ...), with the source, docs and tests. Left out:
+# git history (also inside vendor), node_modules (Node is not needed on the server), earlier
+# releases, local secrets and runtime files (logs, sessions, caches, uploads,
+# the install lock) that belong to this machine only.
 mkdir -p "$APP"
 tar -C "$ROOT" \
-    --exclude=.git --exclude=./.github --exclude=./node_modules --exclude=./release \
-    --exclude=./tests --exclude=./docs --exclude=./scripts \
-    --exclude=./.env --exclude=./.env.example --exclude=./.env.production \
-    --exclude=./public/uploads --exclude=./public/hot --exclude=./storage/installed \
+    --exclude=.git --exclude=./node_modules --exclude=./release \
+    --exclude=./.env --exclude=./.env.production --exclude=./.env.backup \
+    --exclude=./public/uploads --exclude=./public/hot --exclude=./public/storage --exclude=./storage/installed \
     --exclude='./storage/logs/*.log' --exclude='./storage/framework/cache/data/*' \
     --exclude='./storage/framework/sessions/*' --exclude='./storage/framework/views/*' \
-    --exclude='./storage/framework/testing*' --exclude='./storage/media-library' \
-    --exclude=./storage/inertia-devtools --exclude=./test-results --exclude=./playwright-report --exclude=./coverage --exclude='./storage/app/private/*' --exclude='./storage/app/purifier/*' \
-    --exclude='./database/*.sqlite*' --exclude='./bootstrap/cache/*.php' \
-    --exclude=./phpunit.xml --exclude=./playwright.config.ts --exclude=./vitest.config.ts \
-    --exclude=./eslint.config.js --exclude=./.prettierrc --exclude=./tsconfig.json \
-    --exclude=./vite.config.ts --exclude=./package.json --exclude=./package-lock.json \
-    --exclude=./CLAUDE.md --exclude=./README.md --exclude=./.editorconfig --exclude=./.gitattributes \
-    --exclude=./resources/js --exclude=./resources/css --exclude=./resources/brand \
+    --exclude='./storage/framework/testing*' --exclude=./storage/media-library --exclude=./storage/pail \
+    --exclude=./storage/inertia-devtools --exclude='./storage/app/private/*' --exclude='./storage/app/purifier/*' \
+    --exclude=./test-results --exclude=./playwright-report --exclude=./coverage \
+    --exclude=./.phpunit.cache --exclude=./.phpunit.result.cache \
+    --exclude='./database/*.sqlite*' --exclude='./bootstrap/cache/*.php' --exclude='*.DS_Store' \
     -cf - . | tar -C "$APP" -xf -
 
 echo "3/5 Installing production PHP packages"
@@ -42,7 +43,7 @@ echo "3/5 Installing production PHP packages"
 (cd "$APP" && php artisan package:discover --ansi >/dev/null)
 rm -f "$APP"/bootstrap/cache/config.php "$APP"/bootstrap/cache/routes-*.php
 
-echo "4/5 Writing the production environment template"
+echo "4/5 Writing the production .env and .env.production"
 secret="$(grep -E '^PUSHER_APP_SECRET=' "$ROOT/.env" 2>/dev/null | cut -d= -f2- || true)"
 if [ -z "$secret" ]; then
     echo "   Warning: PUSHER_APP_SECRET is empty in .env; live admin updates will be off until it is set."
@@ -57,6 +58,9 @@ sed -e 's/^APP_ENV=.*/APP_ENV=production/' \
     -e '/^ADMIN_/d' \
     -e "s|^PUSHER_APP_SECRET=.*|PUSHER_APP_SECRET=${secret}|" \
     "$ROOT/.env.example" > "$APP/.env.production"
+# A ready .env too: the installer fills in the app key, address and database.
+# The address stays empty until then, so the installer opens over http or https.
+sed -e 's|^APP_URL=.*|APP_URL=|' "$APP/.env.production" > "$APP/.env"
 
 mkdir -p "$APP/public/uploads" "$APP/storage/framework/"{cache/data,sessions,views} "$APP/storage/logs" "$APP/bootstrap/cache"
 touch "$APP/public/uploads/.gitkeep"

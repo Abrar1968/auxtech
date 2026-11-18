@@ -57,7 +57,9 @@ Do this on a staging copy or on the live site before announcing it. Use at least
 2. Open `https://auxtechbd.com/install`. Enter the website address (with `https://`), the database details, your admin name, email and password, and the Gmail app password (optional here, can be added later).
 3. When it says **Your website is installed**, sign in at `/admin`.
 
-The installer locks itself afterwards. Private files (`.env`, `vendor`, `storage`) are blocked by the included `.htaccess`.
+The installer locks itself afterwards. The zip holds the whole project, dotfiles included (`.htaccess`, `.env`, `.env.production`); turn on "Show hidden files" in File Manager to see them. Private files (`.env`, `vendor`, `storage`, source, docs) are blocked by the included `.htaccess`.
+
+**Alternative: import the prepared database.** Before step 2, open the empty database in cPanel > phpMyAdmin and **Import** `auxtech-database.sql`, then extract `auxtech-uploads.zip` inside `public_html/public` (it creates `public/uploads`). The installer keeps the imported content and only creates your admin account, and every image is already in place, so B2a is not needed.
 
 The installer also seeds the whole site's text: 6 services with sub-services, 6 platforms with the 23 Auxtech Ecommerce modules, 11 industries, 7 technologies, all 33 projects with their case studies, and 8 FAQs. The same content can be added again at any time from cPanel Terminal with `php artisan auxtech:seed` (it only adds what is missing and keeps your edits; `--overwrite` restores the original text).
 

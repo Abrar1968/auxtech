@@ -47,7 +47,7 @@ node scripts/seo-crawl.mjs http://127.0.0.1:8000
 
 ## Release
 
-`bash scripts/build-release.sh` writes `release/auxtech-production.zip` (git-ignored; contains the Pusher secret). Check the zip size (about 73 MB); local runtime folders such as `storage/inertia-devtools` must stay excluded. After changing the installer, `.htaccess` or migrations, rehearse it: extract into an Apache document root, install through `/install`, then extract a second build over it and run the database update from Admin > System.
+`bash scripts/build-release.sh` runs `npm run build` and writes `release/auxtech-production.zip` (git-ignored; contains the Pusher secret): the whole project with its dotfiles (`.htaccess`, `.env` with an empty key and address for the installer, `.env.production`, `.env.example`), source, docs, tests and production `vendor`; only `.git`, `node_modules`, uploads and local runtime folders (logs, sessions, caches, `storage/inertia-devtools`) stay out. Check the zip size (about 73 MB). Also hand over `release/auxtech-database.sql` (mysqldump without users, sessions or cache, first `/*M!` line removed so MariaDB 10.4 and MySQL accept it) with `release/auxtech-uploads.zip` (`public/uploads`) when the owner wants the local content and images as they are. After changing the installer, `.htaccess` or migrations, rehearse it: extract into an Apache document root, install through `/install`, then extract a second build over it and run the database update from Admin > System.
 
 ## Sandbox notes
 

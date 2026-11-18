@@ -31,6 +31,9 @@ Laravel 12 (lock pinned to PHP 8.2 via `config.platform`), MySQL/MariaDB 10.4+ (
 - CSP uses per-request nonces: every inline `<script>` in Blade needs `nonce="{{ Vite::cspNonce() }}"`. Scripts added at runtime are trusted through `'strict-dynamic'`.
 - The app shell (`resources/views/shell/_hero.blade.php`) mirrors the hero markup of `HomeHero.vue` and `PageHero.vue`; change them together.
 - Brand blue as text on page surfaces is `text-link` (theme-aware), not `text-brand-600` (fails contrast in dark theme).
+- Seeded content lives in `database/seeders/data/portfolio.php` (33 projects) and `catalogue.php` (services, platforms, industries, technologies, FAQs); site copy defaults in `config/settings.php`. `php artisan auxtech:seed` is safe to re-run (keeps admin edits; `--overwrite`, `--images=`). Images are never committed: they ship as a separate image pack (release/auxtech-image-pack.zip, git-ignored) with UPLOAD-GUIDE.html.
+- Auxtech is presented as a software development company; the public menu says "Platforms" for solutions. Project texts describe only what is visible on the live sites, never client results.
+- The home background video is generated from `scripts/hero-video/scene.html` (render.cjs → public/media); paths are admin settings (`home.hero_video*`).
 - Never add files under `public/` whose path matches a route (Apache serves the file instead). Files a past release shipped that must go are listed in `App\Support\ObsoleteFiles`.
 
 ## Checks before committing

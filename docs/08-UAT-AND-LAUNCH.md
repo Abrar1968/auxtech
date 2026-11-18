@@ -12,7 +12,7 @@ Do this on a staging copy or on the live site before announcing it. Use at least
 - [ ] **Settings**: check company name, address, phone, WhatsApp number, email, office hours, Facebook link and map link. Fill in the Bangla tab for anything visitors read.
 - [ ] **Settings**: save the Google app password for auxtechbd@gmail.com, then **System > Send a test email** and confirm it arrives.
 - [ ] Add your real **statistics**, **testimonials** (real clients only) and **prices**. Sections with nothing in them stay hidden.
-- [ ] Open one real project, check the screenshots, text and live link; add the Bangla text.
+- [ ] Open a few projects and check the screenshots, text, technologies and live link. Every project text was written from the live site; correct anything that has changed and add the Bangla for the challenge and result fields.
 - [ ] Write and publish one blog post with a cover image.
 - [ ] Translate the Bangla titles and descriptions of services, solutions and projects (the SEO crawl found 46 pages still showing English text on the Bangla side).
 - [ ] Look through every page in English and Bangla for placeholder or wrong text.
@@ -58,6 +58,17 @@ Do this on a staging copy or on the live site before announcing it. Use at least
 3. When it says **Your website is installed**, sign in at `/admin`.
 
 The installer locks itself afterwards. Private files (`.env`, `vendor`, `storage`) are blocked by the included `.htaccess`.
+
+The installer also seeds the whole site's text: 6 services with sub-services, 6 platforms with the 23 Auxtech Ecommerce modules, 11 industries, 7 technologies, all 33 projects with their case studies, and 8 FAQs. The same content can be added again at any time from cPanel Terminal with `php artisan auxtech:seed` (it only adds what is missing and keeps your edits; `--overwrite` restores the original text).
+
+### B2a. Images
+
+Images are not part of the site zip. Unzip `auxtech-image-pack.zip` on your computer and open `UPLOAD-GUIDE.html`. It lists all 204 images (33 client logos, 165 project screenshots, 6 platform covers) with the exact admin page, field and alt text for each. Either:
+
+- **Option A:** upload them one by one in the admin panel as the guide shows, or
+- **Option B:** upload and extract the pack outside `public_html` and run `php artisan auxtech:seed --images=/home/YOUR-CPANEL-USER/auxtech-image-pack` in cPanel Terminal. It attaches everything with alt text and skips fields that already have an image.
+
+Until the images are uploaded, pages show client names instead of logos and empty screenshot frames.
 
 ### B3. Settings after install
 

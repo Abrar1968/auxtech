@@ -3,6 +3,17 @@
 **Release tested:** 1.2.0 · **Date:** 17 Nov 2026 · **Tester:** Senior QA (Phase 3)
 **Plan:** [`04-TESTING.md`](04-TESTING.md) · **Traceability:** [`06-TRACEABILITY.md`](06-TRACEABILITY.md)
 
+## Release 1.3.0 (18 Nov 2026)
+
+Rebrand as a software development company, full content seed (33 projects, services, platforms, industries, technologies, FAQs), generated home background video, client logo carousel, scroll-driven process and stacked platform cards, separate image pack.
+
+| Check | Result |
+|---|---|
+| Backend tests (Pest) | 220 passed on SQLite and MariaDB, including `auxtech:seed` (full seed, re-run keeps edits, `--overwrite`, image pack attach once) |
+| Browser tests (Playwright) | 83 passed (journeys, 18 pages × 5 widths, axe WCAG 2.2 AA light and dark) |
+| Defects fixed in this release | Platform cards overflowed at 320 px; case-study gallery not keyboard-reachable; faint process step numbers; hero sub-headline became a late largest paint on fast loads |
+| Lighthouse mobile, home (local Apache, no Clarity) | Performance 94–97 in 3 of 4 runs (one simulated outlier at 75); observed LCP 0.3–0.4 s; accessibility 100; CLS 0 |
+
 ## Summary
 
 The site is ready for user acceptance testing and launch. Every automated check passes. Phase 3 found **eight defects**, all fixed and covered by new tests (below). What remains needs the real domain, the owner's accounts or a person: delivery to Gmail, Meta Events Manager, Google Search Console, other browsers, a screen-reader pass, and content entry.

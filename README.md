@@ -69,6 +69,8 @@ The build script needs a Unix shell (Git Bash or WSL on Windows) with `zip`.
 | Production build | `npm run build` |
 | Backend tests | `composer test` |
 | Reload starter content | `php artisan migrate:fresh --seed` |
+| Seed or refresh the site content | `php artisan auxtech:seed` (adds missing records, keeps edits), `--overwrite` (restore seeded text), `--images=<unzipped image pack>` (attach logos and screenshots) |
+| Re-render the home page background video | `node scripts/hero-video/render.cjs` (edit `scripts/hero-video/scene.html`; needs ffmpeg) |
 | Build the production zip | `bash scripts/build-release.sh` |
 | PHP code style check / fix | `composer lint` / `composer format` |
 | Type check, lint, unit tests (JS) | `npm run typecheck`, `npm run lint`, `npm test` |

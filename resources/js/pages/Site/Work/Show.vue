@@ -136,7 +136,7 @@ const scale = useTransform(scrollYProgress, [0, 0.5], [0.92, 1]);
 
     <section v-if="project.mobile || project.gallery?.length" class="bg-surface-muted section-y">
         <div class="container-page">
-            <div class="flex gap-6 overflow-x-auto pb-4 [scrollbar-width:thin] snap-x">
+            <div class="flex gap-6 overflow-x-auto rounded-3xl pb-4 [scrollbar-width:thin] snap-x focus-visible:outline-offset-4" tabindex="0" role="region" :aria-label="t('Screenshots')">
                 <div v-if="project.mobile" class="w-64 shrink-0 snap-start overflow-hidden rounded-[2.5rem] border-[10px] border-ink-950 bg-ink-950 shadow-2xl">
                     <AppImage :image="project.mobile" sizes="256px" class="aspect-[9/19] w-full object-top" />
                 </div>

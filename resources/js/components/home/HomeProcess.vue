@@ -21,6 +21,8 @@ useMotionValueEvent(scrollYProgress, 'change', (value: number) => {
 });
 
 const step = computed(() => props.steps[active.value]);
+// Visitors who prefer reduced motion get an instant swap instead of the blur and slide.
+const reduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const number = (index: number) => n(String(index + 1).padStart(2, '0'));
 const ease = [0.16, 1, 0.3, 1] as const;
 </script>
@@ -41,7 +43,7 @@ const ease = [0.16, 1, 0.3, 1] as const;
                                         :style="{ height: '100%', transform: `scaleY(${index < active ? 1 : index === active ? 0.999 : 0})` }"
                                     />
                                 </span>
-                                <span :class="['font-mono text-sm transition-colors duration-300', index <= active ? 'text-link' : 'text-muted/60']">{{ number(index) }}</span>
+                                <span :class="['font-mono text-sm transition-colors duration-300', index <= active ? 'text-link' : 'text-muted']">{{ number(index) }}</span>
                                 <span :class="['font-display text-lg transition-all duration-300', index === active ? 'font-semibold text-fg' : 'text-muted']">{{ item.title }}</span>
                             </li>
                         </ol>
@@ -54,10 +56,10 @@ const ease = [0.16, 1, 0.3, 1] as const;
                                 <motion.div
                                     v-if="step"
                                     :key="active"
-                                    :initial="{ opacity: 0, y: 40, filter: 'blur(6px)' }"
+                                    :initial="reduced ? false : { opacity: 0, y: 40, filter: 'blur(6px)' }"
                                     :animate="{ opacity: 1, y: 0, filter: 'blur(0px)' }"
-                                    :exit="{ opacity: 0, y: -30, filter: 'blur(6px)' }"
-                                    :transition="{ duration: 0.55, ease }"
+                                    :exit="reduced ? { opacity: 1 } : { opacity: 0, y: -30, filter: 'blur(6px)' }"
+                                    :transition="reduced ? { duration: 0 } : { duration: 0.55, ease }"
                                 >
                                     <p class="font-display text-[7rem] leading-none font-semibold tracking-tight text-transparent [-webkit-text-stroke:1.5px_var(--color-brand-400)]">{{ number(active) }}</p>
                                     <h3 class="mt-8 font-display text-4xl font-semibold tracking-tight text-fg">{{ step.title }}</h3>

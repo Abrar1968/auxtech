@@ -9,7 +9,7 @@
         <nav aria-label="Main">
             <a href="{{ lroute('work.index') }}">{{ __('Work') }}</a>
             <a href="{{ lroute('services.index') }}">{{ __('Services') }}</a>
-            <a href="{{ lroute('solutions.index') }}">{{ __('Solutions') }}</a>
+            <a href="{{ lroute('solutions.index') }}">{{ __('Platforms') }}</a>
             <a href="{{ lroute('pricing') }}">{{ __('Pricing') }}</a>
             <a href="{{ lroute('about') }}">{{ __('About') }}</a>
             <a href="{{ lroute('blog.index') }}">{{ __('Blog') }}</a>

@@ -31,7 +31,7 @@
 
 @if ($solutions)
     <section>
-        <h2>{{ __('Solutions') }}</h2>
+        <h2>{{ __('Platforms') }}</h2>
         <ul>@foreach ($solutions as $solution)<li><a href="{{ $solution['url'] }}">{{ $solution['name'] }}</a>@if ($solution['summary']): {{ $solution['summary'] }}@endif</li>@endforeach</ul>
     </section>
 @endif

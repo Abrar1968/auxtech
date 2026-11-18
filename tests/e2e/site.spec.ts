@@ -93,7 +93,7 @@ test('reduced motion leaves all content visible', async ({ browser }) => {
     const page = await context.newPage();
     await page.goto('/');
     await page.mouse.wheel(0, 4000);
-    await expect(page.getByRole('heading', { name: 'How we work' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'How we deliver' })).toBeVisible();
     await context.close();
 });
 

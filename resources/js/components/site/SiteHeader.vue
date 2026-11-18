@@ -34,7 +34,7 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll));
 const links = computed(() => [
     { label: t('Work'), href: lp('/work') },
     { label: t('Services'), href: lp('/services'), menu: 'services' },
-    { label: t('Solutions'), href: lp('/solutions'), menu: 'solutions' },
+    { label: t('Platforms'), href: lp('/solutions'), menu: 'solutions' },
     { label: t('Pricing'), href: lp('/pricing') },
     { label: t('About'), href: lp('/about') },
     { label: t('Blog'), href: lp('/blog') },

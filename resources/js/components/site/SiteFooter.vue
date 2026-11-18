@@ -54,8 +54,8 @@ const company = computed(() => [
                         <li v-for="item in navigation.services" :key="item.url"><Link :href="item.url" class="transition hover:text-white">{{ item.title }}</Link></li>
                     </ul>
                 </nav>
-                <nav v-if="navigation.solutions.length" :aria-label="t('Solutions')">
-                    <h2 class="font-display text-sm font-semibold tracking-wider text-white uppercase">{{ t('Solutions') }}</h2>
+                <nav v-if="navigation.solutions.length" :aria-label="t('Platforms')">
+                    <h2 class="font-display text-sm font-semibold tracking-wider text-white uppercase">{{ t('Platforms') }}</h2>
                     <ul class="mt-5 grid gap-2.5">
                         <li v-for="item in navigation.solutions" :key="item.url"><Link :href="item.url" class="transition hover:text-white">{{ item.title }}</Link></li>
                     </ul>

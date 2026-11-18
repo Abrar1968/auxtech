@@ -17,7 +17,7 @@ const links = computed(() => [
     { label: t('Home'), href: lp('/') },
     { label: t('Work'), href: lp('/work') },
     { label: t('Services'), href: lp('/services') },
-    { label: t('Solutions'), href: lp('/solutions') },
+    { label: t('Platforms'), href: lp('/solutions') },
     { label: t('Pricing'), href: lp('/pricing') },
     { label: t('About'), href: lp('/about') },
     { label: t('Blog'), href: lp('/blog') },

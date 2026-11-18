@@ -40,8 +40,8 @@ const themes = [
                 <SectionHeading :eyebrow="eyebrow" :title="copy?.title" :lead="copy?.lead" />
             </div>
 
-            <div ref="stack" class="mt-14 grid gap-8">
-                <div v-for="(solution, index) in solutions" :key="solution.id" class="sticky" :style="{ top: `calc(6.5rem + ${index * 1.25}rem)` }">
+            <div ref="stack" class="mt-14 grid grid-cols-1 gap-8">
+                <div v-for="(solution, index) in solutions" :key="solution.id" class="min-w-0 lg:sticky" :style="{ top: `calc(6.5rem + ${index * 1.25}rem)` }">
                     <motion.article
                         :style="{ scale: scales[index] }"
                         :class="['origin-top overflow-hidden rounded-[2rem] border shadow-[0_40px_80px_-50px_rgb(5_8_22/0.65)]', themes[index % themes.length]]"

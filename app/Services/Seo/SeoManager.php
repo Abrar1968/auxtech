@@ -86,6 +86,16 @@ class SeoManager
         return $this;
     }
 
+    /** Preloads a single image (no responsive variants), e.g. the home page video still. */
+    public function preloadUrl(?string $href): static
+    {
+        if ($href) {
+            $this->preload = ['href' => $href, 'srcset' => null];
+        }
+
+        return $this;
+    }
+
     public function type(string $type): static
     {
         $this->type = $type;

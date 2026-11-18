@@ -14,7 +14,7 @@ import type { Project, SectionCopy } from '@/types/models';
  * sideways as you scroll; on phones (and with reduced motion) it is a
  * swipeable row.
  */
-defineProps<{ projects: Project[]; total: number; copy?: SectionCopy }>();
+defineProps<{ projects: Project[]; total: number; copy?: SectionCopy; eyebrow?: string }>();
 
 const { t, lp, n } = useI18n();
 const desktop = useMediaQuery('(min-width: 1024px)');
@@ -44,7 +44,7 @@ const progress = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
         <div :class="pinned ? 'sticky top-0 flex h-screen flex-col justify-center overflow-hidden' : 'section-y'">
             <div aria-hidden="true" class="absolute inset-0 bg-grid opacity-60" />
             <div class="container-page relative flex flex-wrap items-end justify-between gap-6">
-                <SectionHeading :title="copy?.title" :lead="copy?.lead" dark />
+                <SectionHeading :eyebrow="eyebrow" :title="copy?.title" :lead="copy?.lead" dark />
                 <Button :href="lp('/work')" variant="glass">
                     {{ t('View all :count projects', { count: n(total) }) }}
                     <ArrowRight :size="18" aria-hidden="true" />

@@ -18,12 +18,9 @@ withDefaults(
     <Reveal :class="['max-w-3xl', align === 'center' && 'mx-auto text-center']">
         <p
             v-if="eyebrow"
-            :class="[
-                'mb-4 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold tracking-[0.14em] uppercase',
-                dark ? 'glass-dark text-brand-200' : 'bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-200',
-            ]"
+            :class="['mb-5 inline-flex items-center gap-2.5 font-mono text-xs tracking-[0.18em] uppercase', dark ? 'text-brand-200' : 'text-link']"
         >
-            <span class="size-1.5 rounded-full bg-current" />{{ eyebrow }}
+            <span class="size-1.5 rounded-full bg-cyan-accent" />[ {{ eyebrow }} ]
         </p>
         <component
             :is="as"

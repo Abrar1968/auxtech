@@ -35,8 +35,8 @@ it('builds the home page from admin-managed content', function () {
 
     $this->get('/')->assertInertia(fn (Assert $page) => $page
         ->component('Site/Home')
-        ->where('hero.title', 'We build the online stores Bangladesh buys from.')
-        ->has('services', 3)
+        ->where('hero.title', 'We engineer software that runs real businesses.')
+        ->has('services', 6)
         ->has('projects', 1)
         ->where('stats.0.value', '30')
         ->where('flagship.slug', 'ecommerce')
@@ -105,15 +105,15 @@ it('prints the page content as plain HTML for crawlers without JavaScript', func
     Faq::query()->create(['question' => ['en' => 'How do I contact Auxtech?'], 'answer' => ['en' => '<p>On WhatsApp.</p>']]);
 
     $this->get('/')->assertSee('data-fallback', false)
-        ->assertSee('<h1>We build the online stores Bangladesh buys from.</h1>', false)
-        ->assertSee('Website Development')
+        ->assertSee('<h1>We engineer software that runs real businesses.</h1>', false)
+        ->assertSee('Web Development')
         ->assertSee('Order Management')
         ->assertSee('How do I contact Auxtech?')
         ->assertSee('https://wa.me/8801805019415', false)
         ->assertSee('mailto:auxtechbd@gmail.com', false);
 
     $this->get('/work/gearzen')->assertSee('<h1>Gearzen</h1>', false)->assertSee('Online store for Gearzen.');
-    $this->get('/services/website-development')->assertSee('<h1>Website Development</h1>', false);
+    $this->get('/services/website-development')->assertSee('<h1>Web Development</h1>', false);
     $this->get('/solutions/ecommerce')->assertSee('<h1>Auxtech Ecommerce</h1>', false)->assertSee('Conversions API (CAPI)');
 });
 
@@ -124,7 +124,7 @@ it('pre-fills WhatsApp messages for the page context and language', function () 
         ->where('project.whatsapp_url', 'https://wa.me/8801805019415?text='.rawurlencode('Hi Auxtech, I saw your work for Gearzen and want a similar website.')));
 
     $this->get('/bn/services/website-development')->assertInertia(fn (Assert $page) => $page
-        ->where('whatsappUrl', fn (string $url) => str_contains(rawurldecode($url), 'ওয়েবসাইট ডেভেলপমেন্ট')));
+        ->where('whatsappUrl', fn (string $url) => str_contains(rawurldecode($url), 'ওয়েব ডেভেলপমেন্ট')));
 });
 
 it('serves landing pages and CMS pages from the top-level URL space without shadowing real routes', function () {

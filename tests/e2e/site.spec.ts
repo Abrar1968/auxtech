@@ -7,7 +7,7 @@ test('home shows the headline, the e-commerce modules and WhatsApp calls to acti
     page.on('pageerror', (error) => errors.push(String(error)));
 
     await page.goto('/');
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('online stores');
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('software');
     await expect(page.locator('a[href^="https://wa.me/8801805019415"]:visible').first()).toBeVisible();
     await expect(page.getByRole('tab', { name: /Fulfil/ })).toBeVisible();
     await page.getByRole('tab', { name: /Fulfil/ }).click();

@@ -118,7 +118,7 @@ it('serves llms.txt and llms-full.txt with the company facts', function () {
     project(['slug' => 'gearzen']);
 
     $this->get('/llms.txt')->assertOk()->assertHeader('Content-Type', 'text/plain; charset=UTF-8')
-        ->assertSee('# Auxtech')->assertSee('+8801805019415')->assertSee('auxtechbd@gmail.com')->assertSee('Website Development');
+        ->assertSee('# Auxtech')->assertSee('+8801805019415')->assertSee('auxtechbd@gmail.com')->assertSee('Web Development');
 
     $this->get('/llms-full.txt')->assertOk()->assertSee('Order Management')->assertSee('Gearzen');
 });
@@ -157,7 +157,8 @@ it('keeps admin pages out of search engines', function () {
 
 it('gives every industry page its own description when none is written', function () {
     industry();
+    DB::table('industries')->where('slug', 'fashion')->update(['description' => null]);
 
-    $this->get('/industries/fashion')->assertSee('<meta name="description" content="Auxtech builds websites and online stores for Fashion &amp; Apparel businesses in Bangladesh.', false);
-    $this->get('/bn/industries/fashion')->assertSee('<meta name="description" content="Auxtech বাংলাদেশের ', false)->assertSee('ব্যবসার জন্য ওয়েবসাইট ও অনলাইন স্টোর তৈরি করে', false);
+    $this->get('/industries/fashion')->assertSee('<meta name="description" content="Auxtech builds software, websites and online stores for Fashion &amp; Apparel businesses in Bangladesh.', false);
+    $this->get('/bn/industries/fashion')->assertSee('<meta name="description" content="Auxtech বাংলাদেশের ', false)->assertSee('ব্যবসার জন্য সফটওয়্যার, ওয়েবসাইট ও অনলাইন স্টোর তৈরি করে', false);
 });

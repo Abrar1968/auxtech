@@ -45,8 +45,9 @@ it('installs: tables, starter content, admin account, mail password and lock fil
     expect(Installation::done())->toBeTrue()
         ->and($admin->hasRole('Super Admin'))->toBeTrue()
         ->and(Hash::check('a-long-password', $admin->password))->toBeTrue()
-        ->and(Project::query()->count())->toBe(32)
-        ->and(Project::query()->first()->getFirstMedia('cover'))->not->toBeNull()
+        ->and(Project::query()->count())->toBe(33)
+        ->and(Project::query()->first()->getFirstMedia('cover'))->toBeNull() // images are uploaded from the image pack, not seeded
+        ->and(Project::query()->first()->getTranslation('summary', 'en'))->not->toBeEmpty()
         ->and(DB::table('solution_features')->count())->toBe(23)
         ->and(DB::table('stats')->count())->toBe(0)
         ->and(DB::table('testimonials')->count())->toBe(0)

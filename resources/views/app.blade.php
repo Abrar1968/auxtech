@@ -66,7 +66,11 @@
         <link rel="preload" as="font" type="font/woff2" crossorigin href="{{ Vite::asset('node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2') }}">
         <link rel="preload" as="font" type="font/woff2" crossorigin href="{{ Vite::asset('node_modules/@fontsource-variable/sora/files/sora-latin-wght-normal.woff2') }}">
         @if (! empty($seo['preload']))
-            <link rel="preload" as="image" href="{{ $seo['preload']['href'] }}" imagesrcset="{{ $seo['preload']['srcset'] }}" imagesizes="(min-width: 1024px) 34vw, 70vw" fetchpriority="high">
+            @if (! empty($seo['preload']['srcset']))
+                <link rel="preload" as="image" href="{{ $seo['preload']['href'] }}" imagesrcset="{{ $seo['preload']['srcset'] }}" imagesizes="(min-width: 1024px) 34vw, 70vw" fetchpriority="high">
+            @else
+                <link rel="preload" as="image" href="{{ $seo['preload']['href'] }}" fetchpriority="high">
+            @endif
         @endif
     @endunless
     <link rel="icon" href="/favicon.ico" sizes="48x48">

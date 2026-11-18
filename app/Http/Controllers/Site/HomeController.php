@@ -40,14 +40,22 @@ class HomeController extends Controller
                 $flagship->featureGroups->flatMap->features->map(fn ($f) => (string) $f->title)->all(),
             ) : null);
 
-        $featured = Project::query()->published()->where('is_featured', true)->ordered()->with('media')->first();
-        seo()->preloadImage($featured?->image('cover'));
+        // The still image behind the headline is the largest thing on the first screen.
+        $poster = setting('home.hero_poster') ?: null;
+        seo()->preloadUrl($poster);
 
         $faqs = Faq::query()->where('is_active', true)->whereNull('faqable_id')->ordered()->limit(8)->get();
         seo()->schema(seo()->builder()->faqPage($faqs->map(fn (Faq $f) => ['question' => $f->question, 'answer' => $f->answer])));
 
         return Inertia::render('Site/Home', [
-            'hero' => ['title' => setting_t('home.hero_title'), 'subtitle' => setting_t('home.hero_subtitle')],
+            'hero' => [
+                'eyebrow' => setting_t('home.hero_eyebrow'),
+                'title' => setting_t('home.hero_title'),
+                'subtitle' => setting_t('home.hero_subtitle'),
+                'video' => setting('home.hero_video') ?: null,
+                'videoWebm' => setting('home.hero_video_webm') ?: null,
+                'poster' => $poster,
+            ],
             'copy' => collect(setting('home.sections', []))->pluck('key')->mapWithKeys(fn (string $key) => [$key => section_copy($key)])->all(),
             'process' => tr_rows(setting('home.process_steps')),
             'reasons' => tr_rows(setting('home.reasons')),

@@ -7,13 +7,13 @@ import SectionHeading from '@/components/ui/SectionHeading.vue';
 import type { SectionCopy, Service } from '@/types/models';
 
 /** Bento grid of services; the first one gets the large tile. */
-defineProps<{ services: Service[]; copy?: SectionCopy }>();
+defineProps<{ services: Service[]; copy?: SectionCopy; eyebrow?: string }>();
 </script>
 
 <template>
     <section class="section-y bg-surface">
         <div class="container-page">
-            <SectionHeading :title="copy?.title" :lead="copy?.lead" />
+            <SectionHeading :eyebrow="eyebrow" :title="copy?.title" :lead="copy?.lead" />
             <div class="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <Reveal
                     v-for="(service, index) in services"

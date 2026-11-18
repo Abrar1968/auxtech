@@ -3,6 +3,7 @@ import { ArrowRight, Calculator } from '@lucide/vue';
 import { computed } from 'vue';
 import HomeHero from '@/components/home/HomeHero.vue';
 import HomeProcess from '@/components/home/HomeProcess.vue';
+import HomePlatforms from '@/components/home/HomePlatforms.vue';
 import HomeServices from '@/components/home/HomeServices.vue';
 import HomeWork from '@/components/home/HomeWork.vue';
 import ReasonGrid from '@/components/home/ReasonGrid.vue';
@@ -13,7 +14,6 @@ import FaqList from '@/components/site/FaqList.vue';
 import ModuleExplorer from '@/components/site/ModuleExplorer.vue';
 import PostCard from '@/components/site/PostCard.vue';
 import PricingCards from '@/components/site/PricingCards.vue';
-import SolutionCard from '@/components/site/SolutionCard.vue';
 import TestimonialGrid from '@/components/site/TestimonialGrid.vue';
 import WhatsAppButton from '@/components/site/WhatsAppButton.vue';
 import Button from '@/components/ui/Button.vue';
@@ -27,7 +27,7 @@ import type { Client, Faq, Post, PricingPlan, Project, SectionCopy, Service, Sol
  * with no content hides itself.
  */
 const props = defineProps<{
-    hero: { title: string | null; subtitle: string | null };
+    hero: { eyebrow: string | null; title: string | null; subtitle: string | null; video: string | null; videoWebm: string | null; poster: string | null };
     sections: string[];
     copy: Record<string, SectionCopy>;
     clients: Client[];
@@ -50,6 +50,8 @@ const props = defineProps<{
 
 const { t, lp } = useI18n();
 const otherSolutions = computed(() => props.solutions.filter((s) => !s.is_flagship));
+// Service and sub-service names for the ticker under the hero.
+const capabilities = computed(() => props.services.flatMap((s) => [s.title, ...(s.children ?? []).map((c) => c.title)]).filter(Boolean) as string[]);
 
 const has: Record<string, () => boolean> = {
     hero: () => true,
@@ -74,19 +76,22 @@ const visible = computed(() => props.sections.filter((key) => has[key]?.()));
     <template v-for="key in visible" :key="key">
         <HomeHero
             v-if="key === 'hero'"
+            :eyebrow="hero.eyebrow"
             :title="hero.title"
             :subtitle="hero.subtitle"
-            :projects="projects"
-            :flagship="flagship"
-            :live-count="liveCount"
+            :video="hero.video"
+            :video-webm="hero.videoWebm"
+            :poster="hero.poster"
+            :project-count="projectCount"
             :industry-count="industryCount"
+            :capabilities="capabilities"
         />
 
-        <section v-else-if="key === 'clients'" class="border-b border-line bg-surface py-12">
+        <section v-else-if="key === 'clients'" class="overflow-hidden border-b border-line bg-surface py-16 sm:py-20">
             <div class="container-page">
-                <p class="text-center text-sm font-medium text-muted">{{ copy.clients?.title }}</p>
+                <SectionHeading :eyebrow="t('Clients')" :title="copy.clients?.title" :lead="copy.clients?.lead" align="center" />
             </div>
-            <ClientMarquee :clients="clients" class="mt-7" />
+            <Reveal class="mt-12"><ClientMarquee :clients="clients" /></Reveal>
         </section>
 
         <section v-else-if="key === 'stats'" class="bg-surface py-16">
@@ -103,13 +108,13 @@ const visible = computed(() => props.sections.filter((key) => has[key]?.()));
             </div>
         </section>
 
-        <HomeServices v-else-if="key === 'services'" :services="services" :copy="copy.services" />
+        <HomeServices v-else-if="key === 'services'" :services="services" :copy="copy.services" :eyebrow="t('What we do')" />
 
         <section v-else-if="key === 'flagship' && flagship" class="relative isolate overflow-hidden bg-ink-950 text-white section-y">
             <div aria-hidden="true" class="absolute inset-0 -z-10 bg-grid" />
             <div aria-hidden="true" class="absolute top-0 right-0 -z-10 size-[36rem] rounded-full bg-[radial-gradient(closest-side,rgb(1_69_255/0.4),transparent)] blur-2xl" />
             <div class="container-page">
-                <SectionHeading :eyebrow="flagship.name" :title="copy.flagship?.title" :lead="copy.flagship?.lead" dark />
+                <SectionHeading :eyebrow="`${t('Our product')} · ${flagship.name}`" :title="copy.flagship?.title" :lead="copy.flagship?.lead" dark />
                 <Reveal class="mt-12"><ModuleExplorer :groups="flagship.feature_groups ?? []" /></Reveal>
                 <div class="mt-12 flex flex-wrap items-center gap-3">
                     <WhatsAppButton placement="flagship" :label="t('Ask for a demo')" />
@@ -119,38 +124,29 @@ const visible = computed(() => props.sections.filter((key) => has[key]?.()));
             </div>
         </section>
 
-        <HomeWork v-else-if="key === 'work'" :projects="projects" :total="projectCount" :copy="copy.work" />
+        <HomeWork v-else-if="key === 'work'" :projects="projects" :total="projectCount" :copy="copy.work" :eyebrow="t('Portfolio')" />
 
-        <section v-else-if="key === 'solutions'" class="section-y bg-surface">
-            <div class="container-page">
-                <SectionHeading :title="copy.solutions?.title" :lead="copy.solutions?.lead" />
-                <div class="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    <Reveal v-for="(solution, index) in otherSolutions" :key="solution.id" :delay="(index % 3) * 0.08">
-                        <SolutionCard :solution="solution" />
-                    </Reveal>
-                </div>
-            </div>
-        </section>
+        <HomePlatforms v-else-if="key === 'solutions'" :solutions="otherSolutions" :copy="copy.solutions" :eyebrow="t('Platforms')" />
 
-        <HomeProcess v-else-if="key === 'process'" :steps="process" :copy="copy.process" />
+        <HomeProcess v-else-if="key === 'process'" :steps="process" :copy="copy.process" :eyebrow="t('Process')" />
 
         <section v-else-if="key === 'testimonials'" class="section-y bg-surface">
             <div class="container-page">
-                <SectionHeading :title="copy.testimonials?.title" :lead="copy.testimonials?.lead" align="center" />
+                <SectionHeading :eyebrow="t('Testimonials')" :title="copy.testimonials?.title" :lead="copy.testimonials?.lead" align="center" />
                 <div class="mt-14"><TestimonialGrid :testimonials="testimonials" /></div>
             </div>
         </section>
 
         <section v-else-if="key === 'reasons'" class="section-y bg-surface">
             <div class="container-page">
-                <SectionHeading :title="copy.reasons?.title" :lead="copy.reasons?.lead" />
+                <SectionHeading :eyebrow="t('Why Auxtech')" :title="copy.reasons?.title" :lead="copy.reasons?.lead" />
                 <div class="mt-14"><ReasonGrid :reasons="reasons" /></div>
             </div>
         </section>
 
         <section v-else-if="key === 'pricing'" class="section-y bg-surface-muted">
             <div class="container-page">
-                <SectionHeading :title="copy.pricing?.title" :lead="copy.pricing?.lead" />
+                <SectionHeading :eyebrow="t('Pricing')" :title="copy.pricing?.title" :lead="copy.pricing?.lead" />
                 <div v-if="plans.length" class="mt-14"><PricingCards :plans="plans" placement="home-pricing" /></div>
                 <Reveal class="mt-8">
                     <div class="flex flex-col gap-6 rounded-3xl bg-gradient-to-r from-brand-700 via-brand-600 to-violet-accent p-8 text-white sm:flex-row sm:items-center sm:justify-between sm:p-10">
@@ -170,7 +166,7 @@ const visible = computed(() => props.sections.filter((key) => has[key]?.()));
         <section v-else-if="key === 'posts'" class="section-y bg-surface">
             <div class="container-page">
                 <div class="flex flex-wrap items-end justify-between gap-6">
-                    <SectionHeading :title="copy.posts?.title" :lead="copy.posts?.lead" />
+                    <SectionHeading :eyebrow="t('Insights')" :title="copy.posts?.title" :lead="copy.posts?.lead" />
                     <Button :href="lp('/blog')" variant="secondary">{{ t('All articles') }} <ArrowRight :size="18" aria-hidden="true" /></Button>
                 </div>
                 <div class="mt-14 grid gap-10 md:grid-cols-3">
@@ -181,7 +177,7 @@ const visible = computed(() => props.sections.filter((key) => has[key]?.()));
 
         <section v-else-if="key === 'faq'" class="section-y bg-surface">
             <div class="container-page grid gap-12 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)]">
-                <SectionHeading :title="copy.faq?.title" :lead="copy.faq?.lead">
+                <SectionHeading :eyebrow="t('FAQ')" :title="copy.faq?.title" :lead="copy.faq?.lead">
                     <Button :href="lp('/faq')" variant="secondary" class="mt-8">{{ t('More questions') }}</Button>
                 </SectionHeading>
                 <Reveal><FaqList :faqs="faqs" /></Reveal>

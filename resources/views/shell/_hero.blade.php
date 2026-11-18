@@ -18,16 +18,19 @@
 @if ($title)
 <div data-shell aria-hidden="true">
     @if ($isHome)
-        <section class="relative isolate overflow-hidden bg-ink-950 pt-32 pb-20 text-white sm:pt-40 lg:min-h-[100svh] lg:pb-28">
-            <div class="absolute inset-0 -z-10 bg-grid"></div>
-            <div class="absolute -top-40 -left-40 -z-10 size-[40rem] rounded-full bg-[radial-gradient(closest-side,rgb(1_69_255/0.6),transparent)] blur-2xl"></div>
-            <div class="container-page grid items-center gap-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
-                <div>
-                    <p class="inline-flex items-center gap-2 rounded-full glass-dark py-1.5 pr-4 pl-1.5 text-sm text-white/80">
-                        <span class="rounded-full bg-brand-600 px-2.5 py-0.5 text-xs font-semibold text-white">{{ $p['site']['name'] ?? '' }}</span>{{ $p['site']['tagline'] ?? '' }}
-                    </p>
-                    <div class="mt-7 font-display text-[2.6rem] leading-[1.05] font-semibold tracking-tight sm:text-6xl xl:text-7xl lang-bn:leading-[1.35]" style="letter-spacing:-0.02em;text-wrap:balance">{{ $title }}</div>
-                    @if ($lead)<p class="mt-6 max-w-xl text-lg leading-relaxed text-white/70 sm:text-xl">{{ $lead }}</p>@endif
+        <section class="relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-ink-950 text-white">
+            @if (! empty($p['hero']['poster']))
+                <div class="absolute inset-0 -z-20" style="transform:scale(1.04)"><img src="{{ $p['hero']['poster'] }}" alt="" class="size-full object-cover object-right" fetchpriority="high"></div>
+            @endif
+            <div class="absolute inset-0 -z-10 bg-gradient-to-r from-ink-950 via-ink-950/75 to-ink-950/5"></div>
+            <div class="absolute inset-0 -z-10 bg-grid opacity-60"></div>
+            <div class="container-page flex flex-1 items-center pt-32 pb-16 sm:pt-40">
+                <div class="max-w-3xl">
+                    @if (! empty($p['hero']['eyebrow']))
+                        <p class="inline-flex items-center gap-2.5 font-mono text-xs tracking-[0.18em] text-brand-200 uppercase sm:text-[0.8rem]"><span class="size-1.5 rounded-full bg-cyan-accent"></span>[ {{ $p['hero']['eyebrow'] }} ]</p>
+                    @endif
+                    <div class="mt-6 font-display text-[2.6rem] leading-[1.05] font-semibold tracking-tight sm:text-6xl xl:text-7xl lang-bn:leading-[1.35]" style="letter-spacing:-0.02em;text-wrap:balance">{{ $title }}</div>
+                    @if ($lead)<p class="mt-6 max-w-2xl text-lg leading-relaxed text-white/75 sm:text-xl">{{ $lead }}</p>@endif
                 </div>
             </div>
         </section>

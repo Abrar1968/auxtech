@@ -45,6 +45,7 @@
     --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
     --animate-marquee: marquee var(--marquee-duration, 40s) linear infinite;
+    --animate-marquee-reverse: marquee-reverse var(--marquee-duration, 40s) linear infinite;
     --animate-aurora: aurora 18s ease-in-out infinite alternate;
     --animate-float: float 7s ease-in-out infinite;
     --animate-page-in: page-in 0.45s var(--ease-out-expo) both;
@@ -52,6 +53,14 @@
     @keyframes marquee {
         to {
             transform: translateX(-50%);
+        }
+    }
+    @keyframes marquee-reverse {
+        from {
+            transform: translateX(-50%);
+        }
+        to {
+            transform: translateX(0);
         }
     }
     @keyframes aurora {

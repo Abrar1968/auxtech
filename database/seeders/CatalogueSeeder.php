@@ -6,104 +6,69 @@ use App\Enums\PublishStatus;
 use App\Models\Industry;
 use App\Models\Service;
 use App\Models\Solution;
+use App\Models\Technology;
+use Database\Seeders\Concerns\SeedsContent;
 use Illuminate\Database\Seeder;
 
-/** Industries, services, solutions and the 23 Auxtech Ecommerce modules. */
+/**
+ * Industries, services, platforms (solutions with the 23 Auxtech Ecommerce
+ * modules) and technologies. Text lives in database/seeders/data/catalogue.php.
+ */
 class CatalogueSeeder extends Seeder
 {
+    use SeedsContent;
+
     public function run(): void
     {
-        $this->industries();
-        $this->services();
-        $this->solutions();
-    }
+        $data = require __DIR__.'/data/catalogue.php';
 
-    private function industries(): void
-    {
-        $industries = [
-            'fashion' => ['Fashion & Apparel', 'ফ্যাশন ও পোশাক', 'shirt'],
-            'gadgets' => ['Gadgets & Electronics', 'গ্যাজেট ও ইলেকট্রনিক্স', 'smartphone'],
-            'food-grocery' => ['Food & Grocery', 'খাদ্য ও গ্রোসারি', 'shopping-basket'],
-            'general-retail' => ['General Retail', 'জেনারেল রিটেইল', 'store'],
-            'reselling' => ['Reselling & Dropshipping', 'রিসেলিং ও ড্রপশিপিং', 'network'],
-            'education' => ['Education', 'শিক্ষা', 'graduation-cap'],
-            'travel' => ['Travel', 'ট্রাভেল', 'plane'],
-            'corporate' => ['Corporate & Industrial', 'কর্পোরেট ও ইন্ডাস্ট্রিয়াল', 'building-2'],
-            'finance' => ['Finance & Compliance', 'ফাইন্যান্স ও কমপ্লায়েন্স', 'calculator'],
-            'environment' => ['Environment & Civic', 'পরিবেশ ও নাগরিক সেবা', 'recycle'],
-            'saas' => ['SaaS', 'সাস', 'cloud'],
-        ];
-
-        foreach ($industries as $slug => [$en, $bn, $icon]) {
-            Industry::query()->updateOrCreate(['slug' => $slug], ['name' => ['en' => $en, 'bn' => $bn], 'icon' => $icon]);
+        foreach ($data['industries'] as $industry) {
+            $this->seedRecord(Industry::class, ['slug' => $industry['slug']], [
+                'name' => $industry['name'], 'description' => $industry['description'], 'icon' => $industry['icon'],
+            ]);
         }
-    }
 
-    private function services(): void
-    {
-        $services = [
-            ['website-development', null, 'Website Development', 'ওয়েবসাইট ডেভেলপমেন্ট', 'globe', true,
-                'E-commerce stores, business websites and custom web applications built for Bangladeshi businesses.'],
-            ['ecommerce-development', 'website-development', 'E-commerce Development', 'ই-কমার্স ডেভেলপমেন্ট', 'shopping-cart', false,
-                'Online stores with order management, inventory, POS, courier integration and Meta tracking built in.'],
-            ['custom-web-application', 'website-development', 'Custom Web Applications', 'কাস্টম ওয়েব অ্যাপ্লিকেশন', 'app-window', false,
-                'Purpose-built platforms such as reseller systems, learning platforms and business tools.'],
-            ['app-development', null, 'App Development', 'অ্যাপ ডেভেলপমেন্ট', 'smartphone', true,
-                'Mobile apps for Android and iOS that work with your website and back office.'],
-            ['digital-marketing', null, 'Digital Marketing', 'ডিজিটাল মার্কেটিং', 'megaphone', true,
-                'Marketing that brings buyers to your store: Meta ads, search engine optimisation and conversion tracking.'],
-            ['seo', 'digital-marketing', 'Search Engine Optimisation', 'সার্চ ইঞ্জিন অপটিমাইজেশন', 'search', false,
-                'Technical and content optimisation so customers find your business on Google.'],
-            ['meta-ads', 'digital-marketing', 'Facebook & Instagram Ads', 'ফেসবুক ও ইনস্টাগ্রাম অ্যাডস', 'target', false,
-                'Meta ad campaigns planned, run and measured for online sales.'],
-            ['meta-pixel-capi', 'digital-marketing', 'Meta Pixel & Conversions API Setup', 'মেটা পিক্সেল ও কনভার্সন এপিআই সেটআপ', 'activity', false,
-                'Browser and server-side tracking so Meta sees every order and your ads optimise on real sales.'],
-        ];
-
-        foreach ($services as $order => [$slug, $parent, $en, $bn, $icon, $featured, $excerpt]) {
-            Service::query()->updateOrCreate(['slug' => $slug], [
-                'parent_id' => $parent ? Service::query()->where('slug', $parent)->value('id') : null,
-                'title' => ['en' => $en, 'bn' => $bn],
-                'excerpt' => ['en' => $excerpt],
-                'icon' => $icon,
-                'is_featured' => $featured,
+        foreach ($data['services'] as $order => $service) {
+            $this->seedRecord(Service::class, ['slug' => $service['slug']], [
+                'parent_id' => $service['parent'] ? Service::query()->where('slug', $service['parent'])->value('id') : null,
+                'title' => $service['title'],
+                'tagline' => $service['tagline'],
+                'excerpt' => $service['excerpt'],
+                'body' => $service['body'],
+                'features' => $service['features'],
+                'process_steps' => $service['process_steps'],
+                'icon' => $service['icon'],
+                'is_featured' => $service['featured'],
                 'status' => PublishStatus::Published,
                 'sort_order' => $order + 1,
             ]);
         }
-    }
 
-    private function solutions(): void
-    {
-        $solutions = [
-            ['ecommerce', 'Auxtech Ecommerce', 'Auxtech ই-কমার্স', 'shopping-bag', true, 'https://kalki.auxdemo.com', null,
-                'A complete e-commerce system for Bangladeshi brands: storefront, orders, inventory, POS, accounting, courier and Meta tracking in one admin panel.'],
-            ['reseller-platform', 'Reseller & Dropshipping Platform', 'রিসেলার ও ড্রপশিপিং প্ল্যাটফর্ম', 'network', false, 'https://resellerv2.auxtechsoftware.com', null,
-                'A B2B platform where resellers sell from your catalogue while you handle stock, packaging and delivery.'],
-            ['lms', 'Learning Management System', 'লার্নিং ম্যানেজমেন্ট সিস্টেম', 'graduation-cap', false, null, null,
-                'Sell and deliver online courses with separate student and trainer portals.'],
-            ['corporate-website', 'Corporate Website', 'কর্পোরেট ওয়েবসাইট', 'building-2', false, null, null,
-                'A professional company website that presents your services, projects and contact details.'],
-            ['custom-software', 'Custom Software', 'কাস্টম সফটওয়্যার', 'code-xml', false, null, null,
-                'Software designed around your process, from calculators and portals to multi-role platforms.'],
-            ['auxify', 'Auxify', 'Auxify', 'cloud', false, null, 'https://auxify.store',
-                'Auxtech\'s own store builder: open an online shop in minutes with ready-made themes, no coding and no server.'],
-        ];
+        // Services from an earlier version of the seed data that were renamed.
+        Service::query()->whereIn('slug', $data['retired_services'])->get()->each->forceDelete();
 
-        foreach ($solutions as $order => [$slug, $en, $bn, $icon, $flagship, $demo, $external, $summary]) {
-            Solution::query()->updateOrCreate(['slug' => $slug], [
-                'name' => ['en' => $en, 'bn' => $bn],
-                'summary' => ['en' => $summary],
-                'icon' => $icon,
-                'is_flagship' => $flagship,
-                'demo_url' => $demo,
-                'external_url' => $external,
+        foreach ($data['solutions'] as $order => $solution) {
+            $this->seedRecord(Solution::class, ['slug' => $solution['slug']], [
+                'name' => $solution['name'],
+                'tagline' => $solution['tagline'],
+                'summary' => $solution['summary'],
+                'body' => $solution['body'],
+                'icon' => $solution['icon'],
+                'is_flagship' => $solution['flagship'],
+                'demo_url' => $solution['demo_url'],
+                'external_url' => $solution['external_url'],
                 'status' => PublishStatus::Published,
                 'sort_order' => $order + 1,
             ]);
         }
 
         $this->ecommerceModules(Solution::query()->where('slug', 'ecommerce')->firstOrFail());
+
+        foreach ($data['technologies'] as $order => $technology) {
+            $this->seedRecord(Technology::class, ['slug' => $technology['slug']], [
+                'name' => $technology['name'], 'category' => $technology['category'], 'sort_order' => $order + 1,
+            ]);
+        }
     }
 
     /** The 23 modules of Auxtech Ecommerce, in four groups. */

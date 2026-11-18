@@ -35,7 +35,7 @@ class PageController extends Controller
         $projects = $industry->projects()->published()->ordered()->with(['client.media', 'industry', 'solution', 'media'])->get();
 
         // Without a description of its own, each industry page still gets a distinct one.
-        $description = $industry->description ?: __(':company builds websites and online stores for :name businesses in Bangladesh. See our :name projects and chat with us on WhatsApp.', [
+        $description = $industry->description ?: __(':company builds software, websites and online stores for :name businesses in Bangladesh. See our :name projects and chat with us on WhatsApp.', [
             'company' => setting_t('company.name'), 'name' => $industry->name,
         ]);
 

@@ -1,77 +1,123 @@
 <script setup lang="ts">
 import { ArrowRight, Check } from '@lucide/vue';
 import { motion, useScroll, useTransform } from 'motion-v';
-import { computed, ref } from 'vue';
-import DeviceFrame from '@/components/site/DeviceFrame.vue';
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
 import WhatsAppButton from '@/components/site/WhatsAppButton.vue';
 import Button from '@/components/ui/Button.vue';
-import Icon from '@/components/ui/Icon.vue';
 import { useShared } from '@/composables/useSite';
 import { useI18n } from '@/lib/i18n';
-import type { Project, Solution } from '@/types/models';
 
+/**
+ * Full-screen hero over a looping background video (admin-replaceable in
+ * Settings > Home page). Phones, data-saver and reduced-motion visitors get
+ * the still image; the video loads only after the page is interactive.
+ */
 const props = defineProps<{
+    eyebrow: string | null;
     title: string | null;
     subtitle: string | null;
-    projects: Project[];
-    flagship: Solution | null;
-    liveCount: number;
+    video: string | null;
+    videoWebm: string | null;
+    poster: string | null;
+    projectCount: number;
     industryCount: number;
+    capabilities: string[];
 }>();
 
 const { site } = useShared();
 const { t, lp, n } = useI18n();
 
-// Three screenshots for the stacked frames.
-const frames = computed(() => props.projects.filter((p) => p.cover).slice(0, 3));
-
-// Module names float over the frames as glass chips.
-const chips = computed(() => {
-    const features = props.flagship?.feature_groups?.flatMap((g) => g.features) ?? [];
-    const wanted = ['order-management', 'courier-integration', 'conversions-api'];
-    const picked = wanted.map((slug) => features.find((f) => f.slug === slug)).filter(Boolean);
-
-    return (picked.length === 3 ? picked : features.slice(0, 3)) as NonNullable<(typeof features)[number]>[];
-});
-
 const section = ref<HTMLElement>();
+const videoEl = ref<HTMLVideoElement>();
+const showVideo = ref(false);
+const playing = ref(false);
+
 const { scrollYProgress } = useScroll({ target: section, offset: ['start start', 'end start'] });
-const framesY = useTransform(scrollYProgress, [0, 1], [0, 120]);
-const textY = useTransform(scrollYProgress, [0, 1], [0, 60]);
+const mediaY = useTransform(scrollYProgress, [0, 1], ['0%', '18%']);
+const mediaScale = useTransform(scrollYProgress, [0, 1], [1.04, 1.14]);
+const textY = useTransform(scrollYProgress, [0, 1], [0, 90]);
+const textOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
 const words = computed(() => (props.title ?? '').split(' '));
 const ease = [0.16, 1, 0.3, 1] as const;
+const ticker = computed(() => [...props.capabilities, ...props.capabilities]);
+
+let observer: IntersectionObserver | undefined;
+
+onMounted(() => {
+    const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+    const allowed =
+        !!(props.video || props.videoWebm) &&
+        matchMedia('(min-width: 768px)').matches &&
+        !matchMedia('(prefers-reduced-motion: reduce)').matches &&
+        !connection?.saveData;
+
+    if (!allowed) {
+        return;
+    }
+
+    showVideo.value = true;
+    nextTick(() => {
+        const video = videoEl.value;
+        if (!video) return;
+        video.play().catch(() => {});
+        // Pause while the hero is off screen; it costs nothing to keep it loaded.
+        observer = new IntersectionObserver(([entry]) => (entry.isIntersecting ? video.play().catch(() => {}) : video.pause()));
+        observer.observe(section.value!);
+    });
+});
+
+onBeforeUnmount(() => observer?.disconnect());
 </script>
 
 <template>
-    <section ref="section" class="relative isolate overflow-hidden bg-ink-950 pt-32 pb-20 text-white sm:pt-40 lg:min-h-[100svh] lg:pb-28">
-        <!-- Background: grid, aurora, glow line -->
-        <div aria-hidden="true" class="absolute inset-0 -z-10 bg-grid" />
-        <div aria-hidden="true" class="absolute -top-40 -left-40 -z-10 size-[40rem] animate-aurora rounded-full bg-[radial-gradient(closest-side,rgb(1_69_255/0.6),transparent)] blur-2xl" />
-        <div aria-hidden="true" class="absolute top-20 right-[-10rem] -z-10 size-[34rem] animate-aurora rounded-full bg-[radial-gradient(closest-side,rgb(124_92_255/0.35),transparent)] blur-2xl [animation-delay:-6s]" />
-        <div aria-hidden="true" class="absolute bottom-[-12rem] left-1/3 -z-10 size-[30rem] animate-aurora rounded-full bg-[radial-gradient(closest-side,rgb(34_211_238/0.22),transparent)] blur-2xl [animation-delay:-11s]" />
+    <section ref="section" class="relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-ink-950 text-white">
+        <!-- Background: still image, then the video fades in over it -->
+        <motion.div aria-hidden="true" class="absolute inset-0 -z-20" :style="{ y: mediaY, scale: mediaScale }">
+            <img v-if="poster" :src="poster" alt="" class="size-full object-cover object-right" fetchpriority="high" decoding="async" />
+            <video
+                v-if="showVideo"
+                ref="videoEl"
+                class="absolute inset-0 size-full object-cover object-right transition-opacity duration-1000"
+                :class="playing ? 'opacity-100' : 'opacity-0'"
+                :poster="poster ?? undefined"
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="auto"
+                disablepictureinpicture
+                @playing="playing = true"
+            >
+                <source v-if="videoWebm" :src="videoWebm" type="video/webm" />
+                <source v-if="video" :src="video" type="video/mp4" />
+            </video>
+        </motion.div>
+        <div aria-hidden="true" class="absolute inset-0 -z-10 bg-gradient-to-r from-ink-950 via-ink-950/75 to-ink-950/5" />
+        <div aria-hidden="true" class="absolute inset-x-0 bottom-0 -z-10 h-48 bg-gradient-to-t from-ink-950 to-transparent" />
+        <div aria-hidden="true" class="absolute inset-0 -z-10 bg-grid opacity-60" />
 
-        <div class="container-page grid items-center gap-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
-            <motion.div :style="{ y: textY }">
+        <div class="container-page flex flex-1 items-center pt-32 pb-16 sm:pt-40">
+            <motion.div class="max-w-3xl" :style="{ y: textY, opacity: textOpacity }">
                 <motion.p
+                    v-if="eyebrow"
                     :initial="{ opacity: 0, y: 12 }"
                     :animate="{ opacity: 1, y: 0 }"
                     :transition="{ duration: 0.6, ease }"
-                    class="inline-flex items-center gap-2 rounded-full glass-dark py-1.5 pr-4 pl-1.5 text-sm text-white/80"
+                    class="inline-flex items-center gap-2.5 font-mono text-xs tracking-[0.18em] text-brand-200 uppercase sm:text-[0.8rem]"
                 >
-                    <span class="rounded-full bg-brand-600 px-2.5 py-0.5 text-xs font-semibold text-white">{{ site.name }}</span>
-                    {{ site.tagline }}
+                    <span class="size-1.5 animate-pulse rounded-full bg-cyan-accent" />[ {{ eyebrow }} ]
                 </motion.p>
 
-                <h1 class="mt-7 font-display text-[2.6rem] leading-[1.05] font-semibold tracking-tight sm:text-6xl xl:text-7xl lang-bn:leading-[1.35]">
+                <h1 class="mt-6 font-display text-[2.6rem] leading-[1.05] font-semibold tracking-tight sm:text-6xl xl:text-7xl lang-bn:leading-[1.35]">
                     <motion.span
                         v-for="(word, index) in words"
                         :key="index"
                         class="inline-block align-top"
                         :class="index >= words.length - 2 ? 'text-gradient' : ''"
-                        :initial="{ y: '0.35em', filter: 'blur(6px)' }"
-                        :animate="{ y: '0em', filter: 'blur(0px)' }"
-                        :transition="{ duration: 0.7, delay: index * 0.04, ease }"
+                        :initial="{ y: '0.35em', opacity: 0, filter: 'blur(8px)' }"
+                        :animate="{ y: '0em', opacity: 1, filter: 'blur(0px)' }"
+                        :transition="{ duration: 0.8, delay: 0.1 + index * 0.05, ease }"
                     >
                         {{ word }}&nbsp;
                     </motion.span>
@@ -82,7 +128,7 @@ const ease = [0.16, 1, 0.3, 1] as const;
                     :initial="{ opacity: 0, y: 16 }"
                     :animate="{ opacity: 1, y: 0 }"
                     :transition="{ duration: 0.8, delay: 0.45, ease }"
-                    class="mt-6 max-w-xl text-lg leading-relaxed text-white/70 sm:text-xl"
+                    class="mt-6 max-w-2xl text-lg leading-relaxed text-white/75 sm:text-xl"
                 >
                     {{ subtitle }}
                 </motion.p>
@@ -104,52 +150,25 @@ const ease = [0.16, 1, 0.3, 1] as const;
                     :initial="{ opacity: 0 }"
                     :animate="{ opacity: 1 }"
                     :transition="{ duration: 1, delay: 0.85 }"
-                    class="mt-10 flex flex-wrap gap-x-6 gap-y-3 text-sm text-white/65"
+                    class="mt-10 flex flex-wrap gap-x-6 gap-y-3 text-sm text-white/70"
                 >
-                    <li v-if="liveCount" class="flex items-center gap-2"><Check :size="16" class="text-whatsapp" aria-hidden="true" />{{ t(':count live client sites', { count: n(liveCount) }) }}</li>
+                    <li v-if="projectCount" class="flex items-center gap-2"><Check :size="16" class="text-whatsapp" aria-hidden="true" />{{ t(':count projects delivered', { count: n(projectCount) }) }}</li>
                     <li v-if="industryCount" class="flex items-center gap-2"><Check :size="16" class="text-whatsapp" aria-hidden="true" />{{ t(':count industries', { count: n(industryCount) }) }}</li>
                     <li v-if="site.hours" class="flex items-center gap-2"><Check :size="16" class="text-whatsapp" aria-hidden="true" />{{ site.hours }}</li>
                 </motion.ul>
             </motion.div>
+        </div>
 
-            <!-- Stacked client screenshots with floating module chips -->
-            <motion.div v-if="frames.length" :style="{ y: framesY }" class="relative mx-auto w-full max-w-xl lg:max-w-none" aria-hidden="true">
-                <motion.div
-                    v-for="(project, index) in frames"
-                    :key="project.id"
-                    :initial="{ opacity: 0, y: 60, rotate: 0 }"
-                    :animate="{ opacity: 1, y: 0, rotate: [-6, 3, -1][index] }"
-                    :transition="{ duration: 1.1, delay: 0.3 + index * 0.15, ease }"
-                    :class="[
-                        'w-[78%]',
-                        index === 0 && 'relative z-10 ml-auto',
-                        index === 1 && 'absolute top-[18%] left-0 z-20',
-                        index === 2 && 'absolute top-[46%] right-[4%] z-30 w-[64%]',
-                    ]"
-                >
-                    <div class="animate-float" :style="{ animationDelay: `${index * -2.3}s` }">
-                        <DeviceFrame :image="project.cover" :url="project.live_url" :priority="index === 0" sizes="(min-width: 1024px) 34vw, 70vw" />
-                    </div>
-                </motion.div>
-
-                <motion.div
-                    v-for="(chip, index) in chips"
-                    :key="chip.slug"
-                    :initial="{ opacity: 0, scale: 0.85 }"
-                    :animate="{ opacity: 1, scale: 1 }"
-                    :transition="{ duration: 0.6, delay: 1 + index * 0.18, ease }"
-                    :class="[
-                        'absolute z-40 hidden items-center gap-2.5 rounded-2xl border border-white/10 bg-ink-900/85 px-3.5 py-2.5 text-sm font-medium text-white shadow-[0_20px_50px_-15px_rgb(0_0_0/0.9)] backdrop-blur-xl sm:flex',
-                        ['-top-10 left-[6%]', 'top-[58%] -left-8', '-bottom-12 right-0'][index],
-                    ]"
-                >
-                    <span class="grid size-8 place-items-center rounded-xl bg-brand-600"><Icon :name="chip.icon" :size="16" /></span>
-                    {{ chip.title }}
-                    <span class="size-2 rounded-full bg-whatsapp" />
-                </motion.div>
-                <!-- Keeps height for the absolutely positioned frames -->
-                <div class="h-[30%]" />
-            </motion.div>
+        <!-- What we do, as a slow ticker along the bottom edge -->
+        <div v-if="capabilities.length" class="relative border-t border-white/10 bg-ink-950/40 py-5 backdrop-blur-md">
+            <h2 class="sr-only">{{ t('What we do') }}</h2>
+            <div class="mask-fade-x overflow-hidden" :style="{ '--marquee-duration': `${Math.max(30, capabilities.length * 6)}s` }">
+                <ul class="flex w-max animate-marquee items-center gap-10 pr-10 font-display text-lg text-white/60 motion-reduce:animate-none sm:text-xl">
+                    <li v-for="(item, index) in ticker" :key="index" class="flex items-center gap-10 whitespace-nowrap" :aria-hidden="index >= capabilities.length">
+                        {{ item }}<span class="text-brand-400" aria-hidden="true">✦</span>
+                    </li>
+                </ul>
+            </div>
         </div>
     </section>
 </template>

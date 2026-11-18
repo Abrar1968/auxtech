@@ -47,6 +47,8 @@ class SecurityHeaders
             'style-src' => "'self' 'unsafe-inline'",
             'img-src' => "'self' data: blob: https:",
             'font-src' => "'self' data:",
+            // Home page background video (self-hosted by default; a full https link may be set in Settings).
+            'media-src' => "'self' blob: https:",
             'connect-src' => "'self' https: wss:",
             'frame-src' => "'self' https://www.googletagmanager.com https://www.youtube.com https://www.youtube-nocookie.com https://www.google.com",
             'object-src' => "'none'",

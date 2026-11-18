@@ -45,7 +45,17 @@ function host(url: string): string {
                 :sizes="sizes ?? '(min-width: 1024px) 40vw, 90vw'"
                 class="absolute inset-0 size-full object-top transition duration-[1.6s] ease-out-expo group-hover:scale-[1.03]"
             />
-            <slot v-else />
+            <slot v-else>
+                <!-- No screenshot uploaded yet: a quiet placeholder with the site address -->
+                <div
+                    :class="[
+                        'absolute inset-0 grid place-items-center bg-gradient-to-br',
+                        dark ? 'from-ink-800 via-brand-950 to-ink-900 text-white/50' : 'from-brand-50 via-surface to-surface-muted text-muted',
+                    ]"
+                >
+                    <span v-if="url" class="font-display text-lg font-semibold tracking-tight">{{ host(url) }}</span>
+                </div>
+            </slot>
         </div>
     </div>
 </template>

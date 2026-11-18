@@ -29,8 +29,8 @@
                     @if (! empty($p['hero']['eyebrow']))
                         <p class="inline-flex items-center gap-2.5 font-mono text-xs tracking-[0.18em] text-brand-200 uppercase sm:text-[0.8rem]"><span class="size-1.5 rounded-full bg-cyan-accent"></span>[ {{ $p['hero']['eyebrow'] }} ]</p>
                     @endif
-                    <div class="mt-6 font-display text-[2.6rem] leading-[1.05] font-semibold tracking-tight sm:text-6xl xl:text-7xl lang-bn:leading-[1.35]" style="letter-spacing:-0.02em;text-wrap:balance">{{ $title }}</div>
-                    @if ($lead)<p class="mt-6 max-w-2xl text-lg leading-relaxed text-white/75 sm:text-xl">{{ $lead }}</p>@endif
+                    <div class="mt-6 font-display text-[2.75rem] leading-[1.05] font-semibold tracking-tight sm:text-6xl xl:text-7xl lang-bn:leading-[1.35]" style="letter-spacing:-0.02em;text-wrap:balance">{{ $title }}</div>
+                    @if ($lead)<p class="mt-6 max-w-2xl text-base leading-relaxed text-white/75 sm:text-xl">{{ $lead }}</p>@endif
                 </div>
             </div>
         </section>

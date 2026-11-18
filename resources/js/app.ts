@@ -9,12 +9,21 @@ import SiteLayout from './layouts/SiteLayout.vue';
  */
 const AdminLayout = defineAsyncComponent(() => import('./layouts/AdminLayout.vue'));
 
-createInertiaApp({
-    pages: './pages',
-    layout: (name: string) => {
-        if (name.startsWith('Site/')) return SiteLayout;
-        if (name.startsWith('Admin/')) return AdminLayout;
-        return undefined;
-    },
-    progress: { color: '#2f61ff', delay: 150 },
-});
+const start = () =>
+    createInertiaApp({
+        pages: './pages',
+        layout: (name: string) => {
+            if (name.startsWith('Site/')) return SiteLayout;
+            if (name.startsWith('Admin/')) return AdminLayout;
+            return undefined;
+        },
+        progress: { color: '#2f61ff', delay: 150 },
+    });
+
+// When the server printed an app shell, let the browser paint it before Vue
+// replaces it (two frames), so the first and largest paint never wait for the bundle.
+if (document.querySelector('[data-shell]')) {
+    requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(start, 0)));
+} else {
+    start();
+}

@@ -109,14 +109,14 @@ onBeforeUnmount(() => observer?.disconnect());
                     <span class="size-1.5 animate-pulse rounded-full bg-cyan-accent" />[ {{ eyebrow }} ]
                 </motion.p>
 
-                <h1 class="mt-6 font-display text-[2.6rem] leading-[1.05] font-semibold tracking-tight sm:text-6xl xl:text-7xl lang-bn:leading-[1.35]">
+                <h1 class="mt-6 font-display text-[2.75rem] leading-[1.05] font-semibold tracking-tight sm:text-6xl xl:text-7xl lang-bn:leading-[1.35]">
                     <motion.span
                         v-for="(word, index) in words"
                         :key="index"
                         class="inline-block align-top"
                         :class="index >= words.length - 2 ? 'text-gradient' : ''"
-                        :initial="{ y: '0.35em', opacity: 0, filter: 'blur(8px)' }"
-                        :animate="{ y: '0em', opacity: 1, filter: 'blur(0px)' }"
+                        :initial="{ y: '0.35em', filter: 'blur(8px)' }"
+                        :animate="{ y: '0em', filter: 'blur(0px)' }"
                         :transition="{ duration: 0.8, delay: 0.1 + index * 0.05, ease }"
                     >
                         {{ word }}&nbsp;
@@ -125,10 +125,10 @@ onBeforeUnmount(() => observer?.disconnect());
 
                 <motion.p
                     v-if="subtitle"
-                    :initial="{ opacity: 0, y: 16 }"
-                    :animate="{ opacity: 1, y: 0 }"
-                    :transition="{ duration: 0.8, delay: 0.45, ease }"
-                    class="mt-6 max-w-2xl text-lg leading-relaxed text-white/75 sm:text-xl"
+                    :initial="{ y: 14, scale: 0.96 }"
+                    :animate="{ y: 0, scale: 1 }"
+                    :transition="{ duration: 0.8, ease }"
+                    class="mt-6 max-w-2xl origin-top-left text-base leading-relaxed text-white/75 sm:text-xl"
                 >
                     {{ subtitle }}
                 </motion.p>

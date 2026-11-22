@@ -19,6 +19,7 @@ import WhatsAppButton from '@/components/site/WhatsAppButton.vue';
 import Button from '@/components/ui/Button.vue';
 import Reveal from '@/components/ui/Reveal.vue';
 import SectionHeading from '@/components/ui/SectionHeading.vue';
+import { plain } from '@/lib/accent';
 import { useI18n } from '@/lib/i18n';
 import type { Client, Faq, Post, PricingPlan, Project, SectionCopy, Service, Solution, Stat, Testimonial, TextRow } from '@/types/models';
 
@@ -27,7 +28,16 @@ import type { Client, Faq, Post, PricingPlan, Project, SectionCopy, Service, Sol
  * with no content hides itself.
  */
 const props = defineProps<{
-    hero: { eyebrow: string | null; title: string | null; subtitle: string | null; video: string | null; videoWebm: string | null; poster: string | null };
+    hero: {
+        eyebrow: string | null;
+        title: string | null;
+        titleParts?: { text: string; accent: boolean }[];
+        subtitle: string | null;
+        video: string | null;
+        videoWebm: string | null;
+        poster: string | null;
+        screens?: { name: string; desktop: string | null; mobile: string | null }[];
+    };
     sections: string[];
     copy: Record<string, SectionCopy>;
     clients: Client[];
@@ -50,8 +60,9 @@ const props = defineProps<{
 
 const { t, lp } = useI18n();
 const otherSolutions = computed(() => props.solutions.filter((s) => !s.is_flagship));
-// Service and sub-service names for the ticker under the hero.
-const capabilities = computed(() => props.services.flatMap((s) => [s.title, ...(s.children ?? []).map((c) => c.title)]).filter(Boolean) as string[]);
+// Hero stages: the first three services in admin order. Labels on the devices: sub-services.
+const heroStages = computed(() => props.services.slice(0, 3).map((s) => ({ title: s.title, text: s.tagline ?? s.excerpt ?? null, url: s.url })));
+const hotspots = computed(() => props.services.flatMap((s) => (s.children ?? []).map((c) => c.title)).filter(Boolean).slice(0, 4) as string[]);
 
 const has: Record<string, () => boolean> = {
     hero: () => true,
@@ -78,13 +89,16 @@ const visible = computed(() => props.sections.filter((key) => has[key]?.()));
             v-if="key === 'hero'"
             :eyebrow="hero.eyebrow"
             :title="hero.title"
+            :title-parts="hero.titleParts ?? []"
             :subtitle="hero.subtitle"
             :video="hero.video"
             :video-webm="hero.videoWebm"
             :poster="hero.poster"
+            :screens="hero.screens ?? []"
+            :stages="heroStages"
+            :hotspots="hotspots"
             :project-count="projectCount"
             :industry-count="industryCount"
-            :capabilities="capabilities"
         />
 
         <section v-else-if="key === 'clients'" class="overflow-hidden border-b border-line bg-surface py-16 sm:py-20">
@@ -96,7 +110,7 @@ const visible = computed(() => props.sections.filter((key) => has[key]?.()));
 
         <section v-else-if="key === 'stats'" class="bg-surface py-16">
             <div class="container-page">
-                <h2 v-if="copy.stats?.title" class="sr-only">{{ copy.stats.title }}</h2>
+                <h2 v-if="copy.stats?.title" class="sr-only">{{ plain(copy.stats.title) }}</h2>
                 <dl class="grid grid-cols-2 gap-8 lg:grid-cols-4">
                     <Reveal v-for="(stat, index) in stats" :key="index" :delay="index * 0.08" class="flex flex-col text-center lg:border-l lg:border-line lg:first:border-0">
                         <dt class="order-2 mt-2 text-muted">{{ stat.label }}</dt>

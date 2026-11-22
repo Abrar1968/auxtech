@@ -39,7 +39,8 @@ const rows = computed(() => {
                     :aria-hidden="index >= row.length"
                     :class="[
                         'flex h-24 w-48 shrink-0 items-center justify-center rounded-2xl border px-5 transition duration-300 sm:h-28 sm:w-56',
-                        dark ? 'border-white/10 bg-white/[0.04] hover:border-white/25' : 'border-line bg-surface-raised hover:border-brand-300 hover:shadow-[0_18px_40px_-24px_rgb(255_201_60/0.45)]',
+                        // Logos keep their own colours, so tiles stay white in every theme.
+                        dark ? 'border-white/10 bg-white hover:border-brand-600' : 'border-line bg-white hover:border-brand-600 hover:shadow-[0_18px_40px_-24px_rgb(20_21_24/0.35)]',
                     ]"
                 >
                     <a
@@ -56,13 +57,13 @@ const rows = computed(() => {
                             :image="client.logo"
                             sizes="200px"
                             fit="contain"
-                            class="max-h-14 w-auto max-w-full opacity-75 grayscale transition duration-300 hover:opacity-100 hover:grayscale-0 dark:brightness-0 dark:invert dark:hover:brightness-100 dark:hover:invert-0"
+                            class="max-h-14 w-auto max-w-full transition duration-300 hover:scale-105"
                         />
-                        <span v-else :class="['text-center font-display text-base font-semibold', dark ? 'text-white/70' : 'text-muted']">{{ client.name }}</span>
+                        <span v-else class="text-center font-display text-base font-semibold text-ink-950/75">{{ client.name }}</span>
                     </a>
                     <template v-else>
-                        <AppImage v-if="client.logo" :image="client.logo" sizes="200px" fit="contain" class="max-h-14 w-auto max-w-full opacity-75 grayscale" />
-                        <span v-else class="text-center font-display text-base font-semibold text-muted">{{ client.name }}</span>
+                        <AppImage v-if="client.logo" :image="client.logo" sizes="200px" fit="contain" class="max-h-14 w-auto max-w-full" />
+                        <span v-else class="text-center font-display text-base font-semibold text-ink-950/75">{{ client.name }}</span>
                     </template>
                 </li>
             </ul>

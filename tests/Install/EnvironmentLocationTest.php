@@ -20,6 +20,6 @@ it('writes the installed settings to storage, away from the template .env in rel
 it('loads storage/.env when it exists', function () {
     $bootstrap = (string) file_get_contents(base_path('bootstrap/app.php'));
 
-    expect($bootstrap)->toContain("\$app->useEnvironmentPath(\$app->storagePath())")
+    expect($bootstrap)->toContain('$app->useEnvironmentPath($app->storagePath())')
         ->and((string) file_get_contents(base_path('scripts/build-release.sh')))->toContain('--exclude=./storage/.env');
 });

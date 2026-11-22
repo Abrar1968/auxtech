@@ -1,7 +1,10 @@
 @import 'tailwindcss';
 
-@import '@fontsource-variable/sora';
-@import '@fontsource-variable/inter';
+/* Headings: Fraunces (soft serif; its italic is nearly calligraphic and marks accent words).
+   Text: Plus Jakarta Sans. Bangla falls back to Anek Bangla. */
+@import '@fontsource-variable/fraunces/soft.css';
+@import '@fontsource-variable/fraunces/soft-italic.css';
+@import '@fontsource-variable/plus-jakarta-sans';
 @import '@fontsource-variable/anek-bangla';
 
 @source '../views';
@@ -17,8 +20,8 @@
  | fill or an accent on dark; as text on light pages use text-link.
  */
 @theme {
-    --font-display: 'Sora Variable', 'Anek Bangla Variable', ui-sans-serif, system-ui, sans-serif;
-    --font-sans: 'Inter Variable', 'Anek Bangla Variable', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Fraunces Variable', 'Anek Bangla Variable', Georgia, 'Times New Roman', serif;
+    --font-sans: 'Plus Jakarta Sans Variable', 'Anek Bangla Variable', ui-sans-serif, system-ui, sans-serif;
 
     --color-brand-50: #fffaeb;
     --color-brand-100: #fff2c9;
@@ -154,10 +157,26 @@
     h1,
     h2,
     h3,
-    h4 {
+    h4,
+    .font-display {
         font-family: var(--font-display);
+        /* The soft axis rounds Fraunces' terminals: friendlier at large sizes. */
+        font-variation-settings: 'SOFT' 100;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
         text-wrap: balance;
-        letter-spacing: -0.02em;
+        letter-spacing: -0.015em;
+    }
+
+    /* Accent words in headings: Fraunces italic, which reads almost like handwriting. */
+    :is(h1, h2, h3, .font-display) em,
+    .accent-italic {
+        font-style: italic;
+        font-variation-settings: 'SOFT' 100;
     }
 
     p {

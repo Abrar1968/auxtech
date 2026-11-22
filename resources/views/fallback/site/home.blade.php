@@ -8,7 +8,7 @@
 
 @if ($services)
     <section>
-        <h2>{{ $copy['services']['title'] ?? __('Services') }}</h2>
+        <h2>{{ str_replace('*', '', $copy['services']['title'] ?? __('Services')) }}</h2>
         <ul>@foreach ($services as $service)<li><a href="{{ $service['url'] }}">{{ $service['title'] }}</a>@if ($service['excerpt']): {{ $service['excerpt'] }}@endif</li>@endforeach</ul>
     </section>
 @endif
@@ -23,7 +23,7 @@
 
 @if ($projects)
     <section>
-        <h2>{{ $copy['work']['title'] ?? __('Featured work') }}</h2>
+        <h2>{{ str_replace('*', '', $copy['work']['title'] ?? __('Featured work')) }}</h2>
         @include('fallback._projects', ['projects' => $projects])
         <p><a href="{{ lroute('work.index') }}">{{ __('View all :count projects', ['count' => $projectCount]) }}</a></p>
     </section>
@@ -54,14 +54,14 @@
 
 @if ($process)
     <section>
-        <h2>{{ $copy['process']['title'] ?? __('How we work') }}</h2>
+        <h2>{{ str_replace('*', '', $copy['process']['title'] ?? __('How we work')) }}</h2>
         <ol>@foreach ($process as $step)<li>{{ $step['title'] }}: {{ $step['description'] }}</li>@endforeach</ol>
     </section>
 @endif
 
 @if ($reasons)
     <section>
-        <h2>{{ $copy['reasons']['title'] ?? '' }}</h2>
+        <h2>{{ str_replace('*', '', $copy['reasons']['title'] ?? '') }}</h2>
         <ul>@foreach ($reasons as $reason)<li>{{ $reason['title'] }}: {{ $reason['description'] }}</li>@endforeach</ul>
     </section>
 @endif

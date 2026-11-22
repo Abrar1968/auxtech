@@ -57,8 +57,8 @@ Gray on yellow is 9:1. Text on white is `#232428`; muted text `#5C5F66` (5.8:1 o
 
 | Role | Font | Notes |
 |---|---|---|
-| Display / headings | **Sora** (variable) | Geometric, matches the logo wordmark |
-| Body / UI | **Inter** (variable) | |
+| Display / headings | **Fraunces** (variable, soft axis) | A soft serif with character. Words wrapped in `*stars*` in a title (hero, section titles, CTA) are set in Fraunces italic, which reads almost like handwriting; in the hero they are also yellow |
+| Body / UI | **Plus Jakarta Sans** (variable) | Modern and readable at small sizes; also the admin panel |
 | Bangla | **Anek Bangla** (variable) | Loaded for all text; `line-height` raised to 1.7 under `:lang(bn)` |
 | Code / numbers in mockups | JetBrains Mono (optional) | |
 

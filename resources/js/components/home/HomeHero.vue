@@ -1,187 +1,401 @@
 <script setup lang="ts">
-import { ArrowRight, Check } from '@lucide/vue';
-import { motion, useScroll, useTransform } from 'motion-v';
+import { ArrowRight, Check, ChevronDown } from '@lucide/vue';
+import { Link } from '@inertiajs/vue3';
+import { motion, useMotionValueEvent, useScroll, useTransform } from 'motion-v';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import type { Anchor, HeroScene, Screen } from './heroScene';
 import WhatsAppButton from '@/components/site/WhatsAppButton.vue';
 import Button from '@/components/ui/Button.vue';
 import { useShared } from '@/composables/useSite';
 import { useI18n } from '@/lib/i18n';
 
 /**
- * Full-screen hero over a looping background video (admin-replaceable in
- * Settings > Home page). Phones, data-saver and reduced-motion visitors get
- * the still image; the video loads only after the page is interactive.
+ * Scroll-pinned hero. Light trails race toward a wireframe laptop and phone that
+ * show real project screenshots; while the visitor scrolls, the hero stays on
+ * screen, the camera moves through the scene and the headline steps through the
+ * featured services (stages). Everything shown comes from the admin.
+ *
+ * Phones get the same scene at a lower cost; visitors who prefer reduced motion
+ * or save data get a still frame and a normal, unpinned hero. An optional
+ * background video (Settings > Home page) replaces the scene.
  */
+export type HeroStage = { title: string; text: string | null; url: string };
+
 const props = defineProps<{
     eyebrow: string | null;
     title: string | null;
+    titleParts: { text: string; accent: boolean }[];
     subtitle: string | null;
     video: string | null;
     videoWebm: string | null;
     poster: string | null;
+    screens: Screen[];
+    stages: HeroStage[];
+    hotspots: string[];
     projectCount: number;
     industryCount: number;
-    capabilities: string[];
 }>();
 
 const { site } = useShared();
-const { t, lp, n } = useI18n();
+const { t, n, lp } = useI18n();
 
 const section = ref<HTMLElement>();
+const canvas = ref<HTMLCanvasElement>();
+const labels = ref<HTMLElement[]>([]);
 const videoEl = ref<HTMLVideoElement>();
-const showVideo = ref(false);
+
+const motionOk = ref(false);
+const sceneOn = ref(false);
 const playing = ref(false);
+const active = ref(0);
 
-const { scrollYProgress } = useScroll({ target: section, offset: ['start start', 'end start'] });
-const mediaY = useTransform(scrollYProgress, [0, 1], ['0%', '18%']);
-const mediaScale = useTransform(scrollYProgress, [0, 1], [1.04, 1.14]);
-const textY = useTransform(scrollYProgress, [0, 1], [0, 90]);
-const textOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+const steps = computed(() => 1 + props.stages.length);
+// The section is taller than the screen only when it pins (motion allowed, stages present).
+const pinned = computed(() => motionOk.value && props.stages.length > 0);
+const parts = computed(() =>
+    props.titleParts.length ? props.titleParts : props.title ? [{ text: props.title, accent: false }] : [],
+);
 
-const words = computed(() => (props.title ?? '').split(' '));
-const ease = [0.16, 1, 0.3, 1] as const;
-const ticker = computed(() => [...props.capabilities, ...props.capabilities]);
+const { scrollYProgress } = useScroll({ target: section, offset: ['start start', 'end end'] });
+let progress = 0;
+useMotionValueEvent(scrollYProgress, 'change', (value: number) => {
+    progress = value;
+    active.value = pinned.value ? Math.min(steps.value - 1, Math.floor(value * steps.value * 0.999)) : 0;
+});
+// When unpinned (no stages), fade the content as the hero leaves the screen.
+const { scrollYProgress: leave } = useScroll({ target: section, offset: ['start start', 'end start'] });
+const contentY = useTransform(leave, [0, 1], [0, 60]);
 
-let observer: IntersectionObserver | undefined;
-const ready = ref(false);
+const number = (i: number) => n(String(i + 1).padStart(2, '0'));
 
-// Fade the video in only once enough is buffered to play through, so it never
-// appears and then freezes while the rest downloads; until then the poster shows.
-function start() {
-    const video = videoEl.value;
-    if (!video || ready.value) return;
-    ready.value = true;
-    video.play().then(() => (playing.value = true)).catch(() => {});
-    // Pause while the hero is off screen; it costs nothing to keep it loaded.
-    observer = new IntersectionObserver(([entry]) => (entry.isIntersecting ? video.play().catch(() => {}) : video.pause()));
-    observer.observe(section.value!);
+function scrollOn(): void {
+    const el = section.value;
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY;
+    const end = top + el.offsetHeight;
+    const step = pinned.value ? (el.offsetHeight - window.innerHeight) / steps.value : 0;
+    const target =
+        pinned.value && active.value < steps.value - 1
+            ? top + step * (active.value + 1) + 2
+            : end - (pinned.value ? window.innerHeight - 1 : 0);
+    window.scrollTo({ top: target, behavior: 'smooth' });
 }
 
-onMounted(() => {
-    const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
-    const allowed =
-        !!(props.video || props.videoWebm) &&
-        matchMedia('(min-width: 768px)').matches &&
-        !matchMedia('(prefers-reduced-motion: reduce)').matches &&
-        !connection?.saveData &&
-        !['slow-2g', '2g'].includes(connection?.effectiveType ?? '');
+let scene: HeroScene | undefined;
+let frame = 0;
+let observer: IntersectionObserver | undefined;
+let resizeObserver: ResizeObserver | undefined;
+let onScreen = true;
 
-    if (!allowed) {
+function placeLabels(anchors: Anchor[]): void {
+    labels.value.forEach((el, i) => {
+        const a = anchors[i];
+        if (!el) return;
+        el.style.opacity = a?.visible ? '1' : '0';
+        if (a?.visible) el.style.transform = `translate3d(${a.x}px, ${a.y}px, 0)`;
+    });
+}
+
+onMounted(async () => {
+    const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches || !!connection?.saveData;
+    motionOk.value = !reduced;
+
+    if (props.video) {
+        if (!reduced && matchMedia('(min-width: 768px)').matches) videoEl.value?.play().catch(() => {});
         return;
     }
 
-    // Start downloading after the page has loaded, so the video never competes
-    // with the page's own scripts, fonts and images.
-    const load = () => setTimeout(() => (showVideo.value = true), 300);
-    if (document.readyState === 'complete') load();
-    else addEventListener('load', load, { once: true });
+    const el = canvas.value;
+    if (!el) return;
+    const { createHeroScene } = await import('./heroScene');
+    const lite = !matchMedia('(min-width: 768px)').matches;
+    let intro = false;
+    try {
+        intro = !reduced && !sessionStorage.getItem('aux-hero-intro');
+        sessionStorage.setItem('aux-hero-intro', '1');
+    } catch {
+        intro = false;
+    }
+    const wide = () => matchMedia('(min-width: 1024px)').matches;
+    scene = createHeroScene(el, {
+        screens: props.screens,
+        lite,
+        intro,
+        focus: () => (wide() ? { x: 0.27, y: 0.6 } : { x: 0.5, y: 0.47 }),
+        onAnchors: wide() ? placeLabels : undefined,
+    });
+    sceneOn.value = true;
+
+    if (reduced) {
+        // A still frame, redrawn once the screenshots have loaded.
+        scene.render(3, 0);
+        setTimeout(() => scene?.render(3, 0), 1500);
+        resizeObserver = new ResizeObserver(() => {
+            scene?.resize();
+            scene?.render(3, 0);
+        });
+        resizeObserver.observe(el);
+        return;
+    }
+
+    const start = performance.now();
+    let last = 0;
+    // Phones start at about 30 frames a second; any device whose frames take
+    // long drops to that rate too, so the scene never makes the page feel slow.
+    let interval = lite ? 30 : 0;
+    let cost = 0;
+    const tick = (now: number) => {
+        frame = requestAnimationFrame(tick);
+        if (now - last < interval || !onScreen) return;
+        last = now;
+        const before = performance.now();
+        scene?.render((now - start) / 1000, pinned.value ? progress : 0);
+        cost = cost * 0.9 + (performance.now() - before) * 0.1;
+        if (cost > 9) interval = 30;
+        if (cost > 20) interval = 60;
+    };
+    frame = requestAnimationFrame(tick);
+
+    resizeObserver = new ResizeObserver(() => scene?.resize());
+    resizeObserver.observe(el);
+    observer = new IntersectionObserver(([entry]) => (onScreen = entry.isIntersecting));
+    observer.observe(el);
 });
 
-onBeforeUnmount(() => observer?.disconnect());
+onBeforeUnmount(() => {
+    cancelAnimationFrame(frame);
+    observer?.disconnect();
+    resizeObserver?.disconnect();
+    scene?.destroy();
+});
 </script>
 
 <template>
-    <section ref="section" class="relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-ink-950 text-white">
-        <!-- Background: still image, then the video fades in over it -->
-        <motion.div aria-hidden="true" class="absolute inset-0 -z-20" :style="{ y: mediaY, scale: mediaScale }">
-            <img v-if="poster" :src="poster" alt="" class="size-full object-cover object-right" fetchpriority="high" decoding="async" />
-            <video
-                v-if="showVideo"
-                ref="videoEl"
-                class="absolute inset-0 size-full object-cover object-right transition-opacity duration-1000"
-                :class="playing ? 'opacity-100' : 'opacity-0'"
-                :poster="poster ?? undefined"
-                muted
-                loop
-                playsinline
-                preload="auto"
-                disablepictureinpicture
-                @canplaythrough="start"
-                @playing="ready && (playing = true)"
+    <section
+        ref="section"
+        class="relative bg-ink-950 text-white"
+        :style="pinned ? { height: `${100 + stages.length * 90}svh` } : undefined"
+    >
+        <div
+            :class="[
+                'isolate flex flex-col overflow-hidden',
+                pinned ? 'sticky top-0 h-[100svh]' : 'relative min-h-[100svh]',
+            ]"
+        >
+            <!-- Ground and light: a deep gray floor with a faint warm horizon. -->
+            <div
+                aria-hidden="true"
+                class="absolute inset-0 -z-30 bg-[radial-gradient(120%_80%_at_50%_42%,#3a3c42_0%,#2b2d31_38%,#1c1d20_100%)]"
+            />
+
+            <template v-if="video">
+                <img
+                    v-if="poster"
+                    :src="poster"
+                    alt=""
+                    aria-hidden="true"
+                    class="absolute inset-0 -z-20 size-full object-cover object-right"
+                    fetchpriority="high"
+                    decoding="async"
+                />
+                <video
+                    ref="videoEl"
+                    aria-hidden="true"
+                    :class="[
+                        'absolute inset-0 -z-20 size-full object-cover object-right transition-opacity duration-1000',
+                        playing ? 'opacity-100' : 'opacity-0',
+                    ]"
+                    :poster="poster ?? undefined"
+                    muted
+                    loop
+                    playsinline
+                    preload="auto"
+                    disablepictureinpicture
+                    @playing="playing = true"
+                >
+                    <source :src="video" type="video/mp4" />
+                    <source v-if="videoWebm" :src="videoWebm" type="video/webm" />
+                </video>
+            </template>
+            <canvas
+                v-else
+                ref="canvas"
+                aria-hidden="true"
+                :class="[
+                    'absolute inset-0 -z-20 size-full transition-opacity duration-700',
+                    sceneOn ? 'opacity-100' : 'opacity-0',
+                ]"
+            />
+
+            <!-- Keep text readable over the scene. -->
+            <div
+                aria-hidden="true"
+                class="absolute inset-x-0 top-0 -z-10 h-40 bg-gradient-to-b from-ink-950/80 to-transparent"
+            />
+            <div
+                aria-hidden="true"
+                class="absolute inset-0 -z-10 bg-gradient-to-t from-ink-950/85 via-transparent to-transparent lg:bg-gradient-to-tr lg:from-ink-950/80 lg:via-transparent"
+            />
+            <div aria-hidden="true" class="absolute inset-0 -z-10 bg-ink-950/35 lg:hidden" />
+            <div aria-hidden="true" class="absolute inset-0 -z-10 hidden bg-[radial-gradient(55%_55%_at_82%_28%,rgb(28_29_32/0.7),transparent)] lg:block" />
+
+            <!-- Labels pinned to the devices (large screens). -->
+            <div
+                v-if="!video && hotspots.length"
+                aria-hidden="true"
+                class="pointer-events-none absolute inset-0 -z-10 hidden lg:block"
             >
-                <!-- H.264 first: hardware-decoded almost everywhere, so it plays without stutter. -->
-                <source v-if="video" :src="video" type="video/mp4" />
-                <source v-if="videoWebm" :src="videoWebm" type="video/webm" />
-            </video>
-        </motion.div>
-        <div aria-hidden="true" class="absolute inset-0 -z-10 bg-gradient-to-r from-ink-950 via-ink-950/75 to-ink-950/5" />
-        <!-- Phones: the poster sits right behind the headline, so dim it further. -->
-        <div aria-hidden="true" class="absolute inset-0 -z-10 bg-ink-950/55 md:hidden" />
-        <div aria-hidden="true" class="absolute inset-x-0 bottom-0 -z-10 h-48 bg-gradient-to-t from-ink-950 to-transparent" />
-        <div aria-hidden="true" class="absolute inset-0 -z-10 bg-grid opacity-60" />
-
-        <div class="container-page flex flex-1 items-center pt-32 pb-16 sm:pt-40">
-            <motion.div class="max-w-3xl" :style="{ y: textY, opacity: textOpacity }">
-                <motion.p
-                    v-if="eyebrow"
-                    :initial="{ opacity: 0, y: 12 }"
-                    :animate="{ opacity: 1, y: 0 }"
-                    :transition="{ duration: 0.6, ease }"
-                    class="inline-flex items-center gap-2.5 font-mono text-xs tracking-[0.18em] text-brand-200 uppercase sm:text-[0.8rem]"
+                <span
+                    v-for="(label, i) in hotspots.slice(0, 4)"
+                    :key="label"
+                    ref="labels"
+                    class="absolute top-0 left-0 flex items-center gap-2.5 opacity-0 transition-opacity duration-500 will-change-transform"
                 >
-                    <span class="size-1.5 animate-pulse rounded-full bg-brand-600" />[ {{ eyebrow }} ]
-                </motion.p>
-
-                <h1 class="mt-6 font-display text-[2.75rem] leading-[1.05] font-semibold tracking-tight sm:text-6xl xl:text-7xl lang-bn:leading-[1.35]">
-                    <motion.span
-                        v-for="(word, index) in words"
-                        :key="index"
-                        class="inline-block align-top"
-                        :class="index >= words.length - 2 ? 'text-gradient' : ''"
-                        :initial="{ y: '0.35em', filter: 'blur(8px)' }"
-                        :animate="{ y: '0em', filter: 'blur(0px)' }"
-                        :transition="{ duration: 0.8, delay: 0.1 + index * 0.05, ease }"
+                    <span
+                        class="-mt-3 -ml-3 grid size-6 place-items-center rounded-full border border-white/60 bg-ink-950/40 backdrop-blur-sm"
                     >
-                        {{ word }}&nbsp;
-                    </motion.span>
-                </h1>
-
-                <motion.p
-                    v-if="subtitle"
-                    :initial="{ y: 14, scale: 0.96 }"
-                    :animate="{ y: 0, scale: 1 }"
-                    :transition="{ duration: 0.8, ease }"
-                    class="mt-6 max-w-2xl origin-top-left text-base leading-relaxed text-white/75 sm:text-xl"
-                >
-                    {{ subtitle }}
-                </motion.p>
-
-                <motion.div
-                    :initial="{ opacity: 0, y: 16 }"
-                    :animate="{ opacity: 1, y: 0 }"
-                    :transition="{ duration: 0.8, delay: 0.6, ease }"
-                    class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center"
-                >
-                    <WhatsAppButton placement="hero" size="lg" />
-                    <Button :href="lp('/work')" variant="glass" size="lg">
-                        {{ t('See our work') }}
-                        <ArrowRight :size="18" class="transition group-hover/button:translate-x-0.5" aria-hidden="true" />
-                    </Button>
-                </motion.div>
-
-                <motion.ul
-                    :initial="{ opacity: 0 }"
-                    :animate="{ opacity: 1 }"
-                    :transition="{ duration: 1, delay: 0.85 }"
-                    class="mt-10 flex flex-wrap gap-x-6 gap-y-3 text-sm text-white/70"
-                >
-                    <li v-if="projectCount" class="flex items-center gap-2"><Check :size="16" class="text-whatsapp" aria-hidden="true" />{{ t(':count projects delivered', { count: n(projectCount) }) }}</li>
-                    <li v-if="industryCount" class="flex items-center gap-2"><Check :size="16" class="text-whatsapp" aria-hidden="true" />{{ t(':count industries', { count: n(industryCount) }) }}</li>
-                    <li v-if="site.hours" class="flex items-center gap-2"><Check :size="16" class="text-whatsapp" aria-hidden="true" />{{ site.hours }}</li>
-                </motion.ul>
-            </motion.div>
-        </div>
-
-        <!-- What we do, as a slow ticker along the bottom edge -->
-        <div v-if="capabilities.length" class="relative border-t border-white/10 bg-ink-950/40 py-5 backdrop-blur-md">
-            <h2 class="sr-only">{{ t('What we do') }}</h2>
-            <div class="mask-fade-x overflow-hidden" :style="{ '--marquee-duration': `${Math.max(30, capabilities.length * 6)}s` }">
-                <ul class="flex w-max animate-marquee items-center gap-10 pr-10 font-display text-lg text-white/60 motion-reduce:animate-none sm:text-xl">
-                    <li v-for="(item, index) in ticker" :key="index" class="flex items-center gap-10 whitespace-nowrap" :aria-hidden="index >= capabilities.length">
-                        {{ item }}<span class="text-brand-400" aria-hidden="true">✦</span>
-                    </li>
-                </ul>
+                        <span :class="['size-1.5 rounded-full', i === 0 ? 'bg-brand-600' : 'bg-white']" />
+                    </span>
+                    <span class="-mt-3 max-w-36 text-[0.72rem] leading-tight text-white/80">{{ label }}</span>
+                </span>
             </div>
+
+            <motion.div
+                class="container-page flex flex-1 flex-col pt-28 pb-24 sm:pt-32 sm:pb-8"
+                :style="pinned ? undefined : { y: contentY }"
+            >
+                <!-- Headlines: the H1, then one per stage, in the same place. -->
+                <div class="grid lg:ml-auto lg:w-[60%] lg:text-right">
+                    <div
+                        :class="[
+                            'col-start-1 row-start-1 transition duration-700 ease-out-expo',
+                            active === 0
+                                ? 'translate-y-0 opacity-100'
+                                : 'pointer-events-none invisible -translate-y-6 opacity-0',
+                        ]"
+                    >
+                        <p
+                            v-if="eyebrow"
+                            class="inline-flex items-center gap-2.5 font-mono text-xs tracking-[0.18em] text-brand-200 uppercase sm:text-[0.8rem] lg:justify-end"
+                        >
+                            <span class="size-1.5 animate-pulse rounded-full bg-brand-600" />[ {{ eyebrow }} ]
+                        </p>
+                        <h1
+                            class="mt-5 font-display text-[2.6rem] leading-[1.02] font-light tracking-[-0.02em] text-balance sm:text-6xl lg:text-[5.25rem] xl:text-[6.25rem] lang-bn:leading-[1.3]"
+                        >
+                            <template v-for="(part, i) in parts" :key="i">
+<span :class="part.accent ? 'text-brand-600 italic' : ''">{{ part.text }}</span>{{ i < parts.length - 1 ? ' ' : '' }}
+</template>
+                        </h1>
+                    </div>
+                    <div
+                        v-for="(stage, i) in stages"
+                        :key="stage.url"
+                        :class="[
+                            'col-start-1 row-start-1 transition duration-700 ease-out-expo',
+                            active === i + 1
+                                ? 'translate-y-0 opacity-100'
+                                : active > i + 1
+                                  ? 'pointer-events-none invisible -translate-y-6 opacity-0'
+                                  : 'pointer-events-none invisible translate-y-6 opacity-0',
+                        ]"
+                    >
+                        <p class="font-mono text-xs tracking-[0.18em] text-brand-200 uppercase sm:text-[0.8rem]">
+                            {{ number(i + 1) }} / {{ number(steps - 1) }} · {{ t('What we do') }}
+                        </p>
+                        <h2
+                            class="mt-5 font-display text-[2.6rem] leading-[1.02] font-light tracking-[-0.02em] text-balance sm:text-6xl lg:text-[5.25rem] xl:text-[6.25rem] lang-bn:leading-[1.3]"
+                        >
+                            <span class="text-brand-600 italic">{{ stage.title.split(' ')[0] }}</span>
+                            {{ stage.title.split(' ').slice(1).join(' ') }}
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="flex-1" />
+
+                <!-- The card: lead text and calls to action. -->
+                <div
+                    class="relative max-w-md rounded-2xl border border-white/10 bg-ink-950/60 p-5 backdrop-blur-md sm:p-6"
+                >
+                    <div class="grid">
+                        <div
+                            :class="[
+                                'col-start-1 row-start-1 transition duration-500',
+                                active === 0 ? 'opacity-100' : 'invisible opacity-0',
+                            ]"
+                        >
+                            <p v-if="subtitle" class="line-clamp-3 text-[0.95rem] leading-relaxed text-white/80 sm:line-clamp-none sm:text-base">
+                                {{ subtitle }}
+                            </p>
+                            <ul class="mt-4 flex flex-wrap gap-x-5 gap-y-1.5 text-xs text-white/70 sm:text-sm">
+                                <li v-if="projectCount" class="flex items-center gap-1.5">
+                                    <Check :size="14" class="text-whatsapp" aria-hidden="true" />{{
+                                        t(':count projects delivered', { count: n(projectCount) })
+                                    }}
+                                </li>
+                                <li v-if="industryCount" class="flex items-center gap-1.5">
+                                    <Check :size="14" class="text-whatsapp" aria-hidden="true" />{{
+                                        t(':count industries', { count: n(industryCount) })
+                                    }}
+                                </li>
+                                <li v-if="site.hours" class="hidden items-center gap-1.5 sm:flex">
+                                    <Check :size="14" class="text-whatsapp" aria-hidden="true" />{{ site.hours }}
+                                </li>
+                            </ul>
+                        </div>
+                        <div
+                            v-for="(stage, i) in stages"
+                            :key="stage.url"
+                            :class="[
+                                'col-start-1 row-start-1 transition duration-500',
+                                active === i + 1 ? 'opacity-100' : 'pointer-events-none invisible opacity-0',
+                            ]"
+                        >
+                            <p v-if="stage.text" class="text-[0.95rem] leading-relaxed text-white/80 sm:text-base">
+                                {{ stage.text }}
+                            </p>
+                            <Link
+                                :href="stage.url"
+                                class="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-brand-200 hover:text-white"
+                            >
+                                {{ t('Explore the service') }} <ArrowRight :size="15" aria-hidden="true" />
+                            </Link>
+                        </div>
+                    </div>
+
+                    <div class="mt-5 flex flex-wrap items-center gap-2.5">
+                        <WhatsAppButton placement="hero" />
+                        <Button :href="lp('/work')" variant="glass">{{ t('See our work') }}</Button>
+                    </div>
+
+                    <div v-if="pinned" class="mt-5 flex items-center gap-3">
+                        <div class="flex flex-1 gap-1.5" aria-hidden="true">
+                            <span
+                                v-for="i in steps"
+                                :key="i"
+                                class="h-0.5 flex-1 overflow-hidden rounded-full bg-white/15"
+                            >
+                                <span
+                                    :class="[
+                                        'block h-full rounded-full bg-brand-600 transition-all duration-500',
+                                        i - 1 <= active ? 'w-full' : 'w-0',
+                                    ]"
+                                />
+                            </span>
+                        </div>
+                        <button
+                            type="button"
+                            class="grid size-10 shrink-0 place-items-center rounded-full border border-white/15 text-white/80 transition hover:border-brand-600 hover:text-brand-600"
+                            :aria-label="t('Scroll down')"
+                            @click="scrollOn"
+                        >
+                            <ChevronDown :size="18" aria-hidden="true" />
+                        </button>
+                    </div>
+                </div>
+            </motion.div>
         </div>
     </section>
 </template>

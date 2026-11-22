@@ -96,7 +96,8 @@ return [
             'bn' => 'Auxtech ক্রমবর্ধমান প্রতিষ্ঠানের জন্য কাস্টম সফটওয়্যার, ওয়েব প্ল্যাটফর্ম, ই-কমার্স সিস্টেম ও মোবাইল অ্যাপ ডিজাইন, তৈরি ও সাপোর্ট করে, প্রথম আলোচনা থেকে লঞ্চের অনেক পর পর্যন্ত।',
         ],
         // Background video behind the home page headline. Leave the video empty to show the poster only.
-        'home.hero_video' => '/media/hero-loop.mp4',
+        // Empty: the hero draws its animated scene. Set to /media/hero-loop.mp4 to use the video instead.
+        'home.hero_video' => '',
         'home.hero_video_webm' => '/media/hero-loop.webm',
         'home.hero_poster' => '/media/hero-poster.jpg',
         // Order and visibility of home page sections.
@@ -138,19 +139,19 @@ return [
         'pages.blog.description' => ['en' => 'Articles from the Auxtech team on building software, web platforms and online businesses in Bangladesh.', 'bn' => 'বাংলাদেশে সফটওয়্যার, ওয়েব প্ল্যাটফর্ম ও অনলাইন ব্যবসা গড়ে তোলা নিয়ে Auxtech টিমের লেখা।'],
 
         // Heading and intro line of each home page section.
-        'home.copy.clients' => ['title' => ['en' => 'Trusted by businesses across Bangladesh', 'bn' => 'বাংলাদেশজুড়ে প্রতিষ্ঠানগুলোর আস্থা'], 'lead' => ['en' => null, 'bn' => null]],
-        'home.copy.stats' => ['title' => ['en' => 'Auxtech in numbers', 'bn' => 'সংখ্যায় Auxtech'], 'lead' => ['en' => null, 'bn' => null]],
-        'home.copy.services' => ['title' => ['en' => 'Engineering, design and growth under one roof', 'bn' => 'ইঞ্জিনিয়ারিং, ডিজাইন ও গ্রোথ, এক ছাদের নিচে'], 'lead' => ['en' => 'From the first workshop to long-term support, one accountable team plans, builds and runs your software.', 'bn' => 'প্রথম আলোচনা থেকে দীর্ঘমেয়াদি সাপোর্ট পর্যন্ত, একটি দায়বদ্ধ টিম আপনার সফটওয়্যারের পরিকল্পনা, ডেভেলপমেন্ট ও পরিচালনা করে।']],
-        'home.copy.flagship' => ['title' => ['en' => 'One platform for selling, fulfilment and growth', 'bn' => 'বিক্রি, ডেলিভারি ও গ্রোথের জন্য একটি প্ল্যাটফর্ম'], 'lead' => ['en' => 'Our in-house commerce platform brings the storefront, orders, inventory, point of sale, accounting, couriers and Meta tracking into a single admin panel.', 'bn' => 'আমাদের নিজস্ব কমার্স প্ল্যাটফর্মে স্টোরফ্রন্ট, অর্ডার, ইনভেন্টরি, পয়েন্ট অব সেল, হিসাব, কুরিয়ার ও মেটা ট্র্যাকিং, সব এক অ্যাডমিন প্যানেলে।']],
-        'home.copy.work' => ['title' => ['en' => 'Selected work', 'bn' => 'আমাদের নির্বাচিত কাজ'], 'lead' => ['en' => 'Platforms and products we have designed, engineered and launched for our clients.', 'bn' => 'ক্লায়েন্টদের জন্য আমাদের ডিজাইন, ডেভেলপ ও লঞ্চ করা প্ল্যাটফর্ম ও প্রোডাক্ট।']],
-        'home.copy.solutions' => ['title' => ['en' => 'Platforms we build on', 'bn' => 'যে প্ল্যাটফর্মগুলোর ওপর আমরা কাজ করি'], 'lead' => ['en' => 'Proven foundations we adapt to each client, so projects start faster, cost less and are easier to maintain.', 'bn' => 'প্রমাণিত ভিত্তি, যা প্রতিটি ক্লায়েন্টের প্রয়োজনে সাজিয়ে নিই, ফলে প্রজেক্ট দ্রুত শুরু হয়, খরচ কমে এবং রক্ষণাবেক্ষণ সহজ হয়।']],
-        'home.copy.process' => ['title' => ['en' => 'How we deliver', 'bn' => 'আমরা যেভাবে কাজ করি'], 'lead' => ['en' => 'A clear, five-stage process with working software you can review at every step.', 'bn' => 'পাঁচ ধাপের পরিষ্কার প্রক্রিয়া, প্রতিটি ধাপে চলমান সফটওয়্যার আপনি নিজে দেখে নিতে পারেন।']],
-        'home.copy.testimonials' => ['title' => ['en' => 'What our clients say', 'bn' => 'ক্লায়েন্টরা যা বলেন'], 'lead' => ['en' => null, 'bn' => null]],
-        'home.copy.reasons' => ['title' => ['en' => 'Why companies choose Auxtech', 'bn' => 'কেন প্রতিষ্ঠানগুলো Auxtech বেছে নেয়'], 'lead' => ['en' => 'Product thinking, solid engineering and support that continues after launch.', 'bn' => 'প্রোডাক্ট ভাবনা, মজবুত ইঞ্জিনিয়ারিং এবং লঞ্চের পরেও চলমান সাপোর্ট।']],
-        'home.copy.pricing' => ['title' => ['en' => 'Engagement and pricing', 'bn' => 'কাজের ধরন ও মূল্য'], 'lead' => ['en' => 'Fixed-scope projects, platform packages and ongoing support. Get a tailored quote on WhatsApp.', 'bn' => 'নির্দিষ্ট স্কোপের প্রজেক্ট, প্ল্যাটফর্ম প্যাকেজ ও চলমান সাপোর্ট। হোয়াটসঅ্যাপে আপনার জন্য কোটেশন নিন।']],
-        'home.copy.posts' => ['title' => ['en' => 'Insights from our team', 'bn' => 'আমাদের টিমের লেখা'], 'lead' => ['en' => null, 'bn' => null]],
-        'home.copy.faq' => ['title' => ['en' => 'Frequently asked questions', 'bn' => 'সাধারণ জিজ্ঞাসা'], 'lead' => ['en' => null, 'bn' => null]],
-        'home.copy.cta' => ['title' => ['en' => 'Have a project in mind?', 'bn' => 'মাথায় কোনো প্রজেক্ট আছে?'], 'lead' => ['en' => 'Tell us what you want to build. We reply on WhatsApp, usually within minutes, and follow up with a clear plan and estimate.', 'bn' => 'আপনি কী তৈরি করতে চান, জানান। আমরা সাধারণত কয়েক মিনিটেই হোয়াটসঅ্যাপে উত্তর দিই, তারপর পাঠাই একটি পরিষ্কার পরিকল্পনা ও খরচের হিসাব।']],
+        'home.copy.clients' => ['title' => ['en' => 'Trusted by businesses across *Bangladesh*', 'bn' => 'বাংলাদেশজুড়ে প্রতিষ্ঠানগুলোর আস্থা'], 'lead' => ['en' => null, 'bn' => null]],
+        'home.copy.stats' => ['title' => ['en' => 'Auxtech in *numbers*', 'bn' => 'সংখ্যায় Auxtech'], 'lead' => ['en' => null, 'bn' => null]],
+        'home.copy.services' => ['title' => ['en' => 'Engineering, design and growth *under one roof*', 'bn' => 'ইঞ্জিনিয়ারিং, ডিজাইন ও গ্রোথ, এক ছাদের নিচে'], 'lead' => ['en' => 'From the first workshop to long-term support, one accountable team plans, builds and runs your software.', 'bn' => 'প্রথম আলোচনা থেকে দীর্ঘমেয়াদি সাপোর্ট পর্যন্ত, একটি দায়বদ্ধ টিম আপনার সফটওয়্যারের পরিকল্পনা, ডেভেলপমেন্ট ও পরিচালনা করে।']],
+        'home.copy.flagship' => ['title' => ['en' => 'One platform for selling, fulfilment *and growth*', 'bn' => 'বিক্রি, ডেলিভারি ও গ্রোথের জন্য একটি প্ল্যাটফর্ম'], 'lead' => ['en' => 'Our in-house commerce platform brings the storefront, orders, inventory, point of sale, accounting, couriers and Meta tracking into a single admin panel.', 'bn' => 'আমাদের নিজস্ব কমার্স প্ল্যাটফর্মে স্টোরফ্রন্ট, অর্ডার, ইনভেন্টরি, পয়েন্ট অব সেল, হিসাব, কুরিয়ার ও মেটা ট্র্যাকিং, সব এক অ্যাডমিন প্যানেলে।']],
+        'home.copy.work' => ['title' => ['en' => 'Selected *work*', 'bn' => 'আমাদের নির্বাচিত কাজ'], 'lead' => ['en' => 'Platforms and products we have designed, engineered and launched for our clients.', 'bn' => 'ক্লায়েন্টদের জন্য আমাদের ডিজাইন, ডেভেলপ ও লঞ্চ করা প্ল্যাটফর্ম ও প্রোডাক্ট।']],
+        'home.copy.solutions' => ['title' => ['en' => 'Platforms we *build on*', 'bn' => 'যে প্ল্যাটফর্মগুলোর ওপর আমরা কাজ করি'], 'lead' => ['en' => 'Proven foundations we adapt to each client, so projects start faster, cost less and are easier to maintain.', 'bn' => 'প্রমাণিত ভিত্তি, যা প্রতিটি ক্লায়েন্টের প্রয়োজনে সাজিয়ে নিই, ফলে প্রজেক্ট দ্রুত শুরু হয়, খরচ কমে এবং রক্ষণাবেক্ষণ সহজ হয়।']],
+        'home.copy.process' => ['title' => ['en' => 'How we *deliver*', 'bn' => 'আমরা যেভাবে কাজ করি'], 'lead' => ['en' => 'A clear, five-stage process with working software you can review at every step.', 'bn' => 'পাঁচ ধাপের পরিষ্কার প্রক্রিয়া, প্রতিটি ধাপে চলমান সফটওয়্যার আপনি নিজে দেখে নিতে পারেন।']],
+        'home.copy.testimonials' => ['title' => ['en' => 'What our clients *say*', 'bn' => 'ক্লায়েন্টরা যা বলেন'], 'lead' => ['en' => null, 'bn' => null]],
+        'home.copy.reasons' => ['title' => ['en' => 'Why companies choose *Auxtech*', 'bn' => 'কেন প্রতিষ্ঠানগুলো Auxtech বেছে নেয়'], 'lead' => ['en' => 'Product thinking, solid engineering and support that continues after launch.', 'bn' => 'প্রোডাক্ট ভাবনা, মজবুত ইঞ্জিনিয়ারিং এবং লঞ্চের পরেও চলমান সাপোর্ট।']],
+        'home.copy.pricing' => ['title' => ['en' => 'Engagement *and pricing*', 'bn' => 'কাজের ধরন ও মূল্য'], 'lead' => ['en' => 'Fixed-scope projects, platform packages and ongoing support. Get a tailored quote on WhatsApp.', 'bn' => 'নির্দিষ্ট স্কোপের প্রজেক্ট, প্ল্যাটফর্ম প্যাকেজ ও চলমান সাপোর্ট। হোয়াটসঅ্যাপে আপনার জন্য কোটেশন নিন।']],
+        'home.copy.posts' => ['title' => ['en' => 'Insights from *our team*', 'bn' => 'আমাদের টিমের লেখা'], 'lead' => ['en' => null, 'bn' => null]],
+        'home.copy.faq' => ['title' => ['en' => 'Frequently asked *questions*', 'bn' => 'সাধারণ জিজ্ঞাসা'], 'lead' => ['en' => null, 'bn' => null]],
+        'home.copy.cta' => ['title' => ['en' => 'Have a project *in mind?*', 'bn' => 'মাথায় কোনো প্রজেক্ট আছে?'], 'lead' => ['en' => 'Tell us what you want to build. We reply on WhatsApp, usually within minutes, and follow up with a clear plan and estimate.', 'bn' => 'আপনি কী তৈরি করতে চান, জানান। আমরা সাধারণত কয়েক মিনিটেই হোয়াটসঅ্যাপে উত্তর দিই, তারপর পাঠাই একটি পরিষ্কার পরিকল্পনা ও খরচের হিসাব।']],
 
         // On-page heading (H1) and intro line of each listing page.
         'pages.work.heading' => ['en' => 'Our work', 'bn' => 'আমাদের কাজ'],
@@ -268,11 +269,11 @@ return [
         ]],
         'home' => ['label' => 'Home page', 'fields' => [
             'home.hero_eyebrow' => ['text', 'Small line above the headline'],
-            'home.hero_title' => ['textarea', 'Headline (H1)'],
+            'home.hero_title' => ['textarea', 'Headline (H1)', 'Wrap words in *stars* to show them in yellow, for example *We engineer* software. Without stars the first two words are yellow.'],
             'home.hero_subtitle' => ['textarea', 'Sub-headline'],
-            'home.hero_video' => ['text', 'Background video (MP4)', 'Path or full link to an MP4 file. Leave empty to show the still image only. The default video ships with the site in public/media.'],
+            'home.hero_video' => ['text', 'Background video (MP4, optional)', 'Leave empty to show the animated light-trail scene with your featured projects on the devices (recommended). To use a video instead, enter a path or link to an MP4, for example /media/hero-loop.mp4, which ships with the site.'],
             'home.hero_video_webm' => ['text', 'Background video (WebM, optional)', 'A smaller WebM copy of the same video, used by browsers that support it.'],
-            'home.hero_poster' => ['text', 'Background still image', 'Shown while the video loads, on phones and when visitors prefer reduced motion.'],
+            'home.hero_poster' => ['text', 'Video still image', 'Only used with a background video: shown while it loads, on phones and when visitors prefer reduced motion.'],
             'home.sections' => ['sections', 'Sections, in order', 'Drag to reorder. Sections with no content (for example testimonials) hide themselves.'],
             'home.copy.clients' => ['copy', 'Client strip'],
             'home.copy.stats' => ['copy', 'Numbers'],

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { accentParts } from '@/lib/accent';
 import { Clock, MapPin } from '@lucide/vue';
 import EmailLink from './EmailLink.vue';
 import WhatsAppButton from './WhatsAppButton.vue';
@@ -19,7 +20,9 @@ const { site } = useShared();
             class="absolute top-1/2 left-1/2 -z-10 h-[30rem] w-[60rem] -translate-1/2 animate-aurora rounded-full bg-[radial-gradient(closest-side,rgb(255_201_60/0.16),transparent)] blur-2xl"
         />
         <Reveal class="container-page text-center">
-            <h2 class="mx-auto max-w-3xl font-display text-3xl leading-tight font-semibold tracking-tight sm:text-5xl">{{ title ?? site.cta.title }}</h2>
+            <h2 class="mx-auto max-w-3xl font-display text-3xl leading-tight font-semibold tracking-tight sm:text-5xl">
+                <template v-for="(part, i) in accentParts(title ?? site.cta.title)" :key="i"><em v-if="part.accent" class="font-normal text-brand-600">{{ part.text }}</em><template v-else>{{ part.text }}</template></template>
+            </h2>
             <p v-if="lead ?? site.cta.lead" class="mx-auto mt-5 max-w-2xl text-lg text-white/70">{{ lead ?? site.cta.lead }}</p>
             <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <WhatsAppButton :href="whatsappUrl" :placement="placement ?? 'cta-band'" size="lg" />

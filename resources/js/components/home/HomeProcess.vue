@@ -2,6 +2,7 @@
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'motion-v';
 import { computed, ref } from 'vue';
 import Reveal from '@/components/ui/Reveal.vue';
+import { plain } from '@/lib/accent';
 import SectionHeading from '@/components/ui/SectionHeading.vue';
 import { useI18n } from '@/lib/i18n';
 import type { SectionCopy, TextRow } from '@/types/models';
@@ -35,7 +36,7 @@ const ease = [0.16, 1, 0.3, 1] as const;
                 <div class="container-page grid w-full items-center gap-16 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
                     <div>
                         <SectionHeading :eyebrow="eyebrow" :title="copy?.title" :lead="copy?.lead" />
-                        <ol class="mt-12 grid gap-1" :aria-label="copy?.title ?? undefined">
+                        <ol class="mt-12 grid gap-1" :aria-label="plain(copy?.title) || undefined">
                             <li v-for="(item, index) in steps" :key="index" class="relative flex items-center gap-4 py-2.5 pl-6">
                                 <span aria-hidden="true" class="absolute top-0 left-0 h-full w-0.5 rounded-full bg-line">
                                     <span

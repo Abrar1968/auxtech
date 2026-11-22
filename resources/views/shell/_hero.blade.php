@@ -18,21 +18,29 @@
 @if ($title)
 <div data-shell aria-hidden="true">
     @if ($isHome)
-        <section class="relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-ink-950 text-white">
-            @if (! empty($p['hero']['poster']))
-                <div class="absolute inset-0 -z-20" style="transform:scale(1.04)"><img src="{{ $p['hero']['poster'] }}" alt="" class="size-full object-cover object-right" fetchpriority="high"></div>
+        @php($parts = $p['hero']['titleParts'] ?? [['text' => $title, 'accent' => false]])
+        <section class="relative flex min-h-[100svh] flex-col overflow-hidden bg-ink-950 text-white" style="isolation:isolate">
+            <div class="absolute inset-0 -z-30 bg-[radial-gradient(120%_80%_at_50%_42%,#3a3c42_0%,#2b2d31_38%,#1c1d20_100%)]"></div>
+            @if (! empty($p['hero']['video']) && ! empty($p['hero']['poster']))
+                <img src="{{ $p['hero']['poster'] }}" alt="" class="absolute inset-0 -z-20 size-full object-cover object-right" fetchpriority="high">
             @endif
-            <div class="absolute inset-0 -z-10 bg-gradient-to-r from-ink-950 via-ink-950/75 to-ink-950/5"></div>
-            <div class="absolute inset-0 -z-10 bg-ink-950/55 md:hidden"></div>
-            <div class="absolute inset-0 -z-10 bg-grid opacity-60"></div>
-            <div class="container-page flex flex-1 items-center pt-32 pb-16 sm:pt-40">
-                <div class="max-w-3xl">
-                    @if (! empty($p['hero']['eyebrow']))
-                        <p class="inline-flex items-center gap-2.5 font-mono text-xs tracking-[0.18em] text-brand-200 uppercase sm:text-[0.8rem]"><span class="size-1.5 rounded-full bg-brand-600"></span>[ {{ $p['hero']['eyebrow'] }} ]</p>
-                    @endif
-                    <div class="mt-6 font-display text-[2.75rem] leading-[1.05] font-semibold tracking-tight sm:text-6xl xl:text-7xl lang-bn:leading-[1.35]" style="letter-spacing:-0.02em;text-wrap:balance">{{ $title }}</div>
-                    @if ($lead)<p class="mt-6 max-w-2xl text-base leading-relaxed text-white/75 sm:text-xl">{{ $lead }}</p>@endif
+            <div class="absolute inset-x-0 top-0 -z-10 h-40 bg-gradient-to-b from-ink-950/80 to-transparent"></div>
+            <div class="absolute inset-0 -z-10 bg-ink-950/35 lg:hidden"></div>
+            <div class="container-page flex flex-1 flex-col pt-28 pb-24 sm:pt-32 sm:pb-8">
+                <div class="grid lg:ml-auto lg:w-[60%] lg:text-right">
+                    <div>
+                        @if (! empty($p['hero']['eyebrow']))
+                            <p class="inline-flex items-center gap-2.5 font-mono text-xs tracking-[0.18em] text-brand-200 uppercase sm:text-[0.8rem] lg:justify-end"><span class="size-1.5 rounded-full bg-brand-600"></span>[ {{ $p['hero']['eyebrow'] }} ]</p>
+                        @endif
+                        <div class="mt-5 font-display text-[2.6rem] leading-[1.02] font-light tracking-[-0.02em] text-balance sm:text-6xl lg:text-[5.25rem] xl:text-[6.25rem] lang-bn:leading-[1.3]">@foreach ($parts as $part)<span @class(['text-brand-600 italic' => $part['accent']])>{{ $part['text'] }}</span>{{ $loop->last ? '' : ' ' }}@endforeach</div>
+                    </div>
                 </div>
+                <div class="flex-1"></div>
+                @if ($lead)
+                    <div class="relative max-w-md rounded-2xl border border-white/10 bg-ink-950/60 p-5 backdrop-blur-md sm:p-6">
+                        <p class="line-clamp-3 text-[0.95rem] leading-relaxed text-white/80 sm:line-clamp-none sm:text-base">{{ $lead }}</p>
+                    </div>
+                @endif
             </div>
         </section>
     @else

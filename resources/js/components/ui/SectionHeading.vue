@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Reveal from './Reveal.vue';
+import { accentParts } from '@/lib/accent';
 
 withDefaults(
     defineProps<{
@@ -31,7 +32,7 @@ withDefaults(
                 dark ? 'text-white' : 'text-fg',
             ]"
         >
-            {{ title }}
+            <template v-for="(part, i) in accentParts(title)" :key="i"><em v-if="part.accent" class="font-normal">{{ part.text }}</em><template v-else>{{ part.text }}</template></template>
         </component>
         <p v-if="lead" :class="['mt-5 text-lg leading-relaxed sm:text-xl', dark ? 'text-white/70' : 'text-muted']">{{ lead }}</p>
         <slot />

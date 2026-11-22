@@ -40,9 +40,16 @@ class HomeController extends Controller
                 $flagship->featureGroups->flatMap->features->map(fn ($f) => (string) $f->title)->all(),
             ) : null);
 
-        // The still image behind the headline is the largest thing on the first screen.
-        $poster = setting('home.hero_poster') ?: null;
+        // A background video is optional (Settings > Home page); without one the
+        // hero draws its animated scene, so the poster is only preloaded with a video.
+        $video = setting('home.hero_video') ?: null;
+        $poster = $video ? (setting('home.hero_poster') ?: null) : null;
         seo()->preloadUrl($poster);
+
+        // Real screenshots of featured projects, shown on the devices in the hero scene.
+        $screens = Project::query()->published()->where('is_featured', true)->where('type', '<>', 'demo')->ordered()->with('media')->limit(6)->get()
+            ->map(fn (Project $p) => ['name' => (string) $p->title, 'desktop' => $p->image('cover')['medium'] ?? null, 'mobile' => $p->image('mobile')['medium'] ?? null])
+            ->filter(fn (array $s) => $s['desktop'] || $s['mobile'])->values()->all();
 
         $faqs = Faq::query()->where('is_active', true)->whereNull('faqable_id')->ordered()->limit(8)->get();
         seo()->schema(seo()->builder()->faqPage($faqs->map(fn (Faq $f) => ['question' => $f->question, 'answer' => $f->answer])));
@@ -50,11 +57,13 @@ class HomeController extends Controller
         return Inertia::render('Site/Home', [
             'hero' => [
                 'eyebrow' => setting_t('home.hero_eyebrow'),
-                'title' => setting_t('home.hero_title'),
+                'title' => self::plainTitle(setting_t('home.hero_title')),
+                'titleParts' => self::titleParts(setting_t('home.hero_title')),
                 'subtitle' => setting_t('home.hero_subtitle'),
-                'video' => setting('home.hero_video') ?: null,
+                'video' => $video,
                 'videoWebm' => setting('home.hero_video_webm') ?: null,
                 'poster' => $poster,
+                'screens' => $screens,
             ],
             'copy' => collect(setting('home.sections', []))->pluck('key')->mapWithKeys(fn (string $key) => [$key => section_copy($key)])->all(),
             'process' => tr_rows(setting('home.process_steps')),
@@ -78,5 +87,43 @@ class HomeController extends Controller
             'faqs' => FaqResource::collection($faqs)->resolve(),
             'whatsappUrl' => $whatsapp->url(),
         ]);
+    }
+
+    /** The headline without the *stars* that mark its yellow words. */
+    public static function plainTitle(?string $title): ?string
+    {
+        return $title === null ? null : trim(str_replace('*', '', $title));
+    }
+
+    /**
+     * The headline split into runs of words, each marked as accent (yellow) or not.
+     * Words wrapped in *stars* are the accent; without stars, the first two words.
+     *
+     * @return list<array{text: string, accent: bool}>
+     */
+    public static function titleParts(?string $title): array
+    {
+        $title = trim((string) $title);
+        if ($title === '') {
+            return [];
+        }
+
+        if (str_contains($title, '*')) {
+            $parts = [];
+            foreach (explode('*', $title) as $i => $text) {
+                if (trim($text) !== '') {
+                    $parts[] = ['text' => trim($text), 'accent' => $i % 2 === 1];
+                }
+            }
+
+            return $parts;
+        }
+
+        $words = preg_split('/\s+/u', $title) ?: [];
+
+        return array_values(array_filter([
+            ['text' => implode(' ', array_slice($words, 0, 2)), 'accent' => true],
+            ['text' => implode(' ', array_slice($words, 2)), 'accent' => false],
+        ], fn (array $p) => $p['text'] !== ''));
     }
 }

@@ -74,7 +74,7 @@ Until the images are uploaded, pages show client names instead of logos and empt
 
 **Alternative: import the prepared database and images.** Import `auxtech-database.sql` in phpMyAdmin before running the installer, and extract `auxtech-uploads.zip` inside `public_html/public`. Every image is then already linked (see B2).
 
-**Upgrading an existing install to 1.4.0:** extract the new zip over the old files, run Admin > System > Update database, then in cPanel Terminal run `php artisan auxtech:seed` (adds the 5 new projects, the Automotive industry and the pricing packages) and `php artisan auxtech:seed --images=...` with the new image pack (adds only the new images). Add `--overwrite` to the first command only if you want the rewritten project texts for the demos; it replaces admin edits to seeded records.
+**Upgrading an existing install to 1.4.0:** extract `auxtech-update.zip` (not the full zip, which contains a template `.env`) over the old files, run Admin > System > Update database, then in cPanel Terminal run `php artisan auxtech:seed` (adds the 5 new projects, the Automotive industry and the pricing packages) and `php artisan auxtech:seed --images=...` with the new image pack (adds only the new images). Add `--overwrite` to the first command only if you want the rewritten project texts for the demos; it replaces admin edits to seeded records.
 
 ### B3. Settings after install
 
@@ -103,4 +103,4 @@ Until the images are uploaded, pages show client names instead of logos and empt
 - [ ] Backups: cPanel > Backup, download a full backup weekly (files and database). The `public/uploads` folder holds your images.
 - [ ] Free uptime monitor (for example UptimeRobot) on the home page, alerting auxtechbd@gmail.com.
 - [ ] Weekly: Admin > System shows no failed background tasks.
-- [ ] Updating to a new version later: extract the new zip over the old files, then **Admin > System > Update database**. Your settings, uploads and leads are kept.
+- [ ] Updating to a new version later: extract the new zip over the old files, then **Admin > System > Update database**. Your settings, uploads and leads are kept. From 1.4.0 the site's settings live in `storage/.env`, so the template `.env` inside the zip cannot overwrite them. **A site installed with 1.3.0 or earlier** must be updated once with `auxtech-update.zip` (the same files without `.env`); after that, either zip is safe.

@@ -12,6 +12,7 @@ New Gray `#2B2D31` / Silver `#D9DADC` / Yellow `#FFC93C` palette (logo, favicon 
 | Backend tests (Pest) | 220 passed on SQLite and MariaDB (seed command covers module screenshots and packages) |
 | Browser tests (Playwright) | 83 passed, 55 skipped by design; axe WCAG 2.2 AA clean in light and dark after raising faint white text to 65% on the new gray |
 | SEO crawl | 0 errors after giving the Bangla "Corporate Websites" service its own title; title-length warnings unchanged |
+| Release rehearsal (Apache) | Fresh install after importing `auxtech-database.sql` and `auxtech-uploads.zip`; full zip extracted over the installed site; a 1.3.0-style site updated with `auxtech-update.zip`, then the full zip: the site keeps working each time (settings in `storage/.env`), `.env` and `storage/.env` answer 403, video served as 206 with byte ranges and no compression |
 | Hero video | H.264 1.1 MB (High profile, keyframe every 2 s, bit rate capped at 1.1 Mbit/s), VP9 fallback; loads after the page, fades in on `canplaythrough` |
 
 ## Release 1.3.0 (18 Nov 2026)

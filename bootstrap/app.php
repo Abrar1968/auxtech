@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Symfony\Component\HttpFoundation\Response;
 
-return Application::configure(basePath: dirname(__DIR__))
+$app = Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         commands: __DIR__.'/../routes/console.php',
@@ -65,3 +65,25 @@ return Application::configure(basePath: dirname(__DIR__))
             }
         });
     })->create();
+
+/*
+ | Once installed, the site's settings live in storage/.env. Release zips
+ | include a template .env, so extracting an update over the site replaces the
+ | top-level file; storage/.env is never in a zip and survives every update.
+ | Installs made before 1.4.0 kept their settings in the top-level .env: the
+ | first request after updating copies it to storage (update zips for those
+ | sites leave the top-level .env out).
+ */
+if (getenv('APP_ENV') !== 'testing') {
+    $live = $app->storagePath('.env');
+    $root = $app->basePath('.env');
+    if (! is_file($live) && is_file($app->storagePath('installed')) && preg_match('/^APP_KEY=\S+/m', (string) @file_get_contents($root)) === 1) {
+        @copy($root, $live);
+        @chmod($live, 0600);
+    }
+    if (is_file($live)) {
+        $app->useEnvironmentPath($app->storagePath());
+    }
+}
+
+return $app;

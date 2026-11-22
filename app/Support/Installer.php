@@ -160,9 +160,13 @@ class Installer
         @chmod($this->environmentPath(), 0600);
     }
 
+    /**
+     * Where the installed settings are written: storage/.env, which update zips
+     * never overwrite (see bootstrap/app.php). Tests point the app at their own file.
+     */
     public function environmentPath(): string
     {
-        return app()->environmentFilePath();
+        return app()->environmentPath() === base_path() ? storage_path('.env') : app()->environmentFilePath();
     }
 
     /** @return array<string, string> */

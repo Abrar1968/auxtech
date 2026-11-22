@@ -27,7 +27,7 @@ echo "2/5 Copying the whole project"
 mkdir -p "$APP"
 tar -C "$ROOT" \
     --exclude=.git --exclude=./node_modules --exclude=./release \
-    --exclude=./.env --exclude=./.env.production --exclude=./.env.backup \
+    --exclude=./.env --exclude=./.env.production --exclude=./.env.backup --exclude=./storage/.env \
     --exclude=./public/uploads --exclude=./public/hot --exclude=./public/storage --exclude=./storage/installed \
     --exclude='./storage/logs/*.log' --exclude='./storage/framework/cache/data/*' \
     --exclude='./storage/framework/sessions/*' --exclude='./storage/framework/views/*' \
@@ -70,6 +70,13 @@ mkdir -p "$OUT"
 rm -f "$OUT/auxtech-production.zip"
 (cd "$APP" && zip -qr "$OUT/auxtech-production.zip" . -x '*.DS_Store')
 
+# Update zip for sites installed before 1.4.0, whose settings are still in the
+# top-level .env: identical, without that file, so extracting it cannot replace it.
+rm -f "$OUT/auxtech-update.zip"
+cp "$OUT/auxtech-production.zip" "$OUT/auxtech-update.zip"
+zip -qd "$OUT/auxtech-update.zip" .env
+
 echo
 echo "Done: $OUT/auxtech-production.zip ($(du -h "$OUT/auxtech-production.zip" | cut -f1), version $(cat "$ROOT/VERSION"))"
 echo "Upload it to the domain folder, extract it, then open https://your-domain/install"
+echo "Updating a site installed before 1.4.0: use $OUT/auxtech-update.zip (no .env), then Admin > System > Update database"

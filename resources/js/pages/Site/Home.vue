@@ -5,7 +5,7 @@ import HomeHero from '@/components/home/HomeHero.vue';
 import HomeProcess from '@/components/home/HomeProcess.vue';
 import HomePlatforms from '@/components/home/HomePlatforms.vue';
 import HomeServices from '@/components/home/HomeServices.vue';
-import HomeWork from '@/components/home/HomeWork.vue';
+import WorkShowcase, { type ShowcaseProject } from '@/components/home/WorkShowcase.vue';
 import ReasonGrid from '@/components/home/ReasonGrid.vue';
 import ClientMarquee from '@/components/site/ClientMarquee.vue';
 import CountUp from '@/components/site/CountUp.vue';
@@ -39,6 +39,7 @@ const props = defineProps<{
         screens?: { name: string; desktop: string | null; mobile: string | null }[];
     };
     sections: string[];
+    showcase: ShowcaseProject[];
     copy: Record<string, SectionCopy>;
     clients: Client[];
     stats: Stat[];
@@ -70,7 +71,7 @@ const has: Record<string, () => boolean> = {
     stats: () => props.stats.length > 0,
     services: () => props.services.length > 0,
     flagship: () => !!props.flagship?.feature_groups?.length,
-    work: () => props.projects.length > 0,
+    work: () => props.showcase.length > 0,
     solutions: () => otherSolutions.value.length > 0,
     process: () => props.process.length > 0,
     testimonials: () => props.testimonials.length > 0,
@@ -138,7 +139,7 @@ const visible = computed(() => props.sections.filter((key) => has[key]?.()));
             </div>
         </section>
 
-        <HomeWork v-else-if="key === 'work'" :projects="projects" :total="projectCount" :copy="copy.work" :eyebrow="t('Portfolio')" />
+        <WorkShowcase v-else-if="key === 'work'" :projects="showcase" :total="projectCount" :copy="copy.work" :eyebrow="t('Portfolio')" />
 
         <HomePlatforms v-else-if="key === 'solutions'" :solutions="otherSolutions" :copy="copy.solutions" :eyebrow="t('Platforms')" />
 

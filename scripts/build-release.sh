@@ -62,6 +62,15 @@ sed -e 's/^APP_ENV=.*/APP_ENV=production/' \
 # The address stays empty until then, so the installer opens over http or https.
 sed -e 's|^APP_URL=.*|APP_URL=|' "$APP/.env.production" > "$APP/.env"
 
+# The live host (cPanel, auxtechsoftware.com) keeps PHP 8.2 and its PHP limits
+# in blocks cPanel writes into the top-level .htaccess. Extracting the zip
+# replaces that file, so the release carries the same blocks. Never on other
+# servers: without cPanel the handler line would serve PHP files as text.
+# CPANEL_HTACCESS=0 builds without them (used for the local Apache rehearsal).
+if [ "${CPANEL_HTACCESS:-1}" = "1" ]; then
+    cat "$ROOT/scripts/cpanel-htaccess.txt" >> "$APP/.htaccess"
+fi
+
 mkdir -p "$APP/public/uploads" "$APP/storage/framework/"{cache/data,sessions,views} "$APP/storage/logs" "$APP/bootstrap/cache"
 touch "$APP/public/uploads/.gitkeep"
 

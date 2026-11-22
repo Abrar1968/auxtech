@@ -53,7 +53,7 @@ The zip's contents go straight into `public_html` (no folder inside the zip). Yo
 2. Delete leftovers that are not part of the site: the folder `auxtech-production (1)` and `node_modules`.
 3. Upload `auxtech-production.zip` into `public_html`, select it, **Extract**, and allow it to overwrite. Delete the zip afterwards.
 4. Put your own `.env` back (upload or edit `public_html/.env` and paste your production values). From 1.4.0 the site keeps a backup of it in `storage/.env`: if a later update replaces `.env` with the empty template, the site keeps running on the backup. Edits you make to `public_html/.env` always take effect.
-5. If cPanel had added a PHP handler to `.htaccess`, open **MultiPHP Manager**, select auxtechsoftware.com and apply PHP 8.2 (or newer) again; it writes the block back.
+5. The zip's `.htaccess` already contains your cPanel PHP 8.2 handler and PHP limits, so nothing changes there. If you ever change the PHP version in **MultiPHP Manager**, tell the developer so the next release carries the new block.
 6. Sign in at `/admin` and run **System > Update database**, then **Clear caches**.
 7. In cPanel **Terminal**, inside `public_html`: `php artisan auxtech:seed` (adds the new projects, the Automotive industry and the pricing packages; keeps your edits), then upload and extract the new image pack outside `public_html` and run `php artisan auxtech:seed --images=/home/YOUR-CPANEL-USER/auxtech-image-pack` (adds only images that are missing). Add `--overwrite` to the first command only if you want the rewritten project texts.
 

@@ -78,6 +78,21 @@ class HomeController extends Controller
             'projects' => ProjectResource::collection(Project::query()->published()->where('is_featured', true)->ordered()
                 ->with(['client.media', 'industry', 'solution', 'media'])->limit(8)->get())->resolve(),
             'projectCount' => Project::query()->published()->where('type', '<>', 'demo')->count(),
+            // The curved work gallery: tall phone screenshots with facts about each project (never results).
+            'showcase' => Project::query()->published()->where('is_featured', true)->ordered()
+                ->with(['client.media', 'industry', 'solution', 'technologies', 'media'])->withCount('features')->limit(12)->get()
+                ->map(fn (Project $p) => [
+                    'id' => $p->id,
+                    'title' => (string) $p->title,
+                    'url' => lroute('work.show', $p->slug),
+                    'industry' => $p->industry ? (string) $p->industry->name : null,
+                    'platform' => $p->solution ? (string) $p->solution->name : null,
+                    'tech' => $p->technologies->take(2)->map(fn ($t) => (string) $t->name)->implode(' · ') ?: null,
+                    'modules' => $p->features_count ?: null,
+                    'demo' => $p->type === ProjectType::Demo,
+                    'image' => $p->image('mobile') ?? $p->image('cover'),
+                    'logo' => $p->client?->image('logo'),
+                ])->filter(fn (array $p) => $p['image'] !== null)->values()->all(),
             'liveCount' => Project::query()->published()->where('type', ProjectType::Live->value)->count(),
             'solutions' => SolutionResource::collection(Solution::query()->published()->ordered()->with('media')->withCount('projects')->get())->resolve(),
             'testimonials' => TestimonialResource::collection(Testimonial::query()->published()->where('is_featured', true)->ordered()

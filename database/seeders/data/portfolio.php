@@ -39,6 +39,72 @@ return [
         ],
     ],
     [
+        'slug' => 'gearzen',
+        'client' => 'Gearzen',
+        'url' => 'https://gearzen.com.bd',
+        'industry' => 'gadgets',
+        'solution' => 'ecommerce',
+        'type' => 'live',
+        'featured' => true,
+        'services' => ['ecommerce-development', 'ui-ux-design'],
+        'technologies' => ['laravel', 'vuejs', 'inertiajs'],
+        'modules' => ['product-management', 'order-management', 'customer-management', 'dashboard', 'campaign-management', 'order-tracking'],
+        'tagline' => [
+            'en' => 'An online store for smartphones, laptops and smart gadgets.',
+            'bn' => 'স্মার্টফোন, ল্যাপটপ ও স্মার্ট গ্যাজেটের অনলাইন স্টোর।',
+        ],
+        'summary' => [
+            'en' => 'Gearzen sells phones, MacBooks, tablets and iPads, cameras, earbuds, speakers and drones, with flash deals, product comparison, wishlists and order tracking.',
+            'bn' => 'Gearzen ফোন, ম্যাকবুক, ট্যাবলেট ও আইপ্যাড, ক্যামেরা, ইয়ারবাড, স্পিকার ও ড্রোন বিক্রি করে; আছে ফ্ল্যাশ ডিল, প্রোডাক্ট কম্পেয়ার, উইশলিস্ট ও অর্ডার ট্র্যাকিং।',
+        ],
+        'challenge' => [
+            'en' => '<p>Gearzen needed a fast, mobile-friendly store that customers in Bangladesh trust, with cash on delivery, clear categories and an admin panel the team can run every day without developer help.</p>',
+        ],
+        'approach' => [
+            'en' => '<p>We launched the store on Auxtech Ecommerce and configured it around the catalogue:</p><ul><li>Categories for phones, MacBooks, tablets, iPads, cameras, earbuds, speakers and drones.</li><li>Product variants for storage and memory options.</li><li>Flash deals, product comparison and wishlists.</li><li>Order tracking and a visible hotline.</li></ul>',
+        ],
+        'outcome' => [
+            'en' => '<p>Gearzen takes and manages orders online from one admin panel, with products, customers and orders in the same place.</p>',
+        ],
+    ],
+    [
+        'slug' => 'dhakaculture',
+        'client' => 'Dhaka Culture',
+        'url' => 'https://dhakaculture.com',
+        'industry' => 'fashion',
+        'solution' => 'ecommerce',
+        'type' => 'live',
+        'featured' => true,
+        'services' => ['ecommerce-development', 'ui-ux-design'],
+        'technologies' => ['laravel', 'vuejs', 'inertiajs'],
+        'modules' => [
+            'product-management',
+            'order-management',
+            'customer-management',
+            'dashboard',
+            'pre-order-management',
+            'campaign-management',
+            'order-tracking',
+        ],
+        'tagline' => [
+            'en' => 'An online store for a streetwear brand built on stories, art and culture.',
+            'bn' => 'গল্প, শিল্প ও সংস্কৃতিকে ঘিরে গড়া একটি স্ট্রিটওয়্যার ব্র্যান্ডের অনলাইন স্টোর।',
+        ],
+        'summary' => [
+            'en' => 'Dhaka Culture sells semi-drop T-shirts, couple tees, shirts, polos, pants, caps and bandanas, with pre-orders for new drops and a dedicated offers page.',
+            'bn' => 'Dhaka Culture সেমি-ড্রপ টি-শার্ট, কাপল টি, শার্ট, পোলো, প্যান্ট, ক্যাপ ও ব্যান্ডানা বিক্রি করে; নতুন ড্রপের জন্য আছে প্রি-অর্ডার ও আলাদা অফার পেজ।',
+        ],
+        'challenge' => [
+            'en' => '<p>Dhaka Culture needed a fast, mobile-friendly store that customers in Bangladesh trust, with cash on delivery, clear categories and an admin panel the team can run every day without developer help.</p>',
+        ],
+        'approach' => [
+            'en' => '<p>We launched the store on Auxtech Ecommerce and configured it around the catalogue:</p><ul><li>Collections for semi-drop T-shirts, shirts, polos, pants, caps, events and bandanas.</li><li>A top-sellers section on the home page.</li><li>Pre-orders for upcoming drops.</li><li>An offers page and order tracking for customers.</li></ul>',
+        ],
+        'outcome' => [
+            'en' => '<p>Dhaka Culture takes and manages orders online from one admin panel, with products, customers and orders in the same place.</p>',
+        ],
+    ],
+    [
         'slug' => 'bsmcarwash',
         'client' => 'BSM Cleaning Services',
         'url' => 'https://bsmcarwash.com',
@@ -68,69 +134,32 @@ return [
         ],
     ],
     [
-        'slug' => 'trikalhouse',
-        'client' => 'Trikal House',
-        'url' => 'https://trikalhouse.com',
-        'industry' => 'fashion',
-        'solution' => 'ecommerce',
+        'slug' => 'rongtorongob2b',
+        'client' => 'Rong Torongo',
+        'url' => 'https://rongtorongob2b.com',
+        'industry' => 'reselling',
+        'solution' => 'reseller-platform',
         'type' => 'live',
         'featured' => true,
-        'services' => ['ecommerce-development', 'ui-ux-design'],
-        'technologies' => ['laravel', 'vuejs', 'inertiajs'],
-        'modules' => [
-            'product-management',
-            'order-management',
-            'customer-management',
-            'dashboard',
-            'pre-order-management',
-            'campaign-management',
-            'order-tracking',
-        ],
-        'tagline' => [
-            'en' => 'An online watch store with shop-by-brand navigation and pre-orders.',
-            'bn' => 'ব্র্যান্ড অনুযায়ী কেনাকাটা ও প্রি-অর্ডারসহ একটি অনলাইন ঘড়ির স্টোর।',
-        ],
-        'summary' => [
-            'en' => 'Trikal House sells men\'s and women\'s watches from Gedi, Kimio, Scottie, Duke Nicle, Guou, Mishali and Tianta, with variants for case, dial and strap, pre-orders for incoming stock, a watch-and-shop video section and offers.',
-            'bn' => 'Trikal House জেডি, কিমিও, স্কটি, ডিউক নিকেল, গুউ, মিশালি ও তিয়ান্তার পুরুষ ও নারীদের ঘড়ি বিক্রি করে; আছে কেস, ডায়াল ও স্ট্র্যাপের ভ্যারিয়েন্ট, আসন্ন স্টকের প্রি-অর্ডার, ভিডিও দেখে কেনা ও অফার।',
-        ],
-        'challenge' => [
-            'en' => '<p>Trikal House needed a fast, mobile-friendly store that customers in Bangladesh trust, with cash on delivery, clear categories and an admin panel the team can run every day without developer help.</p>',
-        ],
-        'approach' => [
-            'en' => '<p>We launched the store on Auxtech Ecommerce and configured it around the catalogue:</p><ul><li>Shop-by-brand navigation for Duke Nicle, Gedi, Guou, Kimio, Mishali, Scottie and Tianta.</li><li>Variants for case, dial and strap colours.</li><li>Pre-orders for incoming stock, with clear in-stock, pre-order and out-of-stock labels.</li><li>A watch-and-shop video section and an offers page.</li><li>Order tracking, support, shipping and return pages.</li></ul>',
-        ],
-        'outcome' => [
-            'en' => '<p>Trikal House takes orders and pre-orders online and manages its watch catalogue, stock and campaigns from the Auxtech Ecommerce admin panel.</p>',
-        ],
-    ],
-    [
-        'slug' => 'unisupport',
-        'client' => 'UniSupport Consultancy',
-        'url' => 'https://uni.auxtechsoftware.com',
-        'industry' => 'education',
-        'solution' => 'corporate-website',
-        'type' => 'demo',
-        'featured' => true,
-        'services' => ['web-application-development', 'corporate-websites', 'ui-ux-design', 'seo'],
+        'services' => ['custom-software-development', 'ecommerce-development'],
         'technologies' => ['laravel', 'vuejs', 'inertiajs'],
         'modules' => [],
         'tagline' => [
-            'en' => 'A website and admin panel for a study-abroad and student visa consultancy.',
-            'bn' => 'বিদেশে পড়াশোনা ও স্টুডেন্ট ভিসা কনসালটেন্সির ওয়েবসাইট ও অ্যাডমিন প্যানেল।',
+            'en' => 'A dropshipping and reselling platform for women\'s clothing.',
+            'bn' => 'নারীদের পোশাকের জন্য একটি ড্রপশিপিং ও রিসেলিং প্ল্যাটফর্ম।',
         ],
         'summary' => [
-            'en' => 'UniSupport guides students from the first counselling session to campus arrival. The site presents its services, study destinations, events and stories, and every page is managed from an admin panel.',
-            'bn' => 'UniSupport শিক্ষার্থীদের প্রথম কাউন্সেলিং থেকে ক্যাম্পাসে পৌঁছানো পর্যন্ত সহায়তা করে। সাইটে আছে সার্ভিস, পড়াশোনার গন্তব্য, ইভেন্ট ও গল্প, আর প্রতিটি পেজ অ্যাডমিন প্যানেল থেকে পরিচালিত।',
+            'en' => 'Rong Torongo lets resellers anywhere in Bangladesh sell sarees, three-pieces, gowns and kurtis from its catalogue without buying stock, while Rong Torongo handles packaging and cash-on-delivery shipping to all 64 districts.',
+            'bn' => 'রঙ তরঙ্গ বাংলাদেশের যেকোনো প্রান্তের রিসেলারদের স্টক না কিনেই শাড়ি, থ্রিপিস, গাউন ও কুর্তি বিক্রির সুযোগ দেয়, আর প্যাকেজিং ও ৬৪ জেলায় ক্যাশ অন ডেলিভারি সামলায় রঙ তরঙ্গ।',
         ],
         'challenge' => [
-            'en' => '<p>Students compare many consultancies before they trust one. UniSupport needed a site that explains its process clearly, covers every destination it serves, promotes its events and turns visitors into enquiries, with content its counsellors can update themselves.</p>',
+            'en' => '<p>Running a reseller network on Facebook groups and spreadsheets does not scale. Rong Torongo needed a platform where resellers register, pick products, set their own price and track orders and payouts.</p>',
         ],
         'approach' => [
-            'en' => '<p>We designed and built the website and its content system:</p><ul><li>A service page laid out as a six-stage workflow, from profile counselling to visa filing and pre-departure briefing, with document checklists.</li><li>Destination pages for the UK, USA, Canada, Australia, New Zealand and more than ten European countries.</li><li>Events and seminars with a featured upcoming event, venue and schedule.</li><li>About, team, testimonials, blog and contact pages, with call, WhatsApp and Apply Now actions throughout.</li><li>Consultation booking and event seat registration forms that reach the counsellors as leads.</li></ul>',
+            'en' => '<p>We delivered it on our B2B reseller platform:</p><ul><li>Reseller registration, packages and a dashboard for orders and earnings.</li><li>A catalogue of sarees, three-pieces, gowns and more, organised by category.</li><li>Orders placed at the reseller\'s own price with white-label parcels.</li><li>Payout tracking for resellers.</li><li>Pages explaining how the programme works.</li></ul>',
         ],
         'outcome' => [
-            'en' => '<p>UniSupport has a complete website ready for its own domain. Its counsellors work from an admin panel with a dashboard of new consultation bookings and messages, and manage events and registrations, destinations, partner universities, blog posts and visa guides, student testimonials, the team, featured videos, legal pages and contact settings themselves.</p>',
+            'en' => '<p>Rong Torongo manages its reseller network, orders and payouts from one platform instead of chat threads.</p>',
         ],
     ],
     [
@@ -160,6 +189,35 @@ return [
         ],
         'outcome' => [
             'en' => '<p>CleanBDX runs its recycling programme on a single platform, and anyone can follow its impact live on the website.</p>',
+        ],
+    ],
+    [
+        'slug' => 'unisupport',
+        'client' => 'UniSupport Consultancy',
+        'url' => 'https://uni.auxtechsoftware.com',
+        'industry' => 'education',
+        'solution' => 'corporate-website',
+        'type' => 'demo',
+        'featured' => true,
+        'services' => ['web-application-development', 'corporate-websites', 'ui-ux-design', 'seo'],
+        'technologies' => ['laravel', 'vuejs', 'inertiajs'],
+        'modules' => [],
+        'tagline' => [
+            'en' => 'A website and admin panel for a study-abroad and student visa consultancy.',
+            'bn' => 'বিদেশে পড়াশোনা ও স্টুডেন্ট ভিসা কনসালটেন্সির ওয়েবসাইট ও অ্যাডমিন প্যানেল।',
+        ],
+        'summary' => [
+            'en' => 'UniSupport guides students from the first counselling session to campus arrival. The site presents its services, study destinations, events and stories, and every page is managed from an admin panel.',
+            'bn' => 'UniSupport শিক্ষার্থীদের প্রথম কাউন্সেলিং থেকে ক্যাম্পাসে পৌঁছানো পর্যন্ত সহায়তা করে। সাইটে আছে সার্ভিস, পড়াশোনার গন্তব্য, ইভেন্ট ও গল্প, আর প্রতিটি পেজ অ্যাডমিন প্যানেল থেকে পরিচালিত।',
+        ],
+        'challenge' => [
+            'en' => '<p>Students compare many consultancies before they trust one. UniSupport needed a site that explains its process clearly, covers every destination it serves, promotes its events and turns visitors into enquiries, with content its counsellors can update themselves.</p>',
+        ],
+        'approach' => [
+            'en' => '<p>We designed and built the website and its content system:</p><ul><li>A service page laid out as a six-stage workflow, from profile counselling to visa filing and pre-departure briefing, with document checklists.</li><li>Destination pages for the UK, USA, Canada, Australia, New Zealand and more than ten European countries.</li><li>Events and seminars with a featured upcoming event, venue and schedule.</li><li>About, team, testimonials, blog and contact pages, with call, WhatsApp and Apply Now actions throughout.</li><li>Consultation booking and event seat registration forms that reach the counsellors as leads.</li></ul>',
+        ],
+        'outcome' => [
+            'en' => '<p>UniSupport has a complete website ready for its own domain. Its counsellors work from an admin panel with a dashboard of new consultation bookings and messages, and manage events and registrations, destinations, partner universities, blog posts and visa guides, student testimonials, the team, featured videos, legal pages and contact settings themselves.</p>',
         ],
     ],
     [
@@ -250,35 +308,6 @@ return [
         ],
     ],
     [
-        'slug' => 'rongtorongob2b',
-        'client' => 'Rong Torongo',
-        'url' => 'https://rongtorongob2b.com',
-        'industry' => 'reselling',
-        'solution' => 'reseller-platform',
-        'type' => 'live',
-        'featured' => true,
-        'services' => ['custom-software-development', 'ecommerce-development'],
-        'technologies' => ['laravel', 'vuejs', 'inertiajs'],
-        'modules' => [],
-        'tagline' => [
-            'en' => 'A dropshipping and reselling platform for women\'s clothing.',
-            'bn' => 'নারীদের পোশাকের জন্য একটি ড্রপশিপিং ও রিসেলিং প্ল্যাটফর্ম।',
-        ],
-        'summary' => [
-            'en' => 'Rong Torongo lets resellers anywhere in Bangladesh sell sarees, three-pieces, gowns and kurtis from its catalogue without buying stock, while Rong Torongo handles packaging and cash-on-delivery shipping to all 64 districts.',
-            'bn' => 'রঙ তরঙ্গ বাংলাদেশের যেকোনো প্রান্তের রিসেলারদের স্টক না কিনেই শাড়ি, থ্রিপিস, গাউন ও কুর্তি বিক্রির সুযোগ দেয়, আর প্যাকেজিং ও ৬৪ জেলায় ক্যাশ অন ডেলিভারি সামলায় রঙ তরঙ্গ।',
-        ],
-        'challenge' => [
-            'en' => '<p>Running a reseller network on Facebook groups and spreadsheets does not scale. Rong Torongo needed a platform where resellers register, pick products, set their own price and track orders and payouts.</p>',
-        ],
-        'approach' => [
-            'en' => '<p>We delivered it on our B2B reseller platform:</p><ul><li>Reseller registration, packages and a dashboard for orders and earnings.</li><li>A catalogue of sarees, three-pieces, gowns and more, organised by category.</li><li>Orders placed at the reseller\'s own price with white-label parcels.</li><li>Payout tracking for resellers.</li><li>Pages explaining how the programme works.</li></ul>',
-        ],
-        'outcome' => [
-            'en' => '<p>Rong Torongo manages its reseller network, orders and payouts from one platform instead of chat threads.</p>',
-        ],
-    ],
-    [
         'slug' => 'greenland-tax',
         'client' => 'Greenland Business & Compliance',
         'url' => 'https://tax.greenlandmarketingcompany.com',
@@ -308,72 +337,6 @@ return [
         ],
     ],
     [
-        'slug' => 'gearzen',
-        'client' => 'Gearzen',
-        'url' => 'https://gearzen.com.bd',
-        'industry' => 'gadgets',
-        'solution' => 'ecommerce',
-        'type' => 'live',
-        'featured' => true,
-        'services' => ['ecommerce-development', 'ui-ux-design'],
-        'technologies' => ['laravel', 'vuejs', 'inertiajs'],
-        'modules' => ['product-management', 'order-management', 'customer-management', 'dashboard', 'campaign-management', 'order-tracking'],
-        'tagline' => [
-            'en' => 'An online store for smartphones, laptops and smart gadgets.',
-            'bn' => 'স্মার্টফোন, ল্যাপটপ ও স্মার্ট গ্যাজেটের অনলাইন স্টোর।',
-        ],
-        'summary' => [
-            'en' => 'Gearzen sells phones, MacBooks, tablets and iPads, cameras, earbuds, speakers and drones, with flash deals, product comparison, wishlists and order tracking.',
-            'bn' => 'Gearzen ফোন, ম্যাকবুক, ট্যাবলেট ও আইপ্যাড, ক্যামেরা, ইয়ারবাড, স্পিকার ও ড্রোন বিক্রি করে; আছে ফ্ল্যাশ ডিল, প্রোডাক্ট কম্পেয়ার, উইশলিস্ট ও অর্ডার ট্র্যাকিং।',
-        ],
-        'challenge' => [
-            'en' => '<p>Gearzen needed a fast, mobile-friendly store that customers in Bangladesh trust, with cash on delivery, clear categories and an admin panel the team can run every day without developer help.</p>',
-        ],
-        'approach' => [
-            'en' => '<p>We launched the store on Auxtech Ecommerce and configured it around the catalogue:</p><ul><li>Categories for phones, MacBooks, tablets, iPads, cameras, earbuds, speakers and drones.</li><li>Product variants for storage and memory options.</li><li>Flash deals, product comparison and wishlists.</li><li>Order tracking and a visible hotline.</li></ul>',
-        ],
-        'outcome' => [
-            'en' => '<p>Gearzen takes and manages orders online from one admin panel, with products, customers and orders in the same place.</p>',
-        ],
-    ],
-    [
-        'slug' => 'dhakaculture',
-        'client' => 'Dhaka Culture',
-        'url' => 'https://dhakaculture.com',
-        'industry' => 'fashion',
-        'solution' => 'ecommerce',
-        'type' => 'live',
-        'featured' => true,
-        'services' => ['ecommerce-development', 'ui-ux-design'],
-        'technologies' => ['laravel', 'vuejs', 'inertiajs'],
-        'modules' => [
-            'product-management',
-            'order-management',
-            'customer-management',
-            'dashboard',
-            'pre-order-management',
-            'campaign-management',
-            'order-tracking',
-        ],
-        'tagline' => [
-            'en' => 'An online store for a streetwear brand built on stories, art and culture.',
-            'bn' => 'গল্প, শিল্প ও সংস্কৃতিকে ঘিরে গড়া একটি স্ট্রিটওয়্যার ব্র্যান্ডের অনলাইন স্টোর।',
-        ],
-        'summary' => [
-            'en' => 'Dhaka Culture sells semi-drop T-shirts, couple tees, shirts, polos, pants, caps and bandanas, with pre-orders for new drops and a dedicated offers page.',
-            'bn' => 'Dhaka Culture সেমি-ড্রপ টি-শার্ট, কাপল টি, শার্ট, পোলো, প্যান্ট, ক্যাপ ও ব্যান্ডানা বিক্রি করে; নতুন ড্রপের জন্য আছে প্রি-অর্ডার ও আলাদা অফার পেজ।',
-        ],
-        'challenge' => [
-            'en' => '<p>Dhaka Culture needed a fast, mobile-friendly store that customers in Bangladesh trust, with cash on delivery, clear categories and an admin panel the team can run every day without developer help.</p>',
-        ],
-        'approach' => [
-            'en' => '<p>We launched the store on Auxtech Ecommerce and configured it around the catalogue:</p><ul><li>Collections for semi-drop T-shirts, shirts, polos, pants, caps, events and bandanas.</li><li>A top-sellers section on the home page.</li><li>Pre-orders for upcoming drops.</li><li>An offers page and order tracking for customers.</li></ul>',
-        ],
-        'outcome' => [
-            'en' => '<p>Dhaka Culture takes and manages orders online from one admin panel, with products, customers and orders in the same place.</p>',
-        ],
-    ],
-    [
         'slug' => 'seasonalbd',
         'client' => 'Seasonal',
         'url' => 'https://seasonalbd.com',
@@ -400,6 +363,43 @@ return [
         ],
         'outcome' => [
             'en' => '<p>Seasonal takes and manages orders online from one admin panel, with products, customers and orders in the same place.</p>',
+        ],
+    ],
+    [
+        'slug' => 'trikalhouse',
+        'client' => 'Trikal House',
+        'url' => 'https://trikalhouse.com',
+        'industry' => 'fashion',
+        'solution' => 'ecommerce',
+        'type' => 'live',
+        'featured' => false,
+        'services' => ['ecommerce-development', 'ui-ux-design'],
+        'technologies' => ['laravel', 'vuejs', 'inertiajs'],
+        'modules' => [
+            'product-management',
+            'order-management',
+            'customer-management',
+            'dashboard',
+            'pre-order-management',
+            'campaign-management',
+            'order-tracking',
+        ],
+        'tagline' => [
+            'en' => 'An online watch store with shop-by-brand navigation and pre-orders.',
+            'bn' => 'ব্র্যান্ড অনুযায়ী কেনাকাটা ও প্রি-অর্ডারসহ একটি অনলাইন ঘড়ির স্টোর।',
+        ],
+        'summary' => [
+            'en' => 'Trikal House sells men\'s and women\'s watches from Gedi, Kimio, Scottie, Duke Nicle, Guou, Mishali and Tianta, with variants for case, dial and strap, pre-orders for incoming stock, a watch-and-shop video section and offers.',
+            'bn' => 'Trikal House জেডি, কিমিও, স্কটি, ডিউক নিকেল, গুউ, মিশালি ও তিয়ান্তার পুরুষ ও নারীদের ঘড়ি বিক্রি করে; আছে কেস, ডায়াল ও স্ট্র্যাপের ভ্যারিয়েন্ট, আসন্ন স্টকের প্রি-অর্ডার, ভিডিও দেখে কেনা ও অফার।',
+        ],
+        'challenge' => [
+            'en' => '<p>Trikal House needed a fast, mobile-friendly store that customers in Bangladesh trust, with cash on delivery, clear categories and an admin panel the team can run every day without developer help.</p>',
+        ],
+        'approach' => [
+            'en' => '<p>We launched the store on Auxtech Ecommerce and configured it around the catalogue:</p><ul><li>Shop-by-brand navigation for Duke Nicle, Gedi, Guou, Kimio, Mishali, Scottie and Tianta.</li><li>Variants for case, dial and strap colours.</li><li>Pre-orders for incoming stock, with clear in-stock, pre-order and out-of-stock labels.</li><li>A watch-and-shop video section and an offers page.</li><li>Order tracking, support, shipping and return pages.</li></ul>',
+        ],
+        'outcome' => [
+            'en' => '<p>Trikal House takes orders and pre-orders online and manages its watch catalogue, stock and campaigns from the Auxtech Ecommerce admin panel.</p>',
         ],
     ],
     [

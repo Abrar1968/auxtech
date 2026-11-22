@@ -42,7 +42,7 @@ function apply(change: Partial<Filters>): void {
 
 const chip = (selected: boolean) => [
     'inline-flex min-h-10 items-center gap-2 rounded-full border px-4 text-sm font-medium whitespace-nowrap transition',
-    selected ? 'border-brand-600 bg-brand-600 text-white' : 'border-line bg-surface-raised text-fg/80 hover:border-brand-400 hover:text-fg',
+    selected ? 'border-brand-600 bg-brand-600 text-ink-950' : 'border-line bg-surface-raised text-fg/80 hover:border-brand-400 hover:text-fg',
 ];
 </script>
 
@@ -55,8 +55,9 @@ const chip = (selected: boolean) => [
         <!-- Sticky filter bar -->
         <div class="sticky top-20 z-30 -mt-8 mb-12">
             <div class="container-page">
-                <div class="glass flex flex-col gap-3 rounded-3xl p-3 shadow-[0_20px_50px_-30px_rgb(5_8_22/0.4)] lg:flex-row lg:items-center">
-                    <div class="flex gap-2 overflow-x-auto [scrollbar-width:none]" role="group" :aria-label="t('Industry')">
+                <div class="glass flex flex-col gap-3 rounded-3xl p-3 shadow-[0_20px_50px_-30px_rgb(20_21_24/0.4)]">
+                    <!-- Industries scroll sideways on their own row; the selects sit below, so nothing overlaps. -->
+                    <div class="flex min-w-0 gap-2 overflow-x-auto [scrollbar-width:none]" role="group" :aria-label="t('Industry')">
                         <button :class="chip(!filters.industry)" :aria-pressed="!filters.industry" @click="apply({ industry: null })">
                             {{ t('All') }}
                         </button>
@@ -68,23 +69,23 @@ const chip = (selected: boolean) => [
                             @click="apply({ industry: filters.industry === industry.slug ? null : industry.slug })"
                         >
                             {{ industry.name }}
-                            <span :class="filters.industry === industry.slug ? 'text-white/80' : 'text-muted'">{{ n(industry.projects_count ?? 0) }}</span>
+                            <span :class="filters.industry === industry.slug ? 'text-ink-950/75' : 'text-muted'">{{ n(industry.projects_count ?? 0) }}</span>
                         </button>
                     </div>
-                    <div class="grid grid-cols-2 gap-2 lg:ml-auto lg:flex">
+                    <div class="grid grid-cols-1 gap-2 border-t border-line pt-3 sm:grid-cols-2 lg:flex lg:justify-end">
                         <select
                             :value="filters.solution ?? ''"
-                            :aria-label="t('Solution')"
-                            class="min-h-10 w-full min-w-0 rounded-full border border-line bg-surface-raised px-4 text-sm text-fg lg:w-auto"
+                            :aria-label="t('Platform')"
+                            class="min-h-10 w-full min-w-0 truncate rounded-full border border-line bg-surface-raised px-4 text-sm text-fg lg:w-72"
                             @change="apply({ solution: ($event.target as HTMLSelectElement).value || null })"
                         >
-                            <option value="">{{ t('All solutions') }}</option>
+                            <option value="">{{ t('All platforms') }}</option>
                             <option v-for="item in solutions" :key="item.slug" :value="item.slug">{{ item.name }} ({{ n(item.projects_count) }})</option>
                         </select>
                         <select
                             :value="filters.service ?? ''"
                             :aria-label="t('Service')"
-                            class="min-h-10 w-full min-w-0 rounded-full border border-line bg-surface-raised px-4 text-sm text-fg lg:w-auto"
+                            class="min-h-10 w-full min-w-0 truncate rounded-full border border-line bg-surface-raised px-4 text-sm text-fg lg:w-72"
                             @change="apply({ service: ($event.target as HTMLSelectElement).value || null })"
                         >
                             <option value="">{{ t('All services') }}</option>

@@ -30,7 +30,7 @@ class SolutionController extends Controller
     public function show(string $slug, LinkBuilder $whatsapp): Response
     {
         $solution = Solution::query()->published()->where('slug', $slug)
-            ->with(['media', 'seo', 'featureGroups.features'])->firstOrFail();
+            ->with(['media', 'seo', 'featureGroups.features.media'])->firstOrFail();
 
         $faqs = $solution->faqs()->where('is_active', true)->ordered()->get();
 

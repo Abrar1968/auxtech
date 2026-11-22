@@ -38,9 +38,9 @@ onBeforeUnmount(() => preview.value && URL.revokeObjectURL(preview.value));
 
 <template>
     <div class="grid gap-2">
-        <div class="group relative overflow-hidden rounded-lg border border-dashed border-[#c5ccda] bg-[#fafbfd]">
+        <div class="group relative overflow-hidden rounded-lg border border-dashed border-[#c5ccda] bg-[#f7f7f8]">
             <img v-if="shown" :src="shown" alt="" class="aspect-[16/10] w-full object-cover object-top" />
-            <label v-else class="grid aspect-[16/10] cursor-pointer place-items-center text-center text-sm text-[#55607a] hover:bg-[#f0f2f7]">
+            <label v-else class="grid aspect-[16/10] cursor-pointer place-items-center text-center text-sm text-[#5c5f66] hover:bg-[#ececed]">
                 <span><ImagePlus :size="24" class="mx-auto mb-1" />Upload image<br /><span class="text-xs">JPG, PNG or WebP, up to 6 MB</span></span>
                 <input type="file" accept="image/jpeg,image/png,image/webp" class="sr-only" @change="pick" />
             </label>

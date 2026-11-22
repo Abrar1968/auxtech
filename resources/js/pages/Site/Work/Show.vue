@@ -48,19 +48,19 @@ const scale = useTransform(scrollYProgress, [0, 0.5], [0.92, 1]);
         <template #after>
             <dl class="mt-12 grid max-w-3xl grid-cols-2 gap-6 border-t border-white/10 pt-8 text-sm sm:grid-cols-4">
                 <div v-if="project.client">
-                    <dt class="text-white/45">{{ t('Client') }}</dt>
+                    <dt class="text-white/65">{{ t('Client') }}</dt>
                     <dd class="mt-1 font-medium text-white">{{ project.client.name }}</dd>
                 </div>
                 <div v-if="project.industry">
-                    <dt class="text-white/45">{{ t('Industry') }}</dt>
+                    <dt class="text-white/65">{{ t('Industry') }}</dt>
                     <dd class="mt-1 font-medium"><Link :href="project.industry.url" class="text-white hover:text-brand-200">{{ project.industry.name }}</Link></dd>
                 </div>
                 <div v-if="project.solution">
-                    <dt class="text-white/45">{{ t('Solution') }}</dt>
+                    <dt class="text-white/65">{{ t('Solution') }}</dt>
                     <dd class="mt-1 font-medium"><Link :href="project.solution.url" class="text-white hover:text-brand-200">{{ project.solution.name }}</Link></dd>
                 </div>
                 <div v-if="launched || project.is_demo">
-                    <dt class="text-white/45">{{ project.is_demo ? t('Status') : t('Launched') }}</dt>
+                    <dt class="text-white/65">{{ project.is_demo ? t('Status') : t('Launched') }}</dt>
                     <dd class="mt-1 font-medium text-white">{{ project.is_demo ? t('Demo / pre-launch') : launched }}</dd>
                 </div>
             </dl>
@@ -72,7 +72,7 @@ const scale = useTransform(scrollYProgress, [0, 0.5], [0.92, 1]);
         <div class="container-page">
             <motion.div :style="{ rotateX: tilt, scale }" class="origin-top">
                 <DeviceFrame :image="project.cover" :url="project.live_url" priority sizes="(min-width: 1280px) 1200px, 95vw">
-                    <div class="grid size-full place-items-center bg-gradient-to-br from-brand-700 to-ink-900 font-display text-3xl text-white/80">{{ project.title }}</div>
+                    <div class="grid size-full place-items-center bg-gradient-to-br from-ink-800 to-ink-950 font-display text-3xl text-brand-200">{{ project.title }}</div>
                 </DeviceFrame>
             </motion.div>
         </div>
@@ -106,7 +106,7 @@ const scale = useTransform(scrollYProgress, [0, 0.5], [0.92, 1]);
                 <div v-if="project.features?.length" class="rounded-3xl border border-line bg-surface-raised p-7">
                     <h2 class="font-display text-lg font-semibold text-fg">{{ t('Modules used') }}</h2>
                     <ul class="mt-4 flex flex-wrap gap-2">
-                        <li v-for="feature in project.features" :key="feature.slug" class="rounded-full bg-brand-50 px-3 py-1.5 text-sm text-brand-700 dark:bg-brand-950 dark:text-brand-200">
+                        <li v-for="feature in project.features" :key="feature.slug" class="rounded-full bg-brand-50 px-3 py-1.5 text-sm text-brand-900 dark:bg-brand-600/15 dark:text-brand-200">
                             {{ feature.title }}
                         </li>
                     </ul>

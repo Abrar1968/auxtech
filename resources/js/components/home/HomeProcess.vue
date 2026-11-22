@@ -50,8 +50,8 @@ const ease = [0.16, 1, 0.3, 1] as const;
                     </div>
 
                     <div class="relative">
-                        <div aria-hidden="true" class="absolute -inset-10 -z-10 rounded-full bg-[radial-gradient(closest-side,rgb(1_69_255/0.18),transparent)] blur-2xl" />
-                        <div class="relative min-h-[26rem] overflow-hidden rounded-[2rem] border border-line bg-surface-raised p-10 shadow-[0_40px_90px_-50px_rgb(1_69_255/0.55)] xl:p-14">
+                        <div aria-hidden="true" class="absolute -inset-10 -z-10 rounded-full bg-[radial-gradient(closest-side,rgb(255_201_60/0.16),transparent)] blur-2xl" />
+                        <div class="relative min-h-[26rem] overflow-hidden rounded-[2rem] border border-line bg-surface-raised p-10 shadow-[0_40px_90px_-50px_rgb(255_201_60/0.55)] xl:p-14">
                             <AnimatePresence mode="wait">
                                 <motion.div
                                     v-if="step"

@@ -27,6 +27,7 @@ class SolutionFeatureModule extends Module
             Field::slug(),
             Field::textarea('description')->translatable(),
             Field::icon(),
+            Field::image('screenshot')->help('A screenshot of this module, shown in the module explorer. 16:10, at least 1440 px wide.'),
         ];
     }
 
@@ -47,6 +48,6 @@ class SolutionFeatureModule extends Module
 
     public function with(): array
     {
-        return ['group'];
+        return ['group', 'media'];
     }
 }

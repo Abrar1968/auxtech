@@ -49,7 +49,7 @@ const { t, lp, n } = useI18n();
             <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <Reveal v-for="(child, index) in service.children" :key="child.id" :delay="index * 0.06">
                     <Link :href="child.url" class="group flex h-full flex-col rounded-3xl border border-line bg-surface-raised p-7 transition hover:-translate-y-1 hover:border-brand-300">
-                        <span class="grid size-12 place-items-center rounded-2xl bg-brand-50 text-link dark:bg-brand-950 dark:text-brand-200"><Icon :name="child.icon" :size="22" /></span>
+                        <span class="grid size-12 place-items-center rounded-2xl bg-brand-50 text-link dark:bg-brand-600/15 dark:text-brand-200"><Icon :name="child.icon" :size="22" /></span>
                         <h3 class="mt-6 font-display text-xl font-semibold text-fg">{{ child.title }}</h3>
                         <p v-if="child.excerpt" class="mt-2 text-muted">{{ child.excerpt }}</p>
                         <ArrowUpRight :size="20" class="mt-auto self-end pt-4 text-link transition group-hover:rotate-45" aria-hidden="true" />

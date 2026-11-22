@@ -17,13 +17,13 @@ const crumbs = computed(() => seo.value.breadcrumbs ?? []);
         <div aria-hidden="true" class="absolute inset-0 -z-10 bg-grid" />
         <div
             aria-hidden="true"
-            class="absolute -top-48 left-1/2 -z-10 h-[34rem] w-[54rem] -translate-x-1/2 animate-aurora rounded-full bg-[radial-gradient(closest-side,rgb(1_69_255/0.55),transparent)] blur-2xl"
+            class="absolute -top-48 left-1/2 -z-10 h-[34rem] w-[54rem] -translate-x-1/2 animate-aurora rounded-full bg-[radial-gradient(closest-side,rgb(255_201_60/0.16),transparent)] blur-2xl"
         />
-        <div aria-hidden="true" class="absolute -right-32 bottom-0 -z-10 size-[26rem] rounded-full bg-[radial-gradient(closest-side,rgb(34_211_238/0.18),transparent)] blur-2xl" />
+        <div aria-hidden="true" class="absolute -right-32 bottom-0 -z-10 size-[26rem] rounded-full bg-[radial-gradient(closest-side,rgb(217_218_220/0.18),transparent)] blur-2xl" />
 
         <div class="container-page">
             <nav v-if="crumbs.length > 1" aria-label="Breadcrumb" class="mb-8">
-                <ol class="flex flex-wrap items-center gap-1.5 text-sm text-white/50">
+                <ol class="flex flex-wrap items-center gap-1.5 text-sm text-white/65">
                     <li v-for="(crumb, index) in crumbs" :key="crumb.url" class="flex items-center gap-1.5">
                         <ChevronRight v-if="index > 0" :size="14" aria-hidden="true" />
                         <Link v-if="index < crumbs.length - 1" :href="crumb.url" class="transition hover:text-white">{{ crumb.name }}</Link>

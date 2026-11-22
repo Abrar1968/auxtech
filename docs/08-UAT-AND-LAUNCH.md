@@ -61,16 +61,20 @@ The installer locks itself afterwards. The zip holds the whole project, dotfiles
 
 **Alternative: import the prepared database.** Before step 2, open the empty database in cPanel > phpMyAdmin and **Import** `auxtech-database.sql`, then extract `auxtech-uploads.zip` inside `public_html/public` (it creates `public/uploads`). The installer keeps the imported content and only creates your admin account, and every image is already in place, so B2a is not needed.
 
-The installer also seeds the whole site's text: 6 services with sub-services, 6 platforms with the 23 Auxtech Ecommerce modules, 11 industries, 7 technologies, all 33 projects with their case studies, and 8 FAQs. The same content can be added again at any time from cPanel Terminal with `php artisan auxtech:seed` (it only adds what is missing and keeps your edits; `--overwrite` restores the original text).
+The installer also seeds the whole site's text: 6 services with sub-services, 6 platforms with the 23 Auxtech Ecommerce modules, 12 industries, 7 technologies, all 38 projects with their case studies (30 delivered sites and products, 8 labelled demos), 8 FAQs and 3 engagement packages on the pricing page (shown as "Custom quote" until you enter prices in Admin > Pricing). The same content can be added again at any time from cPanel Terminal with `php artisan auxtech:seed` (it only adds what is missing and keeps your edits; `--overwrite` restores the original text).
 
 ### B2a. Images
 
-Images are not part of the site zip. Unzip `auxtech-image-pack.zip` on your computer and open `UPLOAD-GUIDE.html`. It lists all 204 images (33 client logos, 165 project screenshots, 6 platform covers) with the exact admin page, field and alt text for each. Either:
+Images are not part of the site zip. Unzip `auxtech-image-pack.zip` on your computer and open `UPLOAD-GUIDE.html`. It lists all 255 images (37 client logos, 190 project screenshots, 6 platform covers and 22 Auxtech Ecommerce module screenshots) with the exact admin page, field and alt text for each. Either:
 
 - **Option A:** upload them one by one in the admin panel as the guide shows, or
 - **Option B:** upload and extract the pack outside `public_html` and run `php artisan auxtech:seed --images=/home/YOUR-CPANEL-USER/auxtech-image-pack` in cPanel Terminal. It attaches everything with alt text and skips fields that already have an image.
 
 Until the images are uploaded, pages show client names instead of logos and empty screenshot frames.
+
+**Alternative: import the prepared database and images.** Import `auxtech-database.sql` in phpMyAdmin before running the installer, and extract `auxtech-uploads.zip` inside `public_html/public`. Every image is then already linked (see B2).
+
+**Upgrading an existing install to 1.4.0:** extract the new zip over the old files, run Admin > System > Update database, then in cPanel Terminal run `php artisan auxtech:seed` (adds the 5 new projects, the Automotive industry and the pricing packages) and `php artisan auxtech:seed --images=...` with the new image pack (adds only the new images). Add `--overwrite` to the first command only if you want the rewritten project texts for the demos; it replaces admin edits to seeded records.
 
 ### B3. Settings after install
 

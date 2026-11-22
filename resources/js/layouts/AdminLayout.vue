@@ -109,7 +109,7 @@ function markRead(): void {
 </script>
 
 <template>
-    <div class="min-h-screen bg-[#f6f7fb] text-[#0a0f24]" data-admin>
+    <div class="min-h-screen bg-[#f4f4f5] text-[#232428]" data-admin>
         <!-- Sidebar -->
         <div v-if="sidebar" class="fixed inset-0 z-40 bg-ink-950/50 lg:hidden" @click="sidebar = false" />
         <aside
@@ -131,7 +131,7 @@ function markRead(): void {
                                 :href="item.href"
                                 :class="[
                                     'flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition',
-                                    isActive(item.href) ? 'bg-brand-600 font-medium text-white' : 'hover:bg-white/8 hover:text-white',
+                                    isActive(item.href) ? 'bg-brand-600 font-medium text-ink-950' : 'hover:bg-white/8 hover:text-white',
                                 ]"
                             >
                                 <Icon :name="item.icon" :size="17" />
@@ -145,47 +145,47 @@ function markRead(): void {
 
         <div class="lg:pl-64">
             <!-- Top bar -->
-            <header class="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-[#e4e8f0] bg-white/85 px-4 backdrop-blur sm:px-6">
-                <button class="grid size-10 place-items-center rounded-lg hover:bg-[#f0f2f7] lg:hidden" aria-label="Open menu" @click="sidebar = true"><Menu :size="20" /></button>
+            <header class="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-[#e3e4e6] bg-white/85 px-4 backdrop-blur sm:px-6">
+                <button class="grid size-10 place-items-center rounded-lg hover:bg-[#ececed] lg:hidden" aria-label="Open menu" @click="sidebar = true"><Menu :size="20" /></button>
                 <span
-                    :class="['hidden items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium sm:inline-flex', live === 'on' ? 'bg-green-50 text-green-700' : 'bg-[#f0f2f7] text-[#55607a]']"
+                    :class="['hidden items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium sm:inline-flex', live === 'on' ? 'bg-green-50 text-green-700' : 'bg-[#ececed] text-[#5c5f66]']"
                     :title="live === 'on' ? 'Live updates are on' : 'Live updates are off; refresh to see new leads'"
                 >
                     <Radio :size="13" /> {{ live === 'on' ? 'Live' : live === 'connecting' ? 'Connecting…' : 'Live updates off' }}
                 </span>
                 <div class="ml-auto flex items-center gap-1">
-                    <a href="/" target="_blank" class="hidden items-center gap-1.5 rounded-lg px-3 py-2 text-sm text-[#55607a] hover:bg-[#f0f2f7] sm:inline-flex">View site <ExternalLink :size="14" /></a>
+                    <a href="/" target="_blank" class="hidden items-center gap-1.5 rounded-lg px-3 py-2 text-sm text-[#5c5f66] hover:bg-[#ececed] sm:inline-flex">View site <ExternalLink :size="14" /></a>
 
                     <div class="relative">
-                        <button class="relative grid size-10 place-items-center rounded-lg hover:bg-[#f0f2f7]" aria-label="Notifications" @click="bellOpen = !bellOpen">
+                        <button class="relative grid size-10 place-items-center rounded-lg hover:bg-[#ececed]" aria-label="Notifications" @click="bellOpen = !bellOpen">
                             <Bell :size="19" />
                             <span v-if="unread" class="absolute top-1.5 right-1.5 grid min-w-4 place-items-center rounded-full bg-red-500 px-1 text-[10px] font-semibold text-white">{{ unread > 9 ? '9+' : unread }}</span>
                         </button>
-                        <div v-if="bellOpen" class="absolute right-0 mt-2 w-80 overflow-hidden rounded-xl border border-[#e4e8f0] bg-white shadow-xl" @mouseleave="bellOpen = false">
-                            <div class="flex items-center justify-between border-b border-[#e4e8f0] px-4 py-3">
+                        <div v-if="bellOpen" class="absolute right-0 mt-2 w-80 overflow-hidden rounded-xl border border-[#e3e4e6] bg-white shadow-xl" @mouseleave="bellOpen = false">
+                            <div class="flex items-center justify-between border-b border-[#e3e4e6] px-4 py-3">
                                 <p class="text-sm font-semibold">Notifications</p>
-                                <button v-if="unread" class="text-xs font-medium text-brand-600 hover:underline" @click="markRead">Mark all read</button>
+                                <button v-if="unread" class="text-xs font-medium text-link hover:underline" @click="markRead">Mark all read</button>
                             </div>
                             <ul class="max-h-96 overflow-y-auto">
                                 <li v-for="item in props.notifications?.items ?? []" :key="item.id">
-                                    <Link :href="item.data.lead_id ? `/admin/leads/${item.data.lead_id}` : '/admin'" class="flex gap-3 px-4 py-3 text-sm hover:bg-[#f6f7fb]" @click="bellOpen = false">
-                                        <MessageCircle :size="18" :class="item.read ? 'text-[#9aa6c1]' : 'text-brand-600'" />
+                                    <Link :href="item.data.lead_id ? `/admin/leads/${item.data.lead_id}` : '/admin'" class="flex gap-3 px-4 py-3 text-sm hover:bg-[#f4f4f5]" @click="bellOpen = false">
+                                        <MessageCircle :size="18" :class="item.read ? 'text-[#85888f]' : 'text-link'" />
                                         <span>
                                             <span :class="['block', !item.read && 'font-semibold']">New lead: {{ item.data.name ?? item.data.phone }}</span>
-                                            <span class="text-xs text-[#55607a]">{{ timeAgo(item.created_at) }}</span>
+                                            <span class="text-xs text-[#5c5f66]">{{ timeAgo(item.created_at) }}</span>
                                         </span>
                                     </Link>
                                 </li>
-                                <li v-if="!(props.notifications?.items ?? []).length" class="px-4 py-8 text-center text-sm text-[#55607a]">Nothing yet.</li>
+                                <li v-if="!(props.notifications?.items ?? []).length" class="px-4 py-8 text-center text-sm text-[#5c5f66]">Nothing yet.</li>
                             </ul>
                         </div>
                     </div>
 
-                    <Link href="/admin/profile" class="flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-[#f0f2f7]">
-                        <span class="grid size-8 place-items-center rounded-full bg-brand-600 text-sm font-semibold text-white">{{ props.auth?.name.charAt(0) }}</span>
+                    <Link href="/admin/profile" class="flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-[#ececed]">
+                        <span class="grid size-8 place-items-center rounded-full bg-brand-600 text-sm font-semibold text-ink-950">{{ props.auth?.name.charAt(0) }}</span>
                         <span class="hidden text-sm font-medium md:block">{{ props.auth?.name }}</span>
                     </Link>
-                    <Link href="/logout" method="post" as="button" class="grid size-10 place-items-center rounded-lg text-[#55607a] hover:bg-[#f0f2f7]" aria-label="Sign out"><LogOut :size="18" /></Link>
+                    <Link href="/logout" method="post" as="button" class="grid size-10 place-items-center rounded-lg text-[#5c5f66] hover:bg-[#ececed]" aria-label="Sign out"><LogOut :size="18" /></Link>
                 </div>
             </header>
 
@@ -197,15 +197,15 @@ function markRead(): void {
         <!-- Toasts -->
         <div class="fixed right-4 bottom-4 z-[60] grid w-[min(24rem,calc(100vw-2rem))] gap-2" aria-live="polite">
             <TransitionGroup enter-active-class="transition duration-300" enter-from-class="opacity-0 translate-y-2" leave-active-class="transition duration-200" leave-to-class="opacity-0">
-                <div v-for="toast in toasts" :key="toast.id" :class="['flex items-start gap-3 rounded-xl border bg-white p-4 shadow-lg', toast.kind === 'lead' ? 'border-whatsapp' : 'border-[#e4e8f0]']">
+                <div v-for="toast in toasts" :key="toast.id" :class="['flex items-start gap-3 rounded-xl border bg-white p-4 shadow-lg', toast.kind === 'lead' ? 'border-whatsapp' : 'border-[#e3e4e6]']">
                     <CircleCheck v-if="toast.kind === 'success'" :size="20" class="shrink-0 text-green-600" />
                     <CircleX v-else-if="toast.kind === 'error'" :size="20" class="shrink-0 text-red-600" />
                     <MessageCircle v-else :size="20" class="shrink-0 text-whatsapp-dark" />
                     <div class="min-w-0 flex-1 text-sm">
                         <component :is="toast.href ? Link : 'p'" :href="toast.href" class="font-medium hover:underline">{{ toast.title }}</component>
-                        <p v-if="toast.body" class="mt-0.5 text-[#55607a]">{{ toast.body }}</p>
+                        <p v-if="toast.body" class="mt-0.5 text-[#5c5f66]">{{ toast.body }}</p>
                     </div>
-                    <button class="text-[#9aa6c1] hover:text-[#0a0f24]" aria-label="Dismiss" @click="dismiss(toast.id)"><X :size="16" /></button>
+                    <button class="text-[#85888f] hover:text-[#232428]" aria-label="Dismiss" @click="dismiss(toast.id)"><X :size="16" /></button>
                 </div>
             </TransitionGroup>
         </div>

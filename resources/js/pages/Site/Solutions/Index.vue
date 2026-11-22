@@ -29,11 +29,11 @@ const others = computed(() => props.solutions.filter((s) => !s.is_flagship));
                     :href="flagship.url"
                     class="group relative isolate block overflow-hidden rounded-[2rem] bg-ink-950 p-8 text-white sm:p-12"
                 >
-                    <div aria-hidden="true" class="absolute -top-32 -right-32 -z-10 size-[30rem] rounded-full bg-brand-600/50 blur-3xl transition duration-700 group-hover:scale-110" />
+                    <div aria-hidden="true" class="absolute -top-32 -right-32 -z-10 size-[30rem] rounded-full bg-brand-600/15 blur-3xl transition duration-700 group-hover:scale-110" />
                     <div aria-hidden="true" class="absolute inset-0 -z-10 bg-grid" />
                     <span class="inline-flex items-center gap-2 rounded-full glass-dark px-3 py-1 text-xs font-semibold tracking-[0.14em] text-brand-200 uppercase">{{ t('Flagship') }}</span>
                     <div class="mt-6 flex items-center gap-4">
-                        <span class="grid size-14 place-items-center rounded-2xl bg-brand-600"><Icon :name="flagship.icon" :size="26" /></span>
+                        <span class="grid size-14 place-items-center rounded-2xl bg-brand-600 text-ink-950"><Icon :name="flagship.icon" :size="26" /></span>
                         <h2 class="font-display text-3xl font-semibold sm:text-5xl">{{ flagship.name }}</h2>
                     </div>
                     <p class="mt-6 max-w-2xl text-lg text-white/70">{{ flagship.summary }}</p>

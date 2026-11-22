@@ -35,7 +35,7 @@ const { t } = useI18n();
                 </div>
                 <span
                     :class="[
-                        'mt-1 grid size-10 shrink-0 place-items-center rounded-full border transition duration-300 group-hover:rotate-45 group-hover:bg-brand-600 group-hover:text-white',
+                        'mt-1 grid size-10 shrink-0 place-items-center rounded-full border transition duration-300 group-hover:rotate-45 group-hover:bg-brand-600 group-hover:text-ink-950',
                         dark ? 'border-white/15 text-white' : 'border-line text-fg',
                     ]"
                 >

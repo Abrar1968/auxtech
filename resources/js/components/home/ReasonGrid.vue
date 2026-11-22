@@ -24,9 +24,9 @@ function spotlight(event: PointerEvent): void {
                 <div
                     aria-hidden="true"
                     class="pointer-events-none absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100"
-                    style="background: radial-gradient(320px circle at var(--x) var(--y), rgb(1 69 255 / 0.09), transparent 70%)"
+                    style="background: radial-gradient(320px circle at var(--x) var(--y), rgb(255 201 60 / 0.09), transparent 70%)"
                 />
-                <span class="relative grid size-12 place-items-center rounded-2xl bg-brand-50 text-link dark:bg-brand-950 dark:text-brand-200">
+                <span class="relative grid size-12 place-items-center rounded-2xl bg-brand-50 text-link dark:bg-brand-600/15 dark:text-brand-200">
                     <Icon :name="reason.icon ?? 'circle-check'" :size="22" />
                 </span>
                 <h3 class="relative mt-6 font-display text-xl font-semibold text-fg">{{ reason.title }}</h3>

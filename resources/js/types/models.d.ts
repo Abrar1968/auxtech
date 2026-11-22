@@ -160,6 +160,7 @@ export interface SolutionFeature {
     title: string;
     description: string | null;
     icon: string | null;
+    image?: Image | null;
 }
 
 export interface SolutionFeatureGroup {

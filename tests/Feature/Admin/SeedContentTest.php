@@ -1,8 +1,10 @@
 <?php
 
 use App\Models\Client;
+use App\Models\PricingPlan;
 use App\Models\Project;
 use App\Models\Service;
+use App\Models\SolutionFeature;
 use Illuminate\Support\Facades\File;
 
 /** php artisan auxtech:seed: the whole site's content, safe to re-run, optional image pack. */
@@ -11,12 +13,14 @@ it('seeds every project, client, service and platform', function () {
 
     $gearzen = Project::query()->where('slug', 'gearzen')->firstOrFail();
 
-    expect(Project::query()->count())->toBe(33)
+    expect(Project::query()->count())->toBe(38)
         ->and(Client::query()->where('show_logo', true)->count())->toBe(Project::query()->where('type', 'live')->count())
         ->and(Service::query()->whereNull('parent_id')->count())->toBe(6)
         ->and($gearzen->technologies()->pluck('name')->all())->toContain('Laravel', 'Vue.js')
         ->and($gearzen->features()->count())->toBeGreaterThan(3)
-        ->and($gearzen->getTranslation('summary', 'bn'))->not->toBeEmpty();
+        ->and($gearzen->getTranslation('summary', 'bn'))->not->toBeEmpty()
+        ->and(PricingPlan::query()->count())->toBe(3)
+        ->and(PricingPlan::query()->whereNull('price')->count())->toBe(3);
 });
 
 it('keeps admin edits when run again, and restores the seeded text with --overwrite', function () {
@@ -26,7 +30,7 @@ it('keeps admin edits when run again, and restores the seeded text with --overwr
 
     $this->artisan('auxtech:seed')->assertSuccessful();
     expect($project->fresh()->getTranslation('tagline', 'en'))->toBe('Edited in the admin')
-        ->and(Project::query()->count())->toBe(33);
+        ->and(Project::query()->count())->toBe(38);
 
     $this->artisan('auxtech:seed', ['--overwrite' => true])->assertSuccessful();
     expect($project->fresh()->getTranslation('tagline', 'en'))->not->toBe('Edited in the admin');
@@ -36,6 +40,7 @@ it('attaches logos and screenshots from the image pack once', function () {
     $pack = storage_path('framework/testing-pack');
     File::ensureDirectoryExists("{$pack}/1-client-logos");
     File::ensureDirectoryExists("{$pack}/2-project-screenshots/01-gearzen");
+    File::ensureDirectoryExists("{$pack}/4-module-screenshots");
     $png = function (string $path) {
         $im = imagecreatetruecolor(40, 20);
         imagepng($im, $path);
@@ -44,6 +49,7 @@ it('attaches logos and screenshots from the image pack once', function () {
     $png("{$pack}/1-client-logos/01-gearzen.png");
     $png("{$pack}/2-project-screenshots/01-gearzen/1-desktop-screenshot.png");
     $png("{$pack}/2-project-screenshots/01-gearzen/3-gallery-1.png");
+    $png("{$pack}/4-module-screenshots/02-order-management.png");
     File::put("{$pack}/manifest.json", json_encode([
         'logos' => [['file' => '1-client-logos/01-gearzen.png', 'slug' => 'gearzen', 'alt' => 'Gearzen logo']],
         'projects' => [['folder' => '2-project-screenshots/01-gearzen', 'slug' => 'gearzen', 'files' => [
@@ -51,15 +57,17 @@ it('attaches logos and screenshots from the image pack once', function () {
             ['file' => '3-gallery-1.png', 'field' => 'Gallery', 'alt' => 'Gearzen section'],
         ]]],
         'platforms' => [],
+        'modules' => [['file' => '4-module-screenshots/02-order-management.png', 'slug' => 'order-management', 'alt' => 'Order management screen']],
     ]));
 
-    $this->artisan('auxtech:seed', ['--images' => $pack])->expectsOutputToContain('3 images attached')->assertSuccessful();
+    $this->artisan('auxtech:seed', ['--images' => $pack])->expectsOutputToContain('4 images attached')->assertSuccessful();
     $this->artisan('auxtech:seed', ['--images' => $pack])->expectsOutputToContain('0 images attached')->assertSuccessful();
 
     $project = Project::query()->where('slug', 'gearzen')->firstOrFail();
     expect($project->getFirstMedia('cover')->getCustomProperty('alt'))->toBe(['en' => 'Gearzen home page'])
         ->and($project->getMedia('gallery'))->toHaveCount(1)
-        ->and($project->client->getFirstMedia('logo'))->not->toBeNull();
+        ->and($project->client->getFirstMedia('logo'))->not->toBeNull()
+        ->and(SolutionFeature::query()->where('slug', 'order-management')->firstOrFail()->getFirstMedia('screenshot'))->not->toBeNull();
 
     File::deleteDirectory($pack);
 });

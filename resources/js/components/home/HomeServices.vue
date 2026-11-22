@@ -27,19 +27,19 @@ defineProps<{ services: Service[]; copy?: SectionCopy; eyebrow?: string }>();
                         :class="[
                             'group relative flex h-full flex-col overflow-hidden rounded-3xl border p-7 transition duration-500 ease-out-expo hover:-translate-y-1 sm:p-8',
                             index === 0
-                                ? 'border-transparent bg-ink-950 text-white hover:shadow-[0_40px_80px_-40px_rgb(1_69_255/0.9)] dark:border-white/10 dark:bg-ink-800'
-                                : 'border-line bg-surface-raised text-fg hover:border-brand-300 hover:shadow-[0_30px_60px_-30px_rgb(1_69_255/0.35)]',
+                                ? 'border-transparent bg-ink-950 text-white hover:shadow-[0_40px_80px_-40px_rgb(255_201_60/0.9)] dark:border-white/10 dark:bg-ink-800'
+                                : 'border-line bg-surface-raised text-fg hover:border-brand-300 hover:shadow-[0_30px_60px_-30px_rgb(255_201_60/0.35)]',
                         ]"
                     >
                         <div
                             v-if="index === 0"
                             aria-hidden="true"
-                            class="absolute -right-24 -bottom-24 size-80 rounded-full bg-brand-600/40 blur-3xl transition duration-700 group-hover:scale-125"
+                            class="absolute -right-24 -bottom-24 size-80 rounded-full bg-brand-600/15 blur-3xl transition duration-700 group-hover:scale-125"
                         />
                         <span
                             :class="[
                                 'relative grid size-13 place-items-center rounded-2xl transition duration-500 group-hover:scale-110',
-                                index === 0 ? 'bg-brand-600 text-white' : 'bg-brand-50 text-link dark:bg-brand-950 dark:text-brand-200',
+                                index === 0 ? 'bg-brand-600 text-ink-950' : 'bg-brand-50 text-link dark:bg-brand-600/15 dark:text-brand-200',
                             ]"
                         >
                             <Icon :name="service.icon" :size="24" />

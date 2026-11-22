@@ -23,7 +23,7 @@ function date(value: string | null): string {
                     sizes="(min-width: 1024px) 33vw, 90vw"
                     class="size-full transition duration-700 ease-out-expo group-hover:scale-105"
                 />
-                <div v-else class="grid size-full place-items-center bg-gradient-to-br from-brand-600 to-ink-900 text-white/70">
+                <div v-else class="grid size-full place-items-center bg-gradient-to-br from-ink-800 to-ink-950 text-brand-200">
                     <FileText :size="40" aria-hidden="true" />
                 </div>
             </div>

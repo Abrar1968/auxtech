@@ -13,8 +13,8 @@ const emit = defineEmits<{ confirm: [] }>();
         <AlertDialogPortal>
             <AlertDialogOverlay class="fixed inset-0 z-[80] bg-ink-950/50" />
             <AlertDialogContent class="fixed top-1/2 left-1/2 z-[90] w-[min(28rem,calc(100vw-2rem))] -translate-1/2 rounded-xl bg-white p-6 shadow-2xl">
-                <AlertDialogTitle class="text-lg font-semibold text-[#0a0f24]">{{ title }}</AlertDialogTitle>
-                <AlertDialogDescription v-if="description" class="mt-2 text-sm text-[#55607a]">{{ description }}</AlertDialogDescription>
+                <AlertDialogTitle class="text-lg font-semibold text-[#232428]">{{ title }}</AlertDialogTitle>
+                <AlertDialogDescription v-if="description" class="mt-2 text-sm text-[#5c5f66]">{{ description }}</AlertDialogDescription>
                 <div class="mt-6 flex justify-end gap-2">
                     <AlertDialogCancel :class="button.secondary">Cancel</AlertDialogCancel>
                     <AlertDialogAction :class="button.danger" @click="emit('confirm')">{{ confirmLabel }}</AlertDialogAction>

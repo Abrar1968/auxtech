@@ -20,7 +20,7 @@ withDefaults(
             v-if="eyebrow"
             :class="['mb-5 inline-flex items-center gap-2.5 font-mono text-xs tracking-[0.18em] uppercase', dark ? 'text-brand-200' : 'text-link']"
         >
-            <span class="size-1.5 rounded-full bg-cyan-accent" />[ {{ eyebrow }} ]
+            <span class="size-1.5 rounded-full bg-brand-600" />[ {{ eyebrow }} ]
         </p>
         <component
             :is="as"

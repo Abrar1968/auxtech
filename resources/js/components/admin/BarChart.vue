@@ -25,7 +25,7 @@ const short = (key: string) => new Intl.DateTimeFormat('en-GB', { day: 'numeric'
     <figure>
         <figcaption class="flex flex-wrap items-center gap-4 text-sm">
             <span class="font-semibold">{{ title }}</span>
-            <span v-for="s in series" :key="s.label" class="inline-flex items-center gap-1.5 text-[#55607a]"><span class="size-2.5 rounded-sm" :style="{ background: s.colour }" />{{ s.label }}</span>
+            <span v-for="s in series" :key="s.label" class="inline-flex items-center gap-1.5 text-[#5c5f66]"><span class="size-2.5 rounded-sm" :style="{ background: s.colour }" />{{ s.label }}</span>
         </figcaption>
         <svg viewBox="0 0 100 40" preserveAspectRatio="none" class="mt-4 h-44 w-full" aria-hidden="true">
             <line v-for="y in [10, 20, 30]" :key="y" x1="0" x2="100" :y1="y" :y2="y" stroke="#eef1f6" stroke-width="0.15" />
@@ -44,7 +44,7 @@ const short = (key: string) => new Intl.DateTimeFormat('en-GB', { day: 'numeric'
                 </rect>
             </g>
         </svg>
-        <div class="mt-1 flex justify-between text-[11px] text-[#9aa6c1]"><span>{{ short(keys[0]) }}</span><span>{{ short(keys[keys.length - 1]) }}</span></div>
+        <div class="mt-1 flex justify-between text-[11px] text-[#85888f]"><span>{{ short(keys[0]) }}</span><span>{{ short(keys[keys.length - 1]) }}</span></div>
         <table class="sr-only">
             <thead><tr><th>Day</th><th v-for="s in series" :key="s.label">{{ s.label }}</th></tr></thead>
             <tbody><tr v-for="key in keys" :key="key"><td>{{ key }}</td><td v-for="s in series" :key="s.label">{{ s.values[key] ?? 0 }}</td></tr></tbody>

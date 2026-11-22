@@ -46,13 +46,13 @@ const invalid = computed(() => (props.error ? 'border-red-400 focus:border-red-5
 
 <template>
     <div v-if="field.type === 'toggle'" class="flex items-center justify-between gap-4">
-        <label :for="id" class="text-sm font-medium text-[#0a0f24]">{{ field.label }}</label>
+        <label :for="id" class="text-sm font-medium text-[#232428]">{{ field.label }}</label>
         <button
             :id="id"
             type="button"
             role="switch"
             :aria-checked="!!model"
-            :class="['relative h-6 w-11 shrink-0 rounded-full transition', model ? 'bg-brand-600' : 'bg-[#d5dbe7]']"
+            :class="['relative h-6 w-11 shrink-0 rounded-full transition', model ? 'bg-brand-600' : 'bg-[#d9dadc]']"
             @click="model = !model"
         >
             <span :class="['absolute top-0.5 left-0.5 size-5 rounded-full bg-white shadow transition', model && 'translate-x-5']" />
@@ -61,11 +61,11 @@ const invalid = computed(() => (props.error ? 'border-red-400 focus:border-red-5
 
     <div v-else>
         <div class="mb-1.5 flex items-baseline justify-between gap-2">
-            <label :for="id" class="text-sm font-medium text-[#0a0f24]">
+            <label :for="id" class="text-sm font-medium text-[#232428]">
                 {{ field.label }}<span v-if="field.required" class="text-red-500"> *</span>
-                <span v-if="field.translatable" class="ml-1.5 rounded bg-[#eef4ff] px-1.5 py-0.5 text-[10px] font-semibold text-brand-700 uppercase">{{ locale }}</span>
+                <span v-if="field.translatable" class="ml-1.5 rounded bg-[#fff2c9] px-1.5 py-0.5 text-[10px] font-semibold text-brand-900 uppercase">{{ locale }}</span>
             </label>
-            <span v-if="field.max && ['text', 'textarea'].includes(field.type) && length > field.max * 0.6" :class="['text-xs', length > field.max ? 'text-red-600' : 'text-[#9aa6c1]']">{{ length }}/{{ field.max }}</span>
+            <span v-if="field.max && ['text', 'textarea'].includes(field.type) && length > field.max * 0.6" :class="['text-xs', length > field.max ? 'text-red-600' : 'text-[#85888f]']">{{ length }}/{{ field.max }}</span>
         </div>
 
         <textarea v-if="field.type === 'textarea'" :id="id" v-model="text" rows="4" :class="[input, invalid]" />
@@ -77,16 +77,16 @@ const invalid = computed(() => (props.error ? 'border-red-400 focus:border-red-5
             <option v-for="option in field.options ?? []" :key="option.value" :value="option.value">{{ option.label }}</option>
         </select>
 
-        <div v-else-if="field.type === 'multiselect'" :class="['rounded-lg border border-[#d5dbe7] bg-white', invalid]">
-            <input v-if="(field.options?.length ?? 0) > 8" v-model="filter" type="search" placeholder="Filter…" class="w-full border-b border-[#e4e8f0] px-3 py-2 text-sm outline-none" />
+        <div v-else-if="field.type === 'multiselect'" :class="['rounded-lg border border-[#d9dadc] bg-white', invalid]">
+            <input v-if="(field.options?.length ?? 0) > 8" v-model="filter" type="search" placeholder="Filter…" class="w-full border-b border-[#e3e4e6] px-3 py-2 text-sm outline-none" />
             <ul class="max-h-56 overflow-y-auto p-1.5">
                 <li v-for="option in visibleOptions" :key="option.value">
-                    <label class="flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-1.5 text-sm hover:bg-[#f6f7fb]">
+                    <label class="flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-1.5 text-sm hover:bg-[#f4f4f5]">
                         <input type="checkbox" class="size-4 accent-brand-600" :checked="selected.includes(String(option.value))" @change="toggle(option.value)" />
                         {{ option.label }}
                     </label>
                 </li>
-                <li v-if="!visibleOptions.length" class="px-2 py-1.5 text-sm text-[#9aa6c1]">Nothing to choose.</li>
+                <li v-if="!visibleOptions.length" class="px-2 py-1.5 text-sm text-[#85888f]">Nothing to choose.</li>
             </ul>
         </div>
 
@@ -100,6 +100,6 @@ const invalid = computed(() => (props.error ? 'border-red-400 focus:border-red-5
         />
 
         <p v-if="error" class="mt-1 text-xs text-red-600">{{ error }}</p>
-        <p v-else-if="field.help" class="mt-1 text-xs text-[#55607a]">{{ field.help }}</p>
+        <p v-else-if="field.help" class="mt-1 text-xs text-[#5c5f66]">{{ field.help }}</p>
     </div>
 </template>

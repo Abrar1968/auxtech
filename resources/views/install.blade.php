@@ -7,9 +7,9 @@
     <title>Install Auxtech</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <style>
-        :root { --brand: #0145ff; --ink: #0a0f24; --muted: #55607a; --line: #dfe4ee; --ok: #15803d; --bad: #b91c1c; }
+        :root { --brand: #ffc93c; --ink: #232428; --muted: #5c5f66; --line: #d9dadc; --ok: #15803d; --bad: #b91c1c; }
         * { box-sizing: border-box; }
-        body { margin: 0; font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--ink); background: #f5f7fb; }
+        body { margin: 0; font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--ink); background: #f3f3f4; }
         main { max-width: 680px; margin: 0 auto; padding: 32px 16px 64px; }
         img { height: 30px; width: auto; }
         h1 { font-size: 26px; margin: 28px 0 6px; }
@@ -25,10 +25,10 @@
         .bad small { display: block; color: var(--muted); margin-left: 20px; }
         label { display: block; font-size: 14px; font-weight: 600; margin: 14px 0 4px; }
         input { width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid #c5ccda; border-radius: 10px; font: inherit; }
-        input:focus { outline: 2px solid var(--brand); outline-offset: 1px; border-color: var(--brand); }
+        input:focus { outline: 2px solid var(--ink); outline-offset: 1px; border-color: var(--ink); }
         .row { display: grid; grid-template-columns: 1fr 120px; gap: 12px; }
         .hint { font-size: 13px; color: var(--muted); margin-top: 4px; }
-        button, .button { display: inline-block; margin-top: 22px; min-height: 48px; padding: 12px 26px; border: 0; border-radius: 999px; background: var(--brand); color: #fff; font: inherit; font-weight: 600; cursor: pointer; text-decoration: none; }
+        button, .button { display: inline-block; margin-top: 22px; min-height: 48px; padding: 12px 26px; border: 0; border-radius: 999px; background: var(--brand); color: var(--ink); font: inherit; font-weight: 600; cursor: pointer; text-decoration: none; }
         button[disabled] { opacity: .5; cursor: not-allowed; }
         .errors { background: #fef2f2; border: 1px solid #fecaca; color: var(--bad); border-radius: 12px; padding: 12px 16px; margin-top: 18px; }
         .errors p { color: inherit; margin: 4px 0; }

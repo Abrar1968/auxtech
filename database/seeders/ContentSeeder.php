@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Enums\PublishStatus;
 use App\Models\Faq;
 use App\Models\Page;
+use App\Models\PricingPlan;
 use Database\Seeders\Concerns\SeedsContent;
 use Illuminate\Database\Seeder;
 
@@ -24,6 +25,18 @@ class ContentSeeder extends Seeder
             $this->seedRecord(Faq::class, ['sort_order' => $order + 1, 'group' => 'general', 'faqable_id' => null], [
                 'question' => $faq['question'],
                 'answer' => $faq['answer'],
+                'is_active' => true,
+            ]);
+        }
+
+        foreach ($data['pricing_plans'] as $order => $plan) {
+            $this->seedRecord(PricingPlan::class, ['sort_order' => $order + 1, 'planable_id' => null], [
+                'name' => $plan['name'],
+                'description' => $plan['description'],
+                'price' => null,
+                'currency' => 'BDT',
+                'features' => array_map(fn (array $title) => ['title' => $title], $plan['features']),
+                'is_popular' => $plan['popular'],
                 'is_active' => true,
             ]);
         }

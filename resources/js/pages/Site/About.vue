@@ -85,7 +85,7 @@ const paragraphs = computed(() => (props.story ?? '').split(/\n\s*\n/).filter(Bo
                 <Reveal v-for="(member, index) in team" :key="member.name" as="li" :delay="(index % 4) * 0.06">
                     <div class="aspect-[4/5] overflow-hidden rounded-3xl bg-surface-muted">
                         <AppImage v-if="member.photo" :image="member.photo" sizes="(min-width: 1024px) 25vw, 50vw" class="size-full" />
-                        <div v-else class="grid size-full place-items-center bg-gradient-to-br from-brand-600 to-ink-900 font-display text-5xl text-white/80">{{ member.name.charAt(0) }}</div>
+                        <div v-else class="grid size-full place-items-center bg-gradient-to-br from-ink-800 to-ink-950 font-display text-5xl text-brand-200">{{ member.name.charAt(0) }}</div>
                     </div>
                     <h3 class="mt-4 font-display text-lg font-semibold text-fg">{{ member.name }}</h3>
                     <p v-if="member.role" class="text-muted">{{ member.role }}</p>

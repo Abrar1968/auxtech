@@ -7,6 +7,7 @@ import {
     Building2,
     Calculator,
     CalendarClock,
+    Car,
     Camera,
     ChartColumn,
     CircleCheck,
@@ -139,6 +140,7 @@ export const icons: Record<string, Component> = {
     headphones: Headphones,
     clock: Clock,
     'circle-check': CircleCheck,
+    car: Car,
 };
 
 export function iconFor(name: string | null | undefined): Component {

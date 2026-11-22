@@ -85,7 +85,7 @@ function finished(): void {
 
 const option = (selected: boolean) => [
     'flex min-h-14 w-full items-center gap-3 rounded-2xl border px-5 py-3 text-left transition',
-    selected ? 'border-brand-600 bg-brand-50 text-fg ring-4 ring-brand-500/15 dark:bg-brand-950' : 'border-line bg-surface-raised text-fg/85 hover:border-brand-400',
+    selected ? 'border-brand-600 bg-brand-50 text-fg ring-4 ring-brand-500/15 dark:bg-brand-600/15' : 'border-line bg-surface-raised text-fg/85 hover:border-brand-400',
 ];
 </script>
 
@@ -94,7 +94,7 @@ const option = (selected: boolean) => [
 
     <section class="bg-surface pb-24">
         <div class="container-page -mt-10 max-w-3xl">
-            <div class="rounded-[2rem] border border-line bg-surface-raised p-6 shadow-[0_40px_80px_-50px_rgb(5_8_22/0.5)] sm:p-10">
+            <div class="rounded-[2rem] border border-line bg-surface-raised p-6 shadow-[0_40px_80px_-50px_rgb(20_21_24/0.5)] sm:p-10">
                 <!-- Progress -->
                 <ol class="grid grid-cols-4 gap-2" :aria-label="t('Progress')">
                     <li v-for="(label, index) in steps" :key="label">
@@ -127,7 +127,7 @@ const option = (selected: boolean) => [
                             <legend class="font-display text-2xl font-semibold text-fg">{{ t('What do you want to build?') }}</legend>
                             <div class="mt-6 grid gap-3 sm:grid-cols-2">
                                 <button v-for="solution in solutions" :key="solution.id" type="button" :class="option(answers.project === solution.name)" :aria-pressed="answers.project === solution.name" @click="answers.project = solution.name">
-                                    <span class="grid size-9 shrink-0 place-items-center rounded-xl bg-brand-600 text-white"><Icon :name="solution.icon" :size="18" /></span>
+                                    <span class="grid size-9 shrink-0 place-items-center rounded-xl bg-brand-600 text-ink-950"><Icon :name="solution.icon" :size="18" /></span>
                                     {{ solution.name }}
                                 </button>
                                 <button v-for="service in services" :key="`s${service.id}`" type="button" :class="option(answers.project === service.title)" :aria-pressed="answers.project === service.title" @click="answers.project = service.title">
@@ -147,7 +147,7 @@ const option = (selected: boolean) => [
                                     :aria-pressed="answers.features.includes(feature)"
                                     :class="[
                                         'inline-flex min-h-11 items-center gap-2 rounded-full border px-4 text-sm transition',
-                                        answers.features.includes(feature) ? 'border-brand-600 bg-brand-600 text-white' : 'border-line text-fg/85 hover:border-brand-400',
+                                        answers.features.includes(feature) ? 'border-brand-600 bg-brand-600 text-ink-950' : 'border-line text-fg/85 hover:border-brand-400',
                                     ]"
                                     @click="toggle(feature)"
                                 >

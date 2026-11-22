@@ -54,7 +54,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <a href="#main" class="sr-only z-[100] rounded-full bg-brand-600 px-5 py-3 text-white focus:not-sr-only focus:fixed focus:top-3 focus:left-3">
+    <a href="#main" class="sr-only z-[100] rounded-full bg-brand-600 px-5 py-3 text-ink-950 focus:not-sr-only focus:fixed focus:top-3 focus:left-3">
         {{ t('Skip to content') }}
     </a>
     <SiteHeader @open-menu="(menuLoaded = true), (menuOpen = true)" />

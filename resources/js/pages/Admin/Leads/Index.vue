@@ -58,16 +58,16 @@ const wa = (phone: string | null) => (phone ? `https://wa.me/${phone.replace(/\D
 
 <template>
     <PageHeader title="Leads" :description="`${leads.total} total`">
-        <div class="inline-flex rounded-lg border border-[#d5dbe7] bg-white p-0.5">
-            <button :class="['inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm', view === 'table' ? 'bg-brand-600 text-white' : 'text-[#55607a]']" @click="view = 'table'"><List :size="15" />Table</button>
-            <button :class="['inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm', view === 'board' ? 'bg-brand-600 text-white' : 'text-[#55607a]']" @click="view = 'board'"><KanbanSquare :size="15" />Board</button>
+        <div class="inline-flex rounded-lg border border-[#d9dadc] bg-white p-0.5">
+            <button :class="['inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm', view === 'table' ? 'bg-brand-600 text-ink-950' : 'text-[#5c5f66]']" @click="view = 'table'"><List :size="15" />Table</button>
+            <button :class="['inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm', view === 'board' ? 'bg-brand-600 text-ink-950' : 'text-[#5c5f66]']" @click="view = 'board'"><KanbanSquare :size="15" />Board</button>
         </div>
         <a :href="exportUrl" :class="button.secondary"><Download :size="16" />Export CSV</a>
     </PageHeader>
 
     <div class="mb-4 flex flex-wrap gap-2">
-        <button :class="['rounded-full px-3 py-1.5 text-sm', !query.status ? 'bg-[#0a0f24] text-white' : 'bg-white text-[#55607a] ring-1 ring-[#e4e8f0]']" @click="visit({ status: null })">All</button>
-        <button v-for="status in statuses" :key="status" :class="['rounded-full px-3 py-1.5 text-sm capitalize', query.status === status ? 'bg-[#0a0f24] text-white' : 'bg-white text-[#55607a] ring-1 ring-[#e4e8f0]']" @click="visit({ status })">
+        <button :class="['rounded-full px-3 py-1.5 text-sm', !query.status ? 'bg-[#232428] text-white' : 'bg-white text-[#5c5f66] ring-1 ring-[#e3e4e6]']" @click="visit({ status: null })">All</button>
+        <button v-for="status in statuses" :key="status" :class="['rounded-full px-3 py-1.5 text-sm capitalize', query.status === status ? 'bg-[#232428] text-white' : 'bg-white text-[#5c5f66] ring-1 ring-[#e3e4e6]']" @click="visit({ status })">
             {{ status }} <span class="opacity-60">{{ counts[status] ?? 0 }}</span>
         </button>
     </div>
@@ -75,7 +75,7 @@ const wa = (phone: string | null) => (phone ? `https://wa.me/${phone.replace(/\D
     <div :class="[card, 'mb-4 flex flex-wrap gap-2 p-3']">
         <label class="relative min-w-56 flex-1">
             <span class="sr-only">Search</span>
-            <Search :size="16" class="absolute top-1/2 left-3 -translate-y-1/2 text-[#9aa6c1]" />
+            <Search :size="16" class="absolute top-1/2 left-3 -translate-y-1/2 text-[#85888f]" />
             <input v-model="search" type="search" :class="[input, 'pl-9']" placeholder="Name, phone, email or company" @input="onSearch" />
         </label>
         <select :value="query.source ?? ''" :class="inputInline" aria-label="Source" @change="visit({ source: ($event.target as HTMLSelectElement).value || null })">
@@ -90,40 +90,40 @@ const wa = (phone: string | null) => (phone ? `https://wa.me/${phone.replace(/\D
 
     <div v-if="view === 'table'" :class="[card, 'overflow-x-auto']">
         <table class="w-full text-left text-sm">
-            <thead class="border-b border-[#e4e8f0] text-xs tracking-wide text-[#55607a] uppercase">
+            <thead class="border-b border-[#e3e4e6] text-xs tracking-wide text-[#5c5f66] uppercase">
                 <tr><th class="px-4 py-3 font-medium">Lead</th><th class="px-4 py-3 font-medium">Source</th><th class="px-4 py-3 font-medium">Status</th><th class="px-4 py-3 font-medium">Assigned</th><th class="px-4 py-3 font-medium">Received</th><th /></tr>
             </thead>
             <tbody>
-                <tr v-for="lead in leads.data" :key="lead.id" class="border-b border-[#f0f2f7] last:border-0 hover:bg-[#fafbfd]">
+                <tr v-for="lead in leads.data" :key="lead.id" class="border-b border-[#ececed] last:border-0 hover:bg-[#f7f7f8]">
                     <td class="px-4 py-3">
-                        <Link :href="`/admin/leads/${lead.id}`" class="font-medium hover:text-brand-600">{{ lead.name ?? 'No name' }}</Link>
-                        <p class="text-xs text-[#55607a]">{{ lead.phone }}</p>
+                        <Link :href="`/admin/leads/${lead.id}`" class="font-medium hover:text-link">{{ lead.name ?? 'No name' }}</Link>
+                        <p class="text-xs text-[#5c5f66]">{{ lead.phone }}</p>
                     </td>
-                    <td class="px-4 py-3 text-[#55607a]">{{ label(lead.source) }}<span v-if="lead.utm_source" class="block text-xs">{{ lead.utm_source }}</span></td>
+                    <td class="px-4 py-3 text-[#5c5f66]">{{ label(lead.source) }}<span v-if="lead.utm_source" class="block text-xs">{{ lead.utm_source }}</span></td>
                     <td class="px-4 py-3"><StatusBadge :value="lead.status" /></td>
-                    <td class="px-4 py-3 text-[#55607a]">{{ lead.assignee ?? '—' }}</td>
-                    <td class="px-4 py-3 text-[#55607a]">{{ timeAgo(lead.created_at) }}</td>
+                    <td class="px-4 py-3 text-[#5c5f66]">{{ lead.assignee ?? '—' }}</td>
+                    <td class="px-4 py-3 text-[#5c5f66]">{{ timeAgo(lead.created_at) }}</td>
                     <td class="px-4 py-3 text-right"><a v-if="wa(lead.phone)" :href="wa(lead.phone)!" target="_blank" rel="noopener" :class="button.ghost" aria-label="Open WhatsApp chat"><MessageCircle :size="16" class="text-whatsapp-dark" /></a></td>
                 </tr>
-                <tr v-if="!leads.data.length"><td colspan="6" class="px-4 py-16 text-center text-[#55607a]">No leads match.</td></tr>
+                <tr v-if="!leads.data.length"><td colspan="6" class="px-4 py-16 text-center text-[#5c5f66]">No leads match.</td></tr>
             </tbody>
         </table>
-        <nav v-if="leads.links.length > 3" class="flex flex-wrap justify-end gap-1 border-t border-[#e4e8f0] p-3 text-sm">
+        <nav v-if="leads.links.length > 3" class="flex flex-wrap justify-end gap-1 border-t border-[#e3e4e6] p-3 text-sm">
             <Pagination :links="leads.links" />
         </nav>
     </div>
 
     <div v-else class="flex gap-4 overflow-x-auto pb-4">
         <section v-for="column in board" :key="column.status" class="w-72 shrink-0 rounded-xl bg-[#eef1f6] p-2" @dragover.prevent @drop="moveTo(column.status)">
-            <h2 class="flex items-center justify-between px-2 py-2 text-sm font-semibold capitalize">{{ column.status }}<span class="text-[#55607a]">{{ column.leads.length }}</span></h2>
+            <h2 class="flex items-center justify-between px-2 py-2 text-sm font-semibold capitalize">{{ column.status }}<span class="text-[#5c5f66]">{{ column.leads.length }}</span></h2>
             <ul class="grid min-h-24 gap-2">
-                <li v-for="lead in column.leads" :key="lead.id" draggable="true" class="cursor-grab rounded-lg border border-[#e4e8f0] bg-white p-3 shadow-sm active:cursor-grabbing" @dragstart="dragged = lead">
-                    <Link :href="`/admin/leads/${lead.id}`" class="font-medium hover:text-brand-600">{{ lead.name ?? 'No name' }}</Link>
-                    <p class="text-xs text-[#55607a]">{{ lead.phone }}</p>
-                    <p class="mt-2 flex justify-between text-xs text-[#9aa6c1]"><span>{{ label(lead.source) }}</span><span>{{ timeAgo(lead.created_at) }}</span></p>
+                <li v-for="lead in column.leads" :key="lead.id" draggable="true" class="cursor-grab rounded-lg border border-[#e3e4e6] bg-white p-3 shadow-sm active:cursor-grabbing" @dragstart="dragged = lead">
+                    <Link :href="`/admin/leads/${lead.id}`" class="font-medium hover:text-link">{{ lead.name ?? 'No name' }}</Link>
+                    <p class="text-xs text-[#5c5f66]">{{ lead.phone }}</p>
+                    <p class="mt-2 flex justify-between text-xs text-[#85888f]"><span>{{ label(lead.source) }}</span><span>{{ timeAgo(lead.created_at) }}</span></p>
                 </li>
             </ul>
         </section>
     </div>
-    <p v-if="view === 'board'" class="text-xs text-[#55607a]">Drag a card to another column to change its status. The board shows the current page of results.</p>
+    <p v-if="view === 'board'" class="text-xs text-[#5c5f66]">Drag a card to another column to change its status. The board shows the current page of results.</p>
 </template>

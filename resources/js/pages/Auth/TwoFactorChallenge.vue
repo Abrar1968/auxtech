@@ -19,7 +19,7 @@ function submit(): void {
             <input v-else v-model="form.recovery_code" autocomplete="off" aria-label="Recovery code" :class="input" />
             <p v-for="error in form.errors" :key="error" role="alert" class="text-sm text-red-600">{{ error }}</p>
             <button type="submit" :disabled="form.processing" :class="[button.primary, 'min-h-11 w-full']">Continue</button>
-            <button type="button" class="text-sm text-brand-600 hover:underline" @click="recovery = !recovery">{{ recovery ? 'Use an authenticator code' : 'Use a recovery code' }}</button>
+            <button type="button" class="text-sm text-link hover:underline" @click="recovery = !recovery">{{ recovery ? 'Use an authenticator code' : 'Use a recovery code' }}</button>
         </form>
     </AuthShell>
 </template>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ArrowRight, Check } from '@lucide/vue';
 import { motion, useScroll, useTransform } from 'motion-v';
-import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import WhatsAppButton from '@/components/site/WhatsAppButton.vue';
 import Button from '@/components/ui/Button.vue';
 import { useShared } from '@/composables/useSite';
@@ -43,28 +43,38 @@ const ease = [0.16, 1, 0.3, 1] as const;
 const ticker = computed(() => [...props.capabilities, ...props.capabilities]);
 
 let observer: IntersectionObserver | undefined;
+const ready = ref(false);
+
+// Fade the video in only once enough is buffered to play through, so it never
+// appears and then freezes while the rest downloads; until then the poster shows.
+function start() {
+    const video = videoEl.value;
+    if (!video || ready.value) return;
+    ready.value = true;
+    video.play().then(() => (playing.value = true)).catch(() => {});
+    // Pause while the hero is off screen; it costs nothing to keep it loaded.
+    observer = new IntersectionObserver(([entry]) => (entry.isIntersecting ? video.play().catch(() => {}) : video.pause()));
+    observer.observe(section.value!);
+}
 
 onMounted(() => {
-    const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+    const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
     const allowed =
         !!(props.video || props.videoWebm) &&
         matchMedia('(min-width: 768px)').matches &&
         !matchMedia('(prefers-reduced-motion: reduce)').matches &&
-        !connection?.saveData;
+        !connection?.saveData &&
+        !['slow-2g', '2g'].includes(connection?.effectiveType ?? '');
 
     if (!allowed) {
         return;
     }
 
-    showVideo.value = true;
-    nextTick(() => {
-        const video = videoEl.value;
-        if (!video) return;
-        video.play().catch(() => {});
-        // Pause while the hero is off screen; it costs nothing to keep it loaded.
-        observer = new IntersectionObserver(([entry]) => (entry.isIntersecting ? video.play().catch(() => {}) : video.pause()));
-        observer.observe(section.value!);
-    });
+    // Start downloading after the page has loaded, so the video never competes
+    // with the page's own scripts, fonts and images.
+    const load = () => setTimeout(() => (showVideo.value = true), 300);
+    if (document.readyState === 'complete') load();
+    else addEventListener('load', load, { once: true });
 });
 
 onBeforeUnmount(() => observer?.disconnect());
@@ -81,16 +91,17 @@ onBeforeUnmount(() => observer?.disconnect());
                 class="absolute inset-0 size-full object-cover object-right transition-opacity duration-1000"
                 :class="playing ? 'opacity-100' : 'opacity-0'"
                 :poster="poster ?? undefined"
-                autoplay
                 muted
                 loop
                 playsinline
                 preload="auto"
                 disablepictureinpicture
-                @playing="playing = true"
+                @canplaythrough="start"
+                @playing="ready && (playing = true)"
             >
-                <source v-if="videoWebm" :src="videoWebm" type="video/webm" />
+                <!-- H.264 first: hardware-decoded almost everywhere, so it plays without stutter. -->
                 <source v-if="video" :src="video" type="video/mp4" />
+                <source v-if="videoWebm" :src="videoWebm" type="video/webm" />
             </video>
         </motion.div>
         <div aria-hidden="true" class="absolute inset-0 -z-10 bg-gradient-to-r from-ink-950 via-ink-950/75 to-ink-950/5" />
@@ -106,7 +117,7 @@ onBeforeUnmount(() => observer?.disconnect());
                     :transition="{ duration: 0.6, ease }"
                     class="inline-flex items-center gap-2.5 font-mono text-xs tracking-[0.18em] text-brand-200 uppercase sm:text-[0.8rem]"
                 >
-                    <span class="size-1.5 animate-pulse rounded-full bg-cyan-accent" />[ {{ eyebrow }} ]
+                    <span class="size-1.5 animate-pulse rounded-full bg-brand-600" />[ {{ eyebrow }} ]
                 </motion.p>
 
                 <h1 class="mt-6 font-display text-[2.75rem] leading-[1.05] font-semibold tracking-tight sm:text-6xl xl:text-7xl lang-bn:leading-[1.35]">

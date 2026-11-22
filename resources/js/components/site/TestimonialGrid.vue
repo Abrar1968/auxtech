@@ -23,7 +23,7 @@ const { t } = useI18n();
                     <AppImage v-if="item.avatar" :image="item.avatar" sizes="48px" class="size-12 rounded-full" />
                     <span
                         v-else
-                        class="grid size-12 place-items-center rounded-full bg-brand-50 font-display font-semibold text-brand-700 dark:bg-brand-950 dark:text-brand-200"
+                        class="grid size-12 place-items-center rounded-full bg-brand-50 font-display font-semibold text-brand-900 dark:bg-brand-600/15 dark:text-brand-200"
                     >
                         {{ item.author_name.charAt(0) }}
                     </span>

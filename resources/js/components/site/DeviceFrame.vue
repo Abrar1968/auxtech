@@ -31,7 +31,7 @@ function host(url: string): string {
                 v-if="url"
                 :class="[
                     'ml-2 truncate rounded-md px-2.5 py-0.5 text-[11px] font-medium',
-                    dark ? 'bg-white/8 text-white/60' : 'bg-surface text-muted',
+                    dark ? 'bg-white/8 text-white/75' : 'bg-surface text-muted',
                 ]"
             >
                 {{ host(url) }}
@@ -50,7 +50,7 @@ function host(url: string): string {
                 <div
                     :class="[
                         'absolute inset-0 grid place-items-center bg-gradient-to-br',
-                        dark ? 'from-ink-800 via-brand-950 to-ink-900 text-white/50' : 'from-brand-50 via-surface to-surface-muted text-muted',
+                        dark ? 'from-ink-800 via-ink-800 to-ink-900 text-white/65' : 'from-brand-50 via-surface to-surface-muted text-muted',
                     ]"
                 >
                     <span v-if="url" class="font-display text-lg font-semibold tracking-tight">{{ host(url) }}</span>

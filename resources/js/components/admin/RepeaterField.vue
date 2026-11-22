@@ -36,12 +36,12 @@ function update(index: number, name: string, value: unknown): void {
 
 <template>
     <fieldset>
-        <legend class="mb-1.5 text-sm font-medium text-[#0a0f24]">{{ field.label }}</legend>
-        <p v-if="field.help" class="mb-2 text-xs text-[#55607a]">{{ field.help }}</p>
+        <legend class="mb-1.5 text-sm font-medium text-[#232428]">{{ field.label }}</legend>
+        <p v-if="field.help" class="mb-2 text-xs text-[#5c5f66]">{{ field.help }}</p>
         <ol class="grid gap-2">
-            <li v-for="(row, index) in rows ?? []" :key="index" class="rounded-lg border border-[#e4e8f0] bg-[#fafbfd] p-3">
+            <li v-for="(row, index) in rows ?? []" :key="index" class="rounded-lg border border-[#e3e4e6] bg-[#f7f7f8] p-3">
                 <div class="mb-2 flex items-center justify-between">
-                    <span class="text-xs font-semibold text-[#55607a]">#{{ index + 1 }}</span>
+                    <span class="text-xs font-semibold text-[#5c5f66]">#{{ index + 1 }}</span>
                     <div class="flex gap-0.5">
                         <button type="button" :class="button.ghost" :disabled="index === 0" aria-label="Move up" @click="move(index, -1)"><ArrowUp :size="14" /></button>
                         <button type="button" :class="button.ghost" :disabled="index === (rows?.length ?? 0) - 1" aria-label="Move down" @click="move(index, 1)"><ArrowDown :size="14" /></button>

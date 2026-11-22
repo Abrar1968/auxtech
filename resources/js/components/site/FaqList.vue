@@ -15,7 +15,7 @@ defineProps<{ faqs: Faq[] }>();
                 >
                     {{ faq.question }}
                     <span
-                        class="grid size-9 shrink-0 place-items-center rounded-full border border-line transition duration-300 group-data-[state=open]:rotate-45 group-data-[state=open]:border-brand-600 group-data-[state=open]:bg-brand-600 group-data-[state=open]:text-white"
+                        class="grid size-9 shrink-0 place-items-center rounded-full border border-line transition duration-300 group-data-[state=open]:rotate-45 group-data-[state=open]:border-brand-600 group-data-[state=open]:bg-brand-600 group-data-[state=open]:text-ink-950"
                     >
                         <Plus :size="18" aria-hidden="true" />
                     </span>

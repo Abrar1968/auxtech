@@ -71,7 +71,7 @@ class PageController extends Controller
             'intro' => page_intro('about'),
             'team' => TeamMemberResource::collection(TeamMember::query()->where('is_active', true)->ordered()->with('media')->get())->resolve(),
             'stats' => StatResource::collection(Stat::query()->where('is_active', true)->ordered()->get())->resolve(),
-            'projectCount' => Project::query()->published()->count(),
+            'projectCount' => Project::query()->published()->where('type', '<>', 'demo')->count(),
             'industries' => IndustryResource::collection(Industry::query()->ordered()
                 ->withCount(['projects' => fn ($q) => $q->published()])->get()->where('projects_count', '>', 0)->values())->resolve(),
             'story' => setting_t('about.story'),
@@ -116,7 +116,7 @@ class PageController extends Controller
         return Inertia::render('Site/Estimate', [
             'intro' => page_intro('estimate'),
             'services' => Service::query()->published()->ordered()->get()->map(fn (Service $s) => ['id' => $s->id, 'title' => $s->title])->all(),
-            'solutions' => Solution::query()->published()->ordered()->with('featureGroups.features')->get()
+            'solutions' => Solution::query()->published()->ordered()->with('featureGroups.features.media')->get()
                 ->map(fn (Solution $s) => (new SolutionResource($s))->resolve())->all(),
         ]);
     }

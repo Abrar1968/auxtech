@@ -12,31 +12,36 @@
 
 /*
  | Design tokens. Specification: docs/03-FRONTEND-DESIGN.md §3.
- | Brand scale is built around the logo colour #0145FF (brand-600).
+ | Palette: Gray #2B2D31 (ink-950, dark sections), Silver #D9DADC (lines and
+ | quiet surfaces) and Yellow #FFC93C (brand-600, the accent). Yellow is a
+ | fill or an accent on dark; as text on light pages use text-link.
  */
 @theme {
     --font-display: 'Sora Variable', 'Anek Bangla Variable', ui-sans-serif, system-ui, sans-serif;
     --font-sans: 'Inter Variable', 'Anek Bangla Variable', ui-sans-serif, system-ui, sans-serif;
 
-    --color-brand-50: #eef4ff;
-    --color-brand-100: #d9e6ff;
-    --color-brand-200: #bcd2ff;
-    --color-brand-300: #8eb4ff;
-    --color-brand-400: #5988ff;
-    --color-brand-500: #2f61ff;
-    --color-brand-600: #0145ff;
-    --color-brand-700: #0034d6;
-    --color-brand-800: #062ea8;
-    --color-brand-900: #0b2c80;
-    --color-brand-950: #07184d;
+    --color-brand-50: #fffaeb;
+    --color-brand-100: #fff2c9;
+    --color-brand-200: #ffe8a1;
+    --color-brand-300: #ffdd75;
+    --color-brand-400: #ffd254;
+    --color-brand-500: #ffcd47;
+    --color-brand-600: #ffc93c;
+    --color-brand-700: #f0b21a;
+    --color-brand-800: #b88300;
+    --color-brand-900: #6b4b00;
+    --color-brand-950: #3d2e0a;
 
-    --color-ink-950: #050816;
-    --color-ink-900: #0a0f24;
-    --color-ink-800: #111a36;
-    --color-ink-700: #1c2647;
+    --color-ink-950: #2b2d31;
+    --color-ink-900: #313338;
+    --color-ink-800: #3a3c42;
+    --color-ink-700: #4a4d55;
 
-    --color-cyan-accent: #22d3ee;
-    --color-violet-accent: #7c5cff;
+    --color-silver: #d9dadc;
+
+    /* Secondary accents (names kept from the first palette). */
+    --color-cyan-accent: #ffe8a1;
+    --color-violet-accent: #d9dadc;
 
     --color-whatsapp: #25d366;
     --color-whatsapp-dark: #128c7e;
@@ -99,33 +104,37 @@
     --color-fg: var(--text);
     --color-muted: var(--text-muted);
     --color-line: var(--line);
-    /* Brand blue as text on a page surface; lighter in the dark theme to keep 4.5:1 contrast. */
+    /* Brand colour as text on a page surface: deep amber on light, yellow on dark (4.5:1 either way). */
     --color-link: var(--link);
+    /* Focus rings and focused borders: gray on light, yellow on dark (3:1 against the page). */
+    --color-focus: var(--focus);
 }
 
 @layer base {
     :root {
         --surface: #ffffff;
-        --surface-muted: #f5f7fb;
+        --surface-muted: #f3f3f4;
         --surface-raised: #ffffff;
-        --text: #0a0f24;
-        --text-muted: #55607a;
-        --line: #e4e8f0;
-        --link: #0145ff;
+        --text: #232428;
+        --text-muted: #5c5f66;
+        --line: #d9dadc;
+        --link: #8a6100;
+        --focus: #2b2d31;
         --glass-bg: rgb(255 255 255 / 0.72);
-        --glass-border: rgb(10 15 36 / 0.08);
+        --glass-border: rgb(43 45 49 / 0.1);
         color-scheme: light;
     }
 
     [data-theme='dark'] {
-        --surface: #050816;
-        --surface-muted: #0a0f24;
-        --surface-raised: #111a36;
-        --text: #f4f6fb;
-        --text-muted: #9aa6c1;
-        --line: #1f2a4a;
-        --link: #8eb4ff;
-        --glass-bg: rgb(10 15 36 / 0.66);
+        --surface: #2b2d31;
+        --surface-muted: #26282c;
+        --surface-raised: #313338;
+        --text: #f2f3f5;
+        --text-muted: #b5bac1;
+        --line: #42444a;
+        --link: #ffc93c;
+        --focus: #ffc93c;
+        --glass-bg: rgb(43 45 49 / 0.7);
         --glass-border: rgb(255 255 255 / 0.1);
         color-scheme: dark;
     }
@@ -166,14 +175,14 @@
     }
 
     :focus-visible {
-        outline: 2px solid var(--color-brand-500);
+        outline: 2px solid var(--focus);
         outline-offset: 2px;
         border-radius: 6px;
     }
 
     ::selection {
         background: var(--color-brand-600);
-        color: white;
+        color: var(--color-ink-950);
     }
 
     /* Inputs at 16px stop iOS from zooming on focus. */
@@ -241,7 +250,7 @@ html:not(.js) [data-shell] {
 }
 
 @utility text-gradient {
-    background: linear-gradient(100deg, #ffffff 10%, var(--color-brand-300) 55%, var(--color-cyan-accent) 100%);
+    background: linear-gradient(100deg, #ffffff 10%, var(--color-brand-200) 50%, var(--color-brand-600) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -283,7 +292,7 @@ html:not(.js) [data-shell] {
         margin: 0.35em 0;
     }
     & :where(a) {
-        color: var(--color-brand-600);
+        color: var(--link);
         text-decoration: underline;
         text-underline-offset: 3px;
     }
@@ -291,7 +300,7 @@ html:not(.js) [data-shell] {
         font-weight: 600;
     }
     & :where(blockquote) {
-        border-left: 3px solid var(--color-brand-500);
+        border-left: 3px solid var(--color-brand-600);
         padding-left: 1em;
         color: var(--text-muted);
         font-style: italic;
@@ -308,7 +317,7 @@ html:not(.js) [data-shell] {
     }
     & :where(pre) {
         background: var(--color-ink-950);
-        color: #e6e9f2;
+        color: #f2f3f5;
         border-radius: 0.75rem;
         padding: 1em;
         overflow-x: auto;

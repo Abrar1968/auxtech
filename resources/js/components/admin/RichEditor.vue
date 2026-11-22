@@ -34,12 +34,12 @@ function setLink(): void {
     else editor.value?.chain().focus().setLink({ href: url }).run();
 }
 
-const tool = (active: boolean) => ['grid size-8 place-items-center rounded-md transition', active ? 'bg-brand-600 text-white' : 'text-[#55607a] hover:bg-[#f0f2f7]'];
+const tool = (active: boolean) => ['grid size-8 place-items-center rounded-md transition', active ? 'bg-brand-600 text-ink-950' : 'text-[#5c5f66] hover:bg-[#ececed]'];
 </script>
 
 <template>
-    <div :class="['overflow-hidden rounded-lg border bg-white focus-within:border-brand-500 focus-within:ring-3 focus-within:ring-brand-500/15', invalid ? 'border-red-400' : 'border-[#d5dbe7]']">
-        <div v-if="editor" class="flex flex-wrap gap-0.5 border-b border-[#e4e8f0] bg-[#fafbfd] p-1">
+    <div :class="['overflow-hidden rounded-lg border bg-white focus-within:border-focus focus-within:ring-3 focus-within:ring-brand-600/30', invalid ? 'border-red-400' : 'border-[#d9dadc]']">
+        <div v-if="editor" class="flex flex-wrap gap-0.5 border-b border-[#e3e4e6] bg-[#f7f7f8] p-1">
             <button type="button" :class="tool(editor.isActive('heading', { level: 2 }))" title="Heading" @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"><Heading2 :size="16" /></button>
             <button type="button" :class="tool(editor.isActive('heading', { level: 3 }))" title="Subheading" @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"><Heading3 :size="16" /></button>
             <button type="button" :class="tool(editor.isActive('bold'))" title="Bold" @click="editor.chain().focus().toggleBold().run()"><Bold :size="16" /></button>
@@ -48,7 +48,7 @@ const tool = (active: boolean) => ['grid size-8 place-items-center rounded-md tr
             <button type="button" :class="tool(editor.isActive('orderedList'))" title="Numbered list" @click="editor.chain().focus().toggleOrderedList().run()"><ListOrdered :size="16" /></button>
             <button type="button" :class="tool(editor.isActive('blockquote'))" title="Quote" @click="editor.chain().focus().toggleBlockquote().run()"><Quote :size="16" /></button>
             <button type="button" :class="tool(editor.isActive('link'))" title="Link" @click="setLink"><Link2 :size="16" /></button>
-            <span class="mx-1 w-px bg-[#e4e8f0]" />
+            <span class="mx-1 w-px bg-[#e3e4e6]" />
             <button type="button" :class="tool(false)" title="Undo" @click="editor.chain().focus().undo().run()"><Undo2 :size="16" /></button>
             <button type="button" :class="tool(false)" title="Redo" @click="editor.chain().focus().redo().run()"><Redo2 :size="16" /></button>
         </div>

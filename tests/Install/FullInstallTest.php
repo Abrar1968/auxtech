@@ -45,13 +45,14 @@ it('installs: tables, starter content, admin account, mail password and lock fil
     expect(Installation::done())->toBeTrue()
         ->and($admin->hasRole('Super Admin'))->toBeTrue()
         ->and(Hash::check('a-long-password', $admin->password))->toBeTrue()
-        ->and(Project::query()->count())->toBe(33)
+        ->and(Project::query()->count())->toBe(38)
         ->and(Project::query()->first()->getFirstMedia('cover'))->toBeNull() // images are uploaded from the image pack, not seeded
         ->and(Project::query()->first()->getTranslation('summary', 'en'))->not->toBeEmpty()
         ->and(DB::table('solution_features')->count())->toBe(23)
         ->and(DB::table('stats')->count())->toBe(0)
         ->and(DB::table('testimonials')->count())->toBe(0)
-        ->and(DB::table('pricing_plans')->count())->toBe(0)
+        ->and(DB::table('pricing_plans')->count())->toBe(3) // engagement packages, never with a seeded price
+        ->and(DB::table('pricing_plans')->whereNotNull('price')->count())->toBe(0)
         ->and(setting('mail.password'))->toBe('abcdefghijklmnop')
         ->and($env)->toContain('APP_ENV=production')->toContain('APP_DEBUG=false')->toContain('APP_KEY=base64:')
         ->toContain('APP_URL=https://auxtechbd.com')->not->toContain('APP_INSTALLED');

@@ -9,7 +9,7 @@ import { computed } from 'vue';
 const props = withDefaults(
     defineProps<{
         href?: string;
-        variant?: 'primary' | 'whatsapp' | 'secondary' | 'glass' | 'ghost' | 'danger';
+        variant?: 'primary' | 'dark' | 'whatsapp' | 'secondary' | 'glass' | 'ghost' | 'danger';
         size?: 'sm' | 'md' | 'lg';
         type?: 'button' | 'submit';
         external?: boolean;
@@ -34,9 +34,10 @@ const classes = computed(() => [
     }[props.size],
     {
         primary:
-            'bg-brand-600 text-white shadow-[0_8px_30px_-8px_rgb(1_69_255/0.7)] hover:bg-brand-500 hover:shadow-[0_10px_40px_-8px_rgb(1_69_255/0.9)]',
+            'bg-brand-600 text-ink-950 shadow-[0_8px_30px_-8px_rgb(255_201_60/0.7)] hover:bg-brand-400 hover:shadow-[0_10px_40px_-8px_rgb(255_201_60/0.9)]',
         whatsapp:
             'bg-whatsapp text-ink-950 shadow-[0_8px_30px_-8px_rgb(37_211_102/0.65)] hover:brightness-105 hover:shadow-[0_10px_40px_-6px_rgb(37_211_102/0.8)]',
+        dark: 'bg-ink-950 text-white hover:bg-ink-800',
         secondary: 'border border-line bg-surface-raised text-fg hover:border-brand-400 hover:text-link',
         glass: 'glass-dark text-white hover:bg-white/12',
         ghost: 'text-fg hover:bg-surface-muted',

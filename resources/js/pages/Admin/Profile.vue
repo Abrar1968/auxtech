@@ -54,17 +54,17 @@ if (props.twoFactor.enabled && !props.twoFactor.confirmed) void loadSetup();
     <div class="grid max-w-3xl gap-6">
         <section :class="[card, 'p-5 sm:p-6']">
             <div class="flex items-start gap-3">
-                <ShieldCheck :size="22" :class="twoFactor.confirmed ? 'text-green-600' : 'text-[#9aa6c1]'" />
+                <ShieldCheck :size="22" :class="twoFactor.confirmed ? 'text-green-600' : 'text-[#85888f]'" />
                 <div class="flex-1">
                     <h2 class="font-semibold">Two-factor sign-in</h2>
-                    <p class="mt-1 text-sm text-[#55607a]">
+                    <p class="mt-1 text-sm text-[#5c5f66]">
                         {{ twoFactor.confirmed ? 'On. You enter a code from your authenticator app when you sign in.' : 'Off. Turn it on so a stolen password is not enough to get in.' }}
                     </p>
                     <p v-if="twoFactor.required && !twoFactor.confirmed" class="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-900">Your organisation requires this before you can use the admin panel.</p>
                 </div>
             </div>
 
-            <div v-if="qr" class="mt-5 grid gap-4 rounded-lg bg-[#fafbfd] p-4 ring-1 ring-[#e4e8f0] sm:grid-cols-[auto_1fr]">
+            <div v-if="qr" class="mt-5 grid gap-4 rounded-lg bg-[#f7f7f8] p-4 ring-1 ring-[#e3e4e6] sm:grid-cols-[auto_1fr]">
                 <div class="size-44 rounded-lg bg-white p-2" v-html="qr" />
                 <form class="grid content-start gap-3" @submit.prevent="confirmCode">
                     <p class="text-sm">1. Scan this code with Google Authenticator, Microsoft Authenticator or a similar app.<br />2. Enter the 6-digit code it shows.</p>
@@ -75,9 +75,9 @@ if (props.twoFactor.enabled && !props.twoFactor.confirmed) void loadSetup();
                 </form>
             </div>
 
-            <div v-if="codes.length" class="mt-5 rounded-lg bg-[#fafbfd] p-4 ring-1 ring-[#e4e8f0]">
+            <div v-if="codes.length" class="mt-5 rounded-lg bg-[#f7f7f8] p-4 ring-1 ring-[#e3e4e6]">
                 <p class="text-sm font-medium">Recovery codes</p>
-                <p class="text-xs text-[#55607a]">Keep these somewhere safe. Each one signs you in once if you lose your phone.</p>
+                <p class="text-xs text-[#5c5f66]">Keep these somewhere safe. Each one signs you in once if you lose your phone.</p>
                 <ul class="mt-3 grid grid-cols-2 gap-1 font-mono text-sm"><li v-for="code in codes" :key="code">{{ code }}</li></ul>
             </div>
 

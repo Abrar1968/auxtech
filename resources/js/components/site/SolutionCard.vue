@@ -13,10 +13,10 @@ const { tc } = useI18n();
     <Link
         :href="solution.url"
         prefetch="hover"
-        class="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-line bg-surface-raised p-7 transition duration-500 ease-out-expo hover:-translate-y-1 hover:border-brand-300 hover:shadow-[0_30px_60px_-30px_rgb(1_69_255/0.4)]"
+        class="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-line bg-surface-raised p-7 transition duration-500 ease-out-expo hover:-translate-y-1 hover:border-brand-300 hover:shadow-[0_30px_60px_-30px_rgb(255_201_60/0.4)]"
     >
         <div class="flex items-start justify-between">
-            <span class="grid size-12 place-items-center rounded-2xl bg-gradient-to-br from-brand-500 to-brand-700 text-white shadow-[0_10px_30px_-10px_rgb(1_69_255)]">
+            <span class="grid size-12 place-items-center rounded-2xl bg-gradient-to-br from-brand-500 to-brand-700 text-ink-950 shadow-[0_10px_30px_-10px_rgb(255_201_60)]">
                 <Icon :name="solution.icon" :size="22" />
             </span>
             <ArrowUpRight :size="20" class="text-muted transition group-hover:rotate-45 group-hover:text-link" aria-hidden="true" />

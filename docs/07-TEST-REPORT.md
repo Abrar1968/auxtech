@@ -3,6 +3,17 @@
 **Release tested:** 1.2.0 · **Date:** 17 Nov 2026 · **Tester:** Senior QA (Phase 3)
 **Plan:** [`04-TESTING.md`](04-TESTING.md) · **Traceability:** [`06-TRACEABILITY.md`](06-TRACEABILITY.md)
 
+## Release 1.4.0 (22 Nov 2026)
+
+New Gray `#2B2D31` / Silver `#D9DADC` / Yellow `#FFC93C` palette (logo, favicon and app icons recoloured), smoother hero video with real project screenshots in the phone, Contact in the top menu, Work filter bar fixed, real Auxtech Ecommerce module screenshots (taken read-only from the demo admin panels, customer data blurred, saved keys masked), professional pricing packages without invented prices, and five new projects: BSM Cleaning Services (Dubai), Trikal House, UniSupport, and the XMens BD and TNMC demos. Demo projects now describe their admin panels.
+
+| Check | Result |
+|---|---|
+| Backend tests (Pest) | 220 passed on SQLite and MariaDB (seed command covers module screenshots and packages) |
+| Browser tests (Playwright) | 83 passed, 55 skipped by design; axe WCAG 2.2 AA clean in light and dark after raising faint white text to 65% on the new gray |
+| SEO crawl | 0 errors after giving the Bangla "Corporate Websites" service its own title; title-length warnings unchanged |
+| Hero video | H.264 1.1 MB (High profile, keyframe every 2 s, bit rate capped at 1.1 Mbit/s), VP9 fallback; loads after the page, fades in on `canplaythrough` |
+
 ## Release 1.3.0 (18 Nov 2026)
 
 Rebrand as a software development company, full content seed (33 projects, services, platforms, industries, technologies, FAQs), generated home background video, client logo carousel, scroll-driven process and stacked platform cards, separate image pack.

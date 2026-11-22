@@ -12,34 +12,37 @@
   @font-face { font-family: Inter; src: url('../../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2') format('woff2'); font-weight: 100 900; }
   @font-face { font-family: Sora; src: url('../../node_modules/@fontsource-variable/sora/files/sora-latin-wght-normal.woff2') format('woff2'); font-weight: 100 900; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { width: 1920px; height: 1080px; overflow: hidden; background: #050816; font-family: Inter, sans-serif; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: #26282c; font-family: Inter, sans-serif; }
   #stage { position: absolute; inset: 0; overflow: hidden; }
   canvas { position: absolute; inset: 0; }
   .glow { position: absolute; border-radius: 50%; filter: blur(90px); }
-  .panel { position: absolute; border-radius: 22px; background: rgba(17, 26, 54, 0.62); border: 1px solid rgba(255, 255, 255, 0.10);
-           box-shadow: 0 40px 120px -40px rgba(1, 69, 255, 0.55), inset 0 1px 0 rgba(255,255,255,0.06); overflow: hidden; transform-style: preserve-3d; }
+  .panel { position: absolute; border-radius: 22px; background: rgba(49, 51, 56, 0.74); border: 1px solid rgba(255, 255, 255, 0.10);
+           box-shadow: 0 40px 120px -40px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255,255,255,0.06); overflow: hidden; transform-style: preserve-3d; }
   .bar { height: 44px; display: flex; align-items: center; gap: 9px; padding: 0 18px; border-bottom: 1px solid rgba(255,255,255,0.07); }
   .dot { width: 11px; height: 11px; border-radius: 50%; }
   .tab { margin-left: 14px; color: rgba(255,255,255,0.55); font-size: 15px; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; }
-  #code pre { font-family: ui-monospace, 'DejaVu Sans Mono', Menlo, monospace; font-size: 19px; line-height: 31px; padding: 18px 24px; color: #c9d4f2; white-space: pre; }
-  .k { color: #8eb4ff; } .s { color: #5eead4; } .f { color: #f0abfc; } .c { color: #55607a; } .n { color: #fbbf24; }
-  .caret { display: inline-block; width: 10px; height: 22px; background: #8eb4ff; vertical-align: -4px; }
+  #code pre { font-family: ui-monospace, 'DejaVu Sans Mono', Menlo, monospace; font-size: 19px; line-height: 31px; padding: 18px 24px; color: #d9dadc; white-space: pre; }
+  .k { color: #ffc93c; } .s { color: #ffe8a1; } .f { color: #ffffff; } .c { color: #85888f; } .n { color: #ffc93c; }
+  .caret { display: inline-block; width: 10px; height: 22px; background: #ffc93c; vertical-align: -4px; }
   .label { color: rgba(255,255,255,0.5); font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; }
   .title { color: #fff; font-family: Sora, sans-serif; font-weight: 600; font-size: 22px; }
   .toast { position: absolute; display: flex; align-items: center; gap: 14px; padding: 16px 22px 16px 16px; border-radius: 18px;
-           background: rgba(10, 15, 36, 0.78); border: 1px solid rgba(255,255,255,0.12); color: #fff; font-size: 18px; white-space: nowrap;
+           background: rgba(35, 36, 40, 0.86); border: 1px solid rgba(255,255,255,0.12); color: #fff; font-size: 18px; white-space: nowrap;
            box-shadow: 0 24px 60px -24px rgba(0,0,0,0.8); }
   .ico { width: 38px; height: 38px; border-radius: 11px; display: grid; place-items: center; font-weight: 700; font-size: 18px; }
   .sub { color: rgba(255,255,255,0.5); font-size: 14px; margin-top: 2px; }
-  #veil { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(5,8,22,0.92) 0%, rgba(5,8,22,0.55) 34%, rgba(5,8,22,0) 62%),
-          linear-gradient(0deg, rgba(5,8,22,0.85) 0%, rgba(5,8,22,0) 22%); }
+  #veil { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(43,45,49,0.94) 0%, rgba(43,45,49,0.58) 34%, rgba(43,45,49,0) 62%),
+          linear-gradient(0deg, rgba(43,45,49,0.88) 0%, rgba(43,45,49,0) 22%); }
+  #phoneScreen { position: absolute; left: 10px; top: 10px; width: 256px; height: 436px; border-radius: 30px; overflow: hidden; background: #1e1f22; }
+  #phoneScreen img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; transform-origin: 50% 0; }
+  #notch { position: absolute; left: 50%; top: 16px; width: 64px; height: 17px; margin-left: -32px; border-radius: 12px; background: #1e1f22; z-index: 2; }
 </style>
 </head>
 <body>
 <div id="stage">
-  <div class="glow" id="g1" style="width:900px;height:900px;background:#0145ff;opacity:.38"></div>
-  <div class="glow" id="g2" style="width:700px;height:700px;background:#7c5cff;opacity:.26"></div>
-  <div class="glow" id="g3" style="width:460px;height:460px;background:#22d3ee;opacity:.16"></div>
+  <div class="glow" id="g1" style="width:900px;height:900px;background:#ffc93c;opacity:.10"></div>
+  <div class="glow" id="g2" style="width:700px;height:700px;background:#d9dadc;opacity:.10"></div>
+  <div class="glow" id="g3" style="width:460px;height:460px;background:#ffc93c;opacity:.09"></div>
   <canvas id="net" width="1920" height="1080"></canvas>
 
   <div class="panel" id="code" style="width:760px;height:430px;">
@@ -53,14 +56,14 @@
     <canvas id="chart" width="504" height="210" style="position:absolute;left:28px;bottom:22px"></canvas>
   </div>
 
-  <div class="panel" id="phone" style="width:270px;height:540px;border-radius:40px;padding:18px;">
-    <div style="width:90px;height:22px;border-radius:12px;background:#050816;margin:0 auto 18px"></div>
-    <div id="phoneCards" style="position:absolute;left:0;right:0;top:56px;bottom:18px;overflow:hidden"></div>
+  <div class="panel" id="phone" style="width:276px;height:456px;border-radius:40px;background:#1e1f22;border-color:rgba(255,255,255,0.16)">
+    <div id="phoneScreen"><div id="phoneCards" style="position:absolute;inset:0"></div></div>
+    <div id="notch"></div>
   </div>
 
   <div class="toast" id="t1"><div class="ico" style="background:#16a34a33;color:#4ade80">✓</div><div>Tests passed<div class="sub">CI pipeline · main</div></div></div>
-  <div class="toast" id="t2"><div class="ico" style="background:#0145ff40;color:#8eb4ff">↑</div><div>Deployed to production<div class="sub">Zero downtime release</div></div></div>
-  <div class="toast" id="t3"><div class="ico" style="background:#7c5cff40;color:#c4b5fd">{}</div><div>API 200 OK<div class="sub">GET /v1/orders · 38 ms</div></div></div>
+  <div class="toast" id="t2"><div class="ico" style="background:#ffc93c38;color:#ffc93c">↑</div><div>Deployed to production<div class="sub">Zero downtime release</div></div></div>
+  <div class="toast" id="t3"><div class="ico" style="background:#d9dadc2e;color:#d9dadc">{}</div><div>API 200 OK<div class="sub">GET /v1/orders · 38 ms</div></div></div>
 
   <div id="veil"></div>
 </div>
@@ -114,14 +117,36 @@ function sliceHtml(html, n) { // keep tags, cut visible text after n characters
   return out + '</span>'.repeat(open.length);
 }
 
-function phoneCards(t) {
-  const shift = ((t / LOOP) * 3) % 1; // three cards scroll by per loop
+// Real mobile screenshots of Auxtech projects (set by render.cjs). Each holds
+// for 2.4 s with a slow zoom, then slides aside for the next; four screens fill
+// the 12 s loop, so the last slide lands on the first screen at the seam.
+let screens = [];
+window.setScreens = async (urls) => {
+  const box = $('phoneCards'); box.innerHTML = '';
+  screens = urls.map((src) => { const img = new Image(); img.src = src; box.appendChild(img); return img; });
+  await Promise.all(screens.map((img) => img.decode()));
+};
+const ease = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+function phoneScreens(t) {
+  const n = screens.length, seg = LOOP / n, hold = seg - 0.6;
+  const k = Math.floor(t / seg) % n, u = t - k * seg;
+  const slide = u > hold ? ease((u - hold) / 0.6) : 0;
+  screens.forEach((img, i) => {
+    let x = 110, scale = 1, opacity = 0;
+    if (i === k) { x = -100 * slide; scale = 1 + 0.05 * Math.min(u, hold) / hold; opacity = 1 - 0.4 * slide; }
+    else if (i === (k + 1) % n && slide > 0) { x = 100 * (1 - slide); opacity = 1; }
+    img.style.opacity = opacity; img.style.transform = `translateX(${x}%) scale(${scale})`; img.style.zIndex = i === k ? 1 : 2;
+  });
+}
+
+function phoneCards(t) { // fallback when no screenshots are given
+  const shift = ((t / LOOP) * 3) % 1;
   let html = '';
   for (let i = -1; i < 5; i++) {
     const y = (i - shift) * 118;
-    const hue = ['#0145ff', '#7c5cff', '#22d3ee'][((i % 3) + 3) % 3];
-    html += `<div style="position:absolute;left:18px;right:18px;top:${12 + y}px;height:104px;border-radius:18px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);display:flex;gap:12px;padding:14px">
-      <div style="width:74px;border-radius:12px;background:linear-gradient(135deg,${hue},#050816)"></div>
+    const hue = ['#ffc93c', '#d9dadc', '#ffe8a1'][((i % 3) + 3) % 3];
+    html += `<div style="position:absolute;left:14px;right:14px;top:${44 + y}px;height:104px;border-radius:18px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);display:flex;gap:12px;padding:14px">
+      <div style="width:74px;border-radius:12px;background:linear-gradient(135deg,${hue},#2b2d31)"></div>
       <div style="flex:1;display:flex;flex-direction:column;gap:9px;padding-top:6px"><div style="height:10px;width:80%;border-radius:6px;background:rgba(255,255,255,0.35)"></div><div style="height:8px;width:55%;border-radius:6px;background:rgba(255,255,255,0.18)"></div><div style="height:22px;width:62px;margin-top:6px;border-radius:8px;background:${hue}"></div></div></div>`;
   }
   return html;
@@ -135,10 +160,10 @@ function chart(t) {
   for (let i = 0; i < bars; i++) {
     const h = 50 + 70 * (0.5 + 0.5 * w(t, 6, i * 0.7)) + 30 * (0.5 + 0.5 * w(t, 4, i));
     const x = i * (W / bars) + 6; const g = c.createLinearGradient(0, H - h, 0, H);
-    g.addColorStop(0, 'rgba(142,180,255,0.9)'); g.addColorStop(1, 'rgba(1,69,255,0.15)');
+    g.addColorStop(0, 'rgba(217,218,220,0.85)'); g.addColorStop(1, 'rgba(217,218,220,0.10)');
     c.fillStyle = g; c.beginPath(); c.roundRect(x, H - h, W / bars - 14, h, 6); c.fill();
   }
-  c.beginPath(); c.lineWidth = 3; c.strokeStyle = '#5eead4';
+  c.beginPath(); c.lineWidth = 3; c.strokeStyle = '#ffc93c';
   for (let x = 0; x <= W; x += 6) { const y = 118 + 22 * w(t + x / 80, 12, 0) + 10 * w(t + x / 40, 4, 1); x ? c.lineTo(x, y) : c.moveTo(x, y); }
   c.stroke();
 }
@@ -149,15 +174,15 @@ function network(t) {
   c.lineWidth = 1;
   for (const [i, j] of edges) {
     const [ax, ay] = pos[i], [bx, by] = pos[j]; const d = Math.hypot(ax - bx, ay - by); if (d > 240) continue;
-    c.strokeStyle = `rgba(94,128,255,${0.22 * (1 - d / 240)})`; c.beginPath(); c.moveTo(ax, ay); c.lineTo(bx, by); c.stroke();
+    c.strokeStyle = `rgba(217,218,220,${0.16 * (1 - d / 240)})`; c.beginPath(); c.moveTo(ax, ay); c.lineTo(bx, by); c.stroke();
   }
   for (const p of pulses) {
     const [i, j] = p.e; const f = ((t / LOOP) * p.speed + p.off) % 1;
     const x = pos[i][0] + (pos[j][0] - pos[i][0]) * f, y = pos[i][1] + (pos[j][1] - pos[i][1]) * f;
-    const g = c.createRadialGradient(x, y, 0, x, y, 12); g.addColorStop(0, 'rgba(142,220,255,0.95)'); g.addColorStop(1, 'rgba(142,220,255,0)');
+    const g = c.createRadialGradient(x, y, 0, x, y, 12); g.addColorStop(0, 'rgba(255,201,60,0.95)'); g.addColorStop(1, 'rgba(255,201,60,0)');
     c.fillStyle = g; c.beginPath(); c.arc(x, y, 12, 0, TAU); c.fill();
   }
-  pos.forEach(([x, y], k) => { c.fillStyle = `rgba(190,210,255,${0.45 + 0.35 * (0.5 + 0.5 * w(t, nodes[k].per, nodes[k].p))})`; c.beginPath(); c.arc(x, y, nodes[k].r, 0, TAU); c.fill(); });
+  pos.forEach(([x, y], k) => { c.fillStyle = `rgba(232,233,235,${0.40 + 0.35 * (0.5 + 0.5 * w(t, nodes[k].per, nodes[k].p))})`; c.beginPath(); c.arc(x, y, nodes[k].r, 0, TAU); c.fill(); });
 }
 
 function place(id, x, y, rx = 0, ry = 0, extra = '') { $(id).style.transform = `translate(${x}px, ${y}px) perspective(1400px) rotateX(${rx}deg) rotateY(${ry}deg) ${extra}`; }
@@ -179,8 +204,8 @@ window.render = (t) => {
   $('codeText').innerHTML = typed(t); $('codeText').style.opacity = fade;
   place('dash', 1080 + 12 * w(t, 12, 2), 610 + 14 * w(t, 6, 1), -3, -10 + 2 * w(t, 12));
   chart(t);
-  place('phone', 1600 + 8 * w(t, 6, 2), 300 + 18 * w(t, 12, 1), 2, -18 + 2 * w(t, 12, 2));
-  $('phoneCards').innerHTML = phoneCards(t);
+  place('phone', 1590 + 8 * w(t, 6, 2), 330 + 18 * w(t, 12, 1), 2, -16 + 2 * w(t, 12, 2));
+  if (screens.length) phoneScreens(t); else $('phoneCards').innerHTML = phoneCards(t);
   toast('t1', t, 1.0, 1290, 548);
   toast('t2', t, 5.0, 1160, 962);
   toast('t3', t, 9.0, 1500, 900);

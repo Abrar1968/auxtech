@@ -293,7 +293,7 @@ return [
             'featured' => false,
             'title' => [
                 'en' => 'Corporate Websites',
-                'bn' => 'কর্পোরেট ওয়েবসাইট',
+                'bn' => 'কর্পোরেট ওয়েবসাইট ডেভেলপমেন্ট',
             ],
             'tagline' => [
                 'en' => 'A credible, fast website that presents your company well.',
@@ -885,7 +885,17 @@ return [
                 'bn' => 'সেলফ-সার্ভিস সাইন-আপ ও প্ল্যানসহ সাবস্ক্রিপশন সফটওয়্যার প্রোডাক্ট।',
             ],
         ],
+        [
+            'slug' => 'automotive',
+            'name' => ['en' => 'Automotive & Car Care', 'bn' => 'অটোমোটিভ ও কার কেয়ার'],
+            'icon' => 'car',
+            'description' => [
+                'en' => 'Booking systems and websites for car wash, detailing and vehicle service businesses, with online slots, payments and live job tracking.',
+                'bn' => 'কার ওয়াশ, ডিটেইলিং ও গাড়ি সার্ভিস ব্যবসার জন্য বুকিং সিস্টেম ও ওয়েবসাইট, অনলাইন স্লট, পেমেন্ট ও লাইভ জব ট্র্যাকিংসহ।',
+            ],
+        ],
     ],
+
     'technologies' => [
         [
             'slug' => 'php',
@@ -1002,6 +1012,50 @@ return [
             'answer' => [
                 'en' => '<p>Yes. Every project in our portfolio links to the live site, and we have demo stores and a demo reseller platform you can try. Message us on WhatsApp and we will send the examples closest to your business.</p>',
                 'bn' => '<p>হ্যাঁ। আমাদের পোর্টফোলিওর প্রতিটি প্রজেক্টে লাইভ সাইটের লিংক আছে, আর ডেমো স্টোর ও ডেমো রিসেলার প্ল্যাটফর্ম ঘুরে দেখতে পারেন। হোয়াটসঅ্যাপে মেসেজ দিন, আপনার ব্যবসার সবচেয়ে কাছাকাছি উদাহরণগুলো পাঠিয়ে দেব।</p>',
+            ],
+        ],
+    ],
+
+    // Engagement packages shown on the pricing page and the home page. No
+    // prices are seeded: each shows "Custom quote" until a price is entered.
+    'pricing_plans' => [
+        [
+            'name' => ['en' => 'Fixed-scope project', 'bn' => 'নির্দিষ্ট স্কোপের প্রজেক্ট'],
+            'description' => ['en' => 'A website, store or application with a scope, timeline and price agreed before work starts.', 'bn' => 'ওয়েবসাইট, অনলাইন স্টোর বা অ্যাপ্লিকেশন, যার স্কোপ, সময়সূচি ও মূল্য কাজ শুরুর আগেই চূড়ান্ত হয়।'],
+            'popular' => false,
+            'features' => [
+                ['en' => 'Discovery workshop and a written scope', 'bn' => 'ডিসকভারি ওয়ার্কশপ ও লিখিত স্কোপ'],
+                ['en' => 'UI/UX design with review rounds', 'bn' => 'রিভিউসহ UI/UX ডিজাইন'],
+                ['en' => 'Development on a staging site you can test', 'bn' => 'স্টেজিং সাইটে ডেভেলপমেন্ট, যা আপনি নিজে পরীক্ষা করতে পারবেন'],
+                ['en' => 'Admin panel for your team', 'bn' => 'আপনার টিমের জন্য অ্যাডমিন প্যানেল'],
+                ['en' => 'Launch, data migration and training', 'bn' => 'লঞ্চ, ডেটা মাইগ্রেশন ও ট্রেনিং'],
+                ['en' => 'Post-launch fixes and full handover', 'bn' => 'লঞ্চ-পরবর্তী সমাধান ও সম্পূর্ণ হস্তান্তর'],
+            ],
+        ],
+        [
+            'name' => ['en' => 'Platform package', 'bn' => 'প্ল্যাটফর্ম প্যাকেজ'],
+            'description' => ['en' => 'Auxtech Ecommerce, the reseller platform or the LMS, set up on your brand and ready to sell.', 'bn' => 'Auxtech Ecommerce, রিসেলার প্ল্যাটফর্ম বা LMS, আপনার ব্র্যান্ডে সাজানো এবং বিক্রির জন্য প্রস্তুত।'],
+            'popular' => true,
+            'features' => [
+                ['en' => 'Your domain, branding and content', 'bn' => 'আপনার ডোমেইন, ব্র্যান্ডিং ও কনটেন্ট'],
+                ['en' => 'Admin panel with the modules you need', 'bn' => 'প্রয়োজনীয় মডিউলসহ অ্যাডমিন প্যানেল'],
+                ['en' => 'Courier, payment and SMS integrations', 'bn' => 'কুরিয়ার, পেমেন্ট ও SMS ইন্টিগ্রেশন'],
+                ['en' => 'Meta Pixel and Conversions API set up', 'bn' => 'Meta Pixel ও Conversions API সেটআপ'],
+                ['en' => 'Product upload guidance and staff training', 'bn' => 'প্রোডাক্ট আপলোড গাইডেন্স ও স্টাফ ট্রেনিং'],
+                ['en' => 'Launch support and updates', 'bn' => 'লঞ্চ সাপোর্ট ও আপডেট'],
+            ],
+        ],
+        [
+            'name' => ['en' => 'Ongoing support and growth', 'bn' => 'চলমান সাপোর্ট ও গ্রোথ'],
+            'description' => ['en' => 'A monthly engagement for new features, maintenance and marketing after launch.', 'bn' => 'লঞ্চের পর নতুন ফিচার, রক্ষণাবেক্ষণ ও মার্কেটিংয়ের জন্য মাসিক এনগেজমেন্ট।'],
+            'popular' => false,
+            'features' => [
+                ['en' => 'New features and improvements every month', 'bn' => 'প্রতি মাসে নতুন ফিচার ও উন্নয়ন'],
+                ['en' => 'Security updates and backups', 'bn' => 'সিকিউরিটি আপডেট ও ব্যাকআপ'],
+                ['en' => 'Performance and uptime monitoring', 'bn' => 'পারফরম্যান্স ও আপটাইম মনিটরিং'],
+                ['en' => 'SEO and Meta ads management', 'bn' => 'SEO ও Meta বিজ্ঞাপন ব্যবস্থাপনা'],
+                ['en' => 'Monthly report on traffic and sales', 'bn' => 'ট্রাফিক ও বিক্রির মাসিক রিপোর্ট'],
+                ['en' => 'Priority support on WhatsApp', 'bn' => 'হোয়াটসঅ্যাপে অগ্রাধিকার সাপোর্ট'],
             ],
         ],
     ],

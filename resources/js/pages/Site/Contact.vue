@@ -32,7 +32,7 @@ const { t } = useI18n();
 
                 <Reveal :delay="0.06" class="rounded-3xl border border-line bg-surface-raised p-7">
                     <div class="flex items-start gap-4">
-                        <span class="grid size-11 shrink-0 place-items-center rounded-2xl bg-brand-50 text-link dark:bg-brand-950 dark:text-brand-200"><Mail :size="20" aria-hidden="true" /></span>
+                        <span class="grid size-11 shrink-0 place-items-center rounded-2xl bg-brand-50 text-link dark:bg-brand-600/15 dark:text-brand-200"><Mail :size="20" aria-hidden="true" /></span>
                         <div>
                             <h2 class="font-display text-lg font-semibold text-fg">{{ t('Email') }}</h2>
                             <EmailLink placement="contact-email" :show-icon="false" class="!min-h-0 text-link" />
@@ -42,7 +42,7 @@ const { t } = useI18n();
 
                 <Reveal :delay="0.12" class="rounded-3xl border border-line bg-surface-raised p-7">
                     <div class="flex items-start gap-4">
-                        <span class="grid size-11 shrink-0 place-items-center rounded-2xl bg-brand-50 text-link dark:bg-brand-950 dark:text-brand-200"><MapPin :size="20" aria-hidden="true" /></span>
+                        <span class="grid size-11 shrink-0 place-items-center rounded-2xl bg-brand-50 text-link dark:bg-brand-600/15 dark:text-brand-200"><MapPin :size="20" aria-hidden="true" /></span>
                         <div>
                             <h2 class="font-display text-lg font-semibold text-fg">{{ t('Office') }}</h2>
                             <address class="mt-1 text-muted not-italic">{{ site.address }}</address>
@@ -52,7 +52,7 @@ const { t } = useI18n();
                         </div>
                     </div>
                     <div v-if="site.hours" class="mt-6 flex items-start gap-4 border-t border-line pt-6">
-                        <span class="grid size-11 shrink-0 place-items-center rounded-2xl bg-brand-50 text-link dark:bg-brand-950 dark:text-brand-200"><Clock :size="20" aria-hidden="true" /></span>
+                        <span class="grid size-11 shrink-0 place-items-center rounded-2xl bg-brand-50 text-link dark:bg-brand-600/15 dark:text-brand-200"><Clock :size="20" aria-hidden="true" /></span>
                         <div>
                             <h2 class="font-display text-lg font-semibold text-fg">{{ t('Hours') }}</h2>
                             <p class="mt-1 text-muted">{{ site.hours }}</p>
@@ -61,7 +61,7 @@ const { t } = useI18n();
                 </Reveal>
             </div>
 
-            <Reveal :delay="0.08" class="rounded-3xl border border-line bg-surface-raised p-7 shadow-[0_30px_70px_-50px_rgb(5_8_22/0.5)] sm:p-10">
+            <Reveal :delay="0.08" class="rounded-3xl border border-line bg-surface-raised p-7 shadow-[0_30px_70px_-50px_rgb(20_21_24/0.5)] sm:p-10">
                 <h2 class="font-display text-2xl font-semibold text-fg">{{ t('Prefer a form?') }}</h2>
                 <p class="mt-2 mb-8 text-muted">{{ t('Leave your details and we will get back to you.') }}</p>
                 <LeadForm :services="services" placement="contact-form" />

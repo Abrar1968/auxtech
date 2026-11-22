@@ -20,7 +20,7 @@ const message = computed(
 <template>
     <section class="relative isolate grid min-h-[100svh] place-items-center overflow-hidden bg-ink-950 px-4 py-32 text-center text-white">
         <div aria-hidden="true" class="absolute inset-0 -z-10 bg-grid" />
-        <div aria-hidden="true" class="absolute top-1/2 left-1/2 -z-10 size-[40rem] -translate-1/2 animate-aurora rounded-full bg-[radial-gradient(closest-side,rgb(1_69_255/0.45),transparent)] blur-2xl" />
+        <div aria-hidden="true" class="absolute top-1/2 left-1/2 -z-10 size-[40rem] -translate-1/2 animate-aurora rounded-full bg-[radial-gradient(closest-side,rgb(255_201_60/0.16),transparent)] blur-2xl" />
         <div>
             <p class="font-display text-[7rem] leading-none font-semibold tracking-tight text-gradient sm:text-[10rem]">{{ n(status) }}</p>
             <h1 class="mt-4 font-display text-3xl font-semibold sm:text-4xl">{{ message[0] }}</h1>

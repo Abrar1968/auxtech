@@ -61,24 +61,24 @@ const badgeColumns = ['status', 'type'];
     </PageHeader>
 
     <div :class="card">
-        <div class="flex flex-wrap items-center gap-2 border-b border-[#e4e8f0] p-3">
+        <div class="flex flex-wrap items-center gap-2 border-b border-[#e3e4e6] p-3">
             <label class="relative min-w-56 flex-1">
                 <span class="sr-only">Search</span>
-                <Search :size="16" class="absolute top-1/2 left-3 -translate-y-1/2 text-[#9aa6c1]" />
+                <Search :size="16" class="absolute top-1/2 left-3 -translate-y-1/2 text-[#85888f]" />
                 <input v-model="search" type="search" :class="[input, 'pl-9']" placeholder="Search…" @input="onSearch" />
             </label>
             <select v-for="(options, name) in filters" :key="name" :value="query[name] ?? ''" :class="inputInline" :aria-label="String(name)" @change="visit({ [name]: ($event.target as HTMLSelectElement).value || null })">
                 <option value="">All {{ String(name).replaceAll('_', ' ') }}</option>
                 <option v-for="(text, value) in options" :key="value" :value="value">{{ text }}</option>
             </select>
-            <button v-if="module.softDeletes" :class="[button.ghost, trashed && '!bg-[#f0f2f7] !text-[#0a0f24]']" @click="visit({ trashed: trashed ? null : '1' })">
+            <button v-if="module.softDeletes" :class="[button.ghost, trashed && '!bg-[#ececed] !text-[#232428]']" @click="visit({ trashed: trashed ? null : '1' })">
                 <Trash2 :size="15" />{{ trashed ? 'Showing deleted' : 'Deleted' }}
             </button>
         </div>
 
         <div class="overflow-x-auto">
             <table class="w-full text-left text-sm">
-                <thead class="border-b border-[#e4e8f0] text-xs tracking-wide text-[#55607a] uppercase">
+                <thead class="border-b border-[#e3e4e6] text-xs tracking-wide text-[#5c5f66] uppercase">
                     <tr>
                         <th v-if="canReorder" class="w-8" />
                         <th v-for="column in columns" :key="column.name" class="px-4 py-3 font-medium">{{ column.label }}</th>
@@ -90,19 +90,19 @@ const badgeColumns = ['status', 'type'];
                         v-for="(row, index) in rows"
                         :key="row.id"
                         :draggable="canReorder"
-                        :class="['border-b border-[#f0f2f7] transition last:border-0 hover:bg-[#fafbfd]', dragging === index && 'opacity-40']"
+                        :class="['border-b border-[#ececed] transition last:border-0 hover:bg-[#f7f7f8]', dragging === index && 'opacity-40']"
                         @dragstart="dragging = index"
                         @dragover.prevent
                         @drop="onDrop(index)"
                         @dragend="dragging = null"
                     >
-                        <td v-if="canReorder" class="cursor-grab pl-3 text-[#9aa6c1]" title="Drag to reorder"><GripVertical :size="16" /></td>
+                        <td v-if="canReorder" class="cursor-grab pl-3 text-[#85888f]" title="Drag to reorder"><GripVertical :size="16" /></td>
                         <td v-for="(column, cIndex) in columns" :key="column.name" class="max-w-xs px-4 py-3">
                             <StatusBadge v-if="badgeColumns.includes(column.name)" :value="row[column.name] as string" />
-                            <Link v-else-if="cIndex === 0 && !row.trashed" :href="`/admin/${module.key}/${row.id}/edit`" class="line-clamp-1 font-medium text-[#0a0f24] hover:text-brand-600">
+                            <Link v-else-if="cIndex === 0 && !row.trashed" :href="`/admin/${module.key}/${row.id}/edit`" class="line-clamp-1 font-medium text-[#232428] hover:text-link">
                                 {{ display(column.name, row[column.name]) }}
                             </Link>
-                            <span v-else class="line-clamp-1 text-[#55607a]">{{ display(column.name, row[column.name]) }}</span>
+                            <span v-else class="line-clamp-1 text-[#5c5f66]">{{ display(column.name, row[column.name]) }}</span>
                         </td>
                         <td class="px-4 py-3 text-right whitespace-nowrap">
                             <template v-if="row.trashed">
@@ -123,21 +123,21 @@ const badgeColumns = ['status', 'type'];
                         </td>
                     </tr>
                     <tr v-if="!rows.length">
-                        <td :colspan="columns.length + 2" class="px-4 py-16 text-center text-[#55607a]">
+                        <td :colspan="columns.length + 2" class="px-4 py-16 text-center text-[#5c5f66]">
                             Nothing here yet.
-                            <Link v-if="module.can.create && !trashed" :href="`/admin/${module.key}/create`" class="font-medium text-brand-600 hover:underline">Create the first one</Link>
+                            <Link v-if="module.can.create && !trashed" :href="`/admin/${module.key}/create`" class="font-medium text-link hover:underline">Create the first one</Link>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <nav v-if="records.links.length > 3" class="flex flex-wrap items-center justify-between gap-2 border-t border-[#e4e8f0] p-3 text-sm" aria-label="Pagination">
-            <span class="text-[#55607a]">{{ records.from }}–{{ records.to }} of {{ records.total }}</span>
+        <nav v-if="records.links.length > 3" class="flex flex-wrap items-center justify-between gap-2 border-t border-[#e3e4e6] p-3 text-sm" aria-label="Pagination">
+            <span class="text-[#5c5f66]">{{ records.from }}–{{ records.to }} of {{ records.total }}</span>
             <div class="flex flex-wrap gap-1">
                 <Pagination :links="records.links" />
             </div>
         </nav>
     </div>
-    <p v-if="canReorder && rows.length > 1" class="mt-3 text-xs text-[#55607a]">Drag rows to change the order on the site.</p>
+    <p v-if="canReorder && rows.length > 1" class="mt-3 text-xs text-[#5c5f66]">Drag rows to change the order on the site.</p>
 </template>

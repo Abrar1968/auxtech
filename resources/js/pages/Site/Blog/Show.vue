@@ -43,9 +43,9 @@ const crumbs = computed(() => seo.value.breadcrumbs.slice(0, -1));
     <article>
         <header class="relative isolate overflow-hidden bg-ink-950 pt-36 pb-16 text-white sm:pt-44">
             <div aria-hidden="true" class="absolute inset-0 -z-10 bg-grid" />
-            <div aria-hidden="true" class="absolute -top-40 left-1/2 -z-10 h-[30rem] w-[50rem] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(1_69_255/0.5),transparent)] blur-2xl" />
+            <div aria-hidden="true" class="absolute -top-40 left-1/2 -z-10 h-[30rem] w-[50rem] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(255_201_60/0.16),transparent)] blur-2xl" />
             <div class="container-page max-w-3xl">
-                <nav aria-label="Breadcrumb" class="mb-6 flex flex-wrap gap-2 text-sm text-white/50">
+                <nav aria-label="Breadcrumb" class="mb-6 flex flex-wrap gap-2 text-sm text-white/65">
                     <template v-for="(crumb, index) in crumbs" :key="crumb.url">
                         <span v-if="index > 0">/</span>
                         <Link :href="crumb.url" class="hover:text-white">{{ crumb.name }}</Link>
@@ -54,7 +54,7 @@ const crumbs = computed(() => seo.value.breadcrumbs.slice(0, -1));
                 <Link v-if="post.category" :href="post.category.url" class="text-sm font-semibold tracking-wider text-brand-300 uppercase">{{ post.category.name }}</Link>
                 <h1 class="mt-3 font-display text-4xl leading-tight font-semibold tracking-tight sm:text-5xl">{{ post.title }}</h1>
                 <p v-if="post.excerpt" class="mt-5 text-lg text-white/70">{{ post.excerpt }}</p>
-                <p class="mt-8 flex flex-wrap gap-x-4 gap-y-1 text-sm text-white/55">
+                <p class="mt-8 flex flex-wrap gap-x-4 gap-y-1 text-sm text-white/70">
                     <span v-if="post.author">{{ post.author }}</span>
                     <time v-if="post.published_at" :datetime="post.published_at">{{ date }}</time>
                     <span>{{ t(':count min read', { count: n(post.reading_minutes) }) }}</span>

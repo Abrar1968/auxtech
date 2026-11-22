@@ -22,15 +22,15 @@ const description = computed({
     set: (value: string) => (seo.value = { ...seo.value, description: { ...seo.value.description, [props.locale]: value } }),
 });
 const previewTitle = computed(() => `${title.value || props.fallbackTitle || 'Page title'} | Auxtech`);
-const counter = (length: number, ideal: number, max: number) => (length > max ? 'text-red-600' : length > ideal ? 'text-amber-600' : 'text-[#9aa6c1]');
+const counter = (length: number, ideal: number, max: number) => (length > max ? 'text-red-600' : length > ideal ? 'text-amber-600' : 'text-[#85888f]');
 </script>
 
 <template>
     <section :class="[card, 'p-5']">
-        <h2 class="text-sm font-semibold">Search appearance <span class="ml-1 rounded bg-[#eef4ff] px-1.5 py-0.5 text-[10px] font-semibold text-brand-700 uppercase">{{ locale }}</span></h2>
-        <p class="mt-1 text-xs text-[#55607a]">Optional. Empty fields use the title and summary.</p>
+        <h2 class="text-sm font-semibold">Search appearance <span class="ml-1 rounded bg-[#fff2c9] px-1.5 py-0.5 text-[10px] font-semibold text-brand-900 uppercase">{{ locale }}</span></h2>
+        <p class="mt-1 text-xs text-[#5c5f66]">Optional. Empty fields use the title and summary.</p>
 
-        <div class="mt-4 rounded-lg border border-[#e4e8f0] p-3">
+        <div class="mt-4 rounded-lg border border-[#e3e4e6] p-3">
             <p class="truncate text-xs text-[#202124]">{{ publicUrl ?? 'auxtechbd.com' }}</p>
             <p class="mt-0.5 line-clamp-1 text-[17px] text-[#1a0dab]">{{ previewTitle }}</p>
             <p class="mt-0.5 line-clamp-2 text-[13px] text-[#4d5156]">{{ description || 'The page summary will be used.' }}</p>
@@ -46,7 +46,7 @@ const counter = (length: number, ideal: number, max: number) => (length > max ? 
         <p :class="['mt-1 text-right text-xs', counter(description.length, 150, 160)]">{{ description.length }}/160</p>
 
         <details class="mt-2 text-sm">
-            <summary class="cursor-pointer text-[#55607a]">Advanced</summary>
+            <summary class="cursor-pointer text-[#5c5f66]">Advanced</summary>
             <label class="mt-3 block text-sm font-medium" for="seo-canonical">Canonical URL</label>
             <input id="seo-canonical" v-model="seo.canonical" type="url" :class="[input, 'mt-1']" placeholder="Leave empty for this page" />
             <label class="mt-3 block text-sm font-medium" for="seo-robots">Search engines</label>

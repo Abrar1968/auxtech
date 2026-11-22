@@ -56,7 +56,7 @@ return [
     ],
 
     'brand' => [
-        'color' => '#0145FF',
+        'color' => '#2B2D31',
         'logo' => '/brand/auxtech-logo.svg',
         'logo_white' => '/brand/auxtech-logo-white.svg',
         'icon' => '/brand/auxtech-icon.svg',

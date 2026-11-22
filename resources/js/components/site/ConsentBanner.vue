@@ -97,7 +97,7 @@ onMounted(() => {
 <template>
     <Transition enter-active-class="transition duration-500 ease-out-expo" enter-from-class="opacity-0 translate-y-6" leave-active-class="transition duration-200" leave-to-class="opacity-0">
         <div v-if="show" role="dialog" :aria-label="t('Cookie preferences')" class="fixed inset-x-3 bottom-20 z-50 sm:right-auto sm:bottom-5 sm:left-5 sm:max-w-sm">
-            <div class="glass rounded-2xl p-5 shadow-[0_20px_60px_-20px_rgb(5_8_22/0.45)]">
+            <div class="glass rounded-2xl p-5 shadow-[0_20px_60px_-20px_rgb(20_21_24/0.45)]">
                 <p class="text-sm text-fg">{{ t('We use cookies to measure visits and improve our ads. You can say no; the site works the same.') }}</p>
                 <div class="mt-4 flex gap-2">
                     <Button size="sm" @click="choose(true)">{{ t('Accept') }}</Button>

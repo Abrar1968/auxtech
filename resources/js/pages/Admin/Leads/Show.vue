@@ -58,32 +58,32 @@ const utm = Object.entries(props.lead.utm).filter(([, value]) => value);
         <div class="grid content-start gap-6">
             <section :class="[card, 'p-5']">
                 <dl class="grid gap-4 text-sm sm:grid-cols-2">
-                    <div><dt class="text-[#55607a]">Phone</dt><dd class="mt-0.5 font-medium">{{ lead.phone ?? '—' }}</dd></div>
-                    <div><dt class="text-[#55607a]">Email</dt><dd class="mt-0.5 font-medium">{{ lead.email ?? '—' }}</dd></div>
-                    <div v-if="lead.company"><dt class="text-[#55607a]">Company</dt><dd class="mt-0.5 font-medium">{{ lead.company }}</dd></div>
-                    <div v-if="lead.service || lead.solution || lead.project"><dt class="text-[#55607a]">Interested in</dt><dd class="mt-0.5 font-medium">{{ [lead.service, lead.solution, lead.project].filter(Boolean).join(', ') }}</dd></div>
-                    <div v-if="lead.budget_range"><dt class="text-[#55607a]">Budget</dt><dd class="mt-0.5 font-medium">{{ lead.budget_range }}</dd></div>
-                    <div><dt class="text-[#55607a]">Language</dt><dd class="mt-0.5 font-medium">{{ lead.locale === 'bn' ? 'Bangla' : 'English' }}</dd></div>
+                    <div><dt class="text-[#5c5f66]">Phone</dt><dd class="mt-0.5 font-medium">{{ lead.phone ?? '—' }}</dd></div>
+                    <div><dt class="text-[#5c5f66]">Email</dt><dd class="mt-0.5 font-medium">{{ lead.email ?? '—' }}</dd></div>
+                    <div v-if="lead.company"><dt class="text-[#5c5f66]">Company</dt><dd class="mt-0.5 font-medium">{{ lead.company }}</dd></div>
+                    <div v-if="lead.service || lead.solution || lead.project"><dt class="text-[#5c5f66]">Interested in</dt><dd class="mt-0.5 font-medium">{{ [lead.service, lead.solution, lead.project].filter(Boolean).join(', ') }}</dd></div>
+                    <div v-if="lead.budget_range"><dt class="text-[#5c5f66]">Budget</dt><dd class="mt-0.5 font-medium">{{ lead.budget_range }}</dd></div>
+                    <div><dt class="text-[#5c5f66]">Language</dt><dd class="mt-0.5 font-medium">{{ lead.locale === 'bn' ? 'Bangla' : 'English' }}</dd></div>
                 </dl>
-                <div v-if="lead.message" class="mt-5 rounded-lg bg-[#f6f7fb] p-4 text-sm whitespace-pre-line">{{ lead.message }}</div>
+                <div v-if="lead.message" class="mt-5 rounded-lg bg-[#f4f4f5] p-4 text-sm whitespace-pre-line">{{ lead.message }}</div>
                 <dl v-if="lead.meta && Object.keys(lead.meta).length" class="mt-5 grid gap-2 text-sm">
-                    <div v-for="(value, key) in lead.meta" :key="key" class="flex gap-3"><dt class="w-28 shrink-0 text-[#55607a]">{{ label(String(key)) }}</dt><dd>{{ value }}</dd></div>
+                    <div v-for="(value, key) in lead.meta" :key="key" class="flex gap-3"><dt class="w-28 shrink-0 text-[#5c5f66]">{{ label(String(key)) }}</dt><dd>{{ value }}</dd></div>
                 </dl>
             </section>
 
             <section :class="card">
-                <h2 class="border-b border-[#e4e8f0] px-5 py-4 text-sm font-semibold">Notes</h2>
-                <form class="flex gap-2 border-b border-[#e4e8f0] p-4" @submit.prevent="addNote">
+                <h2 class="border-b border-[#e3e4e6] px-5 py-4 text-sm font-semibold">Notes</h2>
+                <form class="flex gap-2 border-b border-[#e3e4e6] p-4" @submit.prevent="addNote">
                     <label class="sr-only" for="note">Add a note</label>
                     <textarea id="note" v-model="note.body" rows="2" :class="input" placeholder="What happened? e.g. Called, sending a quote tomorrow." />
                     <button :class="[button.primary, 'self-end']" :disabled="!note.body.trim() || note.processing">Add</button>
                 </form>
                 <ol>
-                    <li v-for="item in lead.notes" :key="item.id" class="border-b border-[#f0f2f7] px-5 py-3 text-sm last:border-0">
+                    <li v-for="item in lead.notes" :key="item.id" class="border-b border-[#ececed] px-5 py-3 text-sm last:border-0">
                         <p class="whitespace-pre-line">{{ item.body }}</p>
-                        <p class="mt-1 text-xs text-[#9aa6c1]">{{ item.user ?? 'Website' }} · {{ timeAgo(item.created_at) }}</p>
+                        <p class="mt-1 text-xs text-[#85888f]">{{ item.user ?? 'Website' }} · {{ timeAgo(item.created_at) }}</p>
                     </li>
-                    <li v-if="!lead.notes.length" class="px-5 py-6 text-center text-sm text-[#9aa6c1]">No notes yet.</li>
+                    <li v-if="!lead.notes.length" class="px-5 py-6 text-center text-sm text-[#85888f]">No notes yet.</li>
                 </ol>
             </section>
         </div>
@@ -103,7 +103,7 @@ const utm = Object.entries(props.lead.utm).filter(([, value]) => value);
                         <option v-for="user in users" :key="user.id" :value="user.id">{{ user.name }}</option>
                     </select>
                 </div>
-                <dl class="grid gap-1 text-xs text-[#55607a]">
+                <dl class="grid gap-1 text-xs text-[#5c5f66]">
                     <div class="flex justify-between"><dt>Received</dt><dd>{{ formatDate(lead.created_at) }}</dd></div>
                     <div v-if="lead.contacted_at" class="flex justify-between"><dt>First contact</dt><dd>{{ formatDate(lead.contacted_at) }}</dd></div>
                     <div v-if="lead.closed_at" class="flex justify-between"><dt>Closed</dt><dd>{{ formatDate(lead.closed_at) }}</dd></div>
@@ -114,11 +114,11 @@ const utm = Object.entries(props.lead.utm).filter(([, value]) => value);
             <section :class="[card, 'p-5 text-sm']">
                 <h2 class="font-semibold">Where they came from</h2>
                 <dl class="mt-3 grid gap-2">
-                    <div v-for="[key, value] in utm" :key="key"><dt class="text-xs text-[#55607a]">{{ key }}</dt><dd class="break-all">{{ value }}</dd></div>
-                    <div v-if="lead.referrer"><dt class="text-xs text-[#55607a]">Referrer</dt><dd class="break-all">{{ lead.referrer }}</dd></div>
-                    <div v-if="lead.landing_url"><dt class="text-xs text-[#55607a]">First page</dt><dd><a :href="lead.landing_url" target="_blank" class="inline-flex items-center gap-1 break-all text-brand-600 hover:underline">{{ lead.landing_url }} <ExternalLink :size="12" /></a></dd></div>
-                    <div v-if="lead.page_url"><dt class="text-xs text-[#55607a]">Form page</dt><dd><a :href="lead.page_url" target="_blank" class="inline-flex items-center gap-1 break-all text-brand-600 hover:underline">{{ lead.page_url }} <ExternalLink :size="12" /></a></dd></div>
-                    <p v-if="!utm.length && !lead.referrer && !lead.landing_url" class="text-[#9aa6c1]">Direct visit; no campaign data.</p>
+                    <div v-for="[key, value] in utm" :key="key"><dt class="text-xs text-[#5c5f66]">{{ key }}</dt><dd class="break-all">{{ value }}</dd></div>
+                    <div v-if="lead.referrer"><dt class="text-xs text-[#5c5f66]">Referrer</dt><dd class="break-all">{{ lead.referrer }}</dd></div>
+                    <div v-if="lead.landing_url"><dt class="text-xs text-[#5c5f66]">First page</dt><dd><a :href="lead.landing_url" target="_blank" class="inline-flex items-center gap-1 break-all text-link hover:underline">{{ lead.landing_url }} <ExternalLink :size="12" /></a></dd></div>
+                    <div v-if="lead.page_url"><dt class="text-xs text-[#5c5f66]">Form page</dt><dd><a :href="lead.page_url" target="_blank" class="inline-flex items-center gap-1 break-all text-link hover:underline">{{ lead.page_url }} <ExternalLink :size="12" /></a></dd></div>
+                    <p v-if="!utm.length && !lead.referrer && !lead.landing_url" class="text-[#85888f]">Direct visit; no campaign data.</p>
                 </dl>
             </section>
         </aside>

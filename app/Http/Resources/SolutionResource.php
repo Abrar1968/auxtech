@@ -37,6 +37,7 @@ class SolutionResource extends JsonResource
                     'title' => $feature->title,
                     'description' => $feature->description,
                     'icon' => $feature->icon,
+                    'image' => $feature->image('screenshot'),
                 ])->all(),
             ])->all()),
         ];

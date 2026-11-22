@@ -167,12 +167,12 @@ const titleValue = computed(() => {
     </PageHeader>
 
     <div v-if="hasTranslatable" class="mb-5 flex items-center gap-3">
-        <div class="inline-flex rounded-lg border border-[#d5dbe7] bg-white p-0.5" role="tablist" aria-label="Language">
-            <button v-for="code in ['en', 'bn'] as const" :key="code" role="tab" :aria-selected="locale === code" :class="['rounded-md px-3.5 py-1.5 text-sm font-medium transition', locale === code ? 'bg-brand-600 text-white' : 'text-[#55607a] hover:text-[#0a0f24]']" @click="locale = code">
+        <div class="inline-flex rounded-lg border border-[#d9dadc] bg-white p-0.5" role="tablist" aria-label="Language">
+            <button v-for="code in ['en', 'bn'] as const" :key="code" role="tab" :aria-selected="locale === code" :class="['rounded-md px-3.5 py-1.5 text-sm font-medium transition', locale === code ? 'bg-brand-600 text-ink-950' : 'text-[#5c5f66] hover:text-[#232428]']" @click="locale = code">
                 {{ code === 'en' ? 'English' : 'বাংলা' }}
             </button>
         </div>
-        <p class="text-xs text-[#55607a]">{{ locale === 'bn' ? 'Empty Bangla fields show the English text on the Bangla site.' : 'English is required; Bangla is optional.' }}</p>
+        <p class="text-xs text-[#5c5f66]">{{ locale === 'bn' ? 'Empty Bangla fields show the English text on the Bangla site.' : 'English is required; Bangla is optional.' }}</p>
     </div>
 
     <p v-if="Object.keys(errors).length" class="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
@@ -191,8 +191,8 @@ const titleValue = computed(() => {
                                 <img :src="image.thumb" :alt="image.alt" class="aspect-[4/3] w-full object-cover" />
                                 <button type="button" class="absolute top-1 right-1 rounded-md bg-white p-1 text-red-600 shadow" aria-label="Remove image" @click="form[`${field.name}_remove`] = [...(form[`${field.name}_remove`] as number[]), image.id]"><X :size="14" /></button>
                             </div>
-                            <div v-for="(file, index) in form[field.name] as File[]" :key="`new-${index}`" class="grid aspect-[4/3] place-items-center rounded-lg border border-dashed border-brand-400 bg-brand-50 p-2 text-center text-xs text-brand-700">{{ file.name }}</div>
-                            <label class="grid aspect-[4/3] cursor-pointer place-items-center rounded-lg border border-dashed border-[#c5ccda] text-sm text-[#55607a] hover:bg-[#f6f7fb]">
+                            <div v-for="(file, index) in form[field.name] as File[]" :key="`new-${index}`" class="grid aspect-[4/3] place-items-center rounded-lg border border-dashed border-brand-400 bg-brand-50 p-2 text-center text-xs text-brand-900">{{ file.name }}</div>
+                            <label class="grid aspect-[4/3] cursor-pointer place-items-center rounded-lg border border-dashed border-[#c5ccda] text-sm text-[#5c5f66] hover:bg-[#f4f4f5]">
                                 <span class="text-center"><ImagePlus :size="20" class="mx-auto" />Add</span>
                                 <input type="file" multiple accept="image/jpeg,image/png,image/webp" class="sr-only" @change="addImages(field.name, $event)" />
                             </label>

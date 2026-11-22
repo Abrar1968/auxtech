@@ -38,6 +38,7 @@ const links = computed(() => [
     { label: t('Pricing'), href: lp('/pricing') },
     { label: t('About'), href: lp('/about') },
     { label: t('Blog'), href: lp('/blog') },
+    { label: t('Contact'), href: lp('/contact') },
 ]);
 
 const otherLocale = computed(() => (locale.value === 'en' ? 'bn' : 'en'));
@@ -61,7 +62,7 @@ function isActive(href: string): boolean {
             <div
                 :class="[
                     'flex h-16 items-center gap-2 rounded-2xl pr-1.5 pl-3 transition-all duration-500 sm:gap-4 sm:px-3 sm:pl-4',
-                    scrolled ? 'glass shadow-[0_10px_40px_-20px_rgb(5_8_22/0.35)]' : 'border border-transparent',
+                    scrolled ? 'glass shadow-[0_10px_40px_-20px_rgb(20_21_24/0.35)]' : 'border border-transparent',
                 ]"
             >
                 <Link :href="lp('/')" class="shrink-0" :aria-label="site.name">
@@ -106,11 +107,11 @@ function isActive(href: string): boolean {
                                 leave-to-class="opacity-0"
                             >
                                 <div v-if="link.menu && openMenu === link.menu && navigation[link.menu as 'services'].length" class="absolute top-full left-0 pt-3">
-                                    <ul class="glass grid w-72 gap-0.5 rounded-2xl p-2 shadow-[0_30px_60px_-30px_rgb(5_8_22/0.5)]">
+                                    <ul class="glass grid w-72 gap-0.5 rounded-2xl p-2 shadow-[0_30px_60px_-30px_rgb(20_21_24/0.5)]">
                                         <li v-for="item in navigation[link.menu as 'services']" :key="item.url">
                                             <Link
                                                 :href="item.url"
-                                                class="block rounded-xl px-3.5 py-2.5 text-sm font-medium text-fg/80 transition hover:bg-brand-600 hover:text-white"
+                                                class="block rounded-xl px-3.5 py-2.5 text-sm font-medium text-fg/80 transition hover:bg-brand-600 hover:text-ink-950"
                                                 @click="openMenu = null"
                                             >
                                                 {{ item.title }}

@@ -100,13 +100,13 @@ async function submit(): Promise<void> {
 
 const field = (dark: boolean) =>
     [
-        'peer w-full rounded-2xl border px-4 pt-6 pb-2.5 outline-none transition placeholder-transparent focus:border-brand-500 focus:ring-4 focus:ring-brand-500/15',
+        'peer w-full rounded-2xl border px-4 pt-6 pb-2.5 outline-none transition placeholder-transparent focus:border-focus focus:ring-4 focus:ring-brand-600/30',
         dark ? 'border-white/12 bg-white/5 text-white' : 'border-line bg-surface text-fg',
     ].join(' ');
 const label = (dark: boolean) =>
     [
         'pointer-events-none absolute top-2 left-4 text-xs font-medium transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:top-2 peer-focus:text-xs',
-        dark ? 'text-white/55' : 'text-muted',
+        dark ? 'text-white/70' : 'text-muted',
     ].join(' ');
 </script>
 

@@ -27,7 +27,7 @@ const featureCount = computed(() => groups.value.reduce((sum, g) => sum + g.feat
     </PageHero>
 
     <section v-if="groups.length" class="relative isolate overflow-hidden bg-ink-950 pb-24 text-white">
-        <div aria-hidden="true" class="absolute right-0 bottom-0 -z-10 size-[30rem] rounded-full bg-brand-600/25 blur-3xl" />
+        <div aria-hidden="true" class="absolute right-0 bottom-0 -z-10 size-[30rem] rounded-full bg-brand-600/15 blur-3xl" />
         <div class="container-page">
             <SectionHeading :title="tc(':count module', ':count modules', featureCount)" :lead="t('Choose a group, then a module.')" dark />
             <Reveal class="mt-10"><ModuleExplorer :groups="groups" /></Reveal>
@@ -43,7 +43,7 @@ const featureCount = computed(() => groups.value.reduce((sum, g) => sum + g.feat
                     <p v-if="group.description" class="mt-1 text-sm text-muted">{{ group.description }}</p>
                     <ul class="mt-4 grid gap-2">
                         <li v-for="feature in group.features" :key="feature.slug" class="flex items-center gap-3 rounded-2xl border border-line bg-surface-raised px-4 py-3">
-                            <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-brand-50 text-link dark:bg-brand-950 dark:text-brand-200"><Icon :name="feature.icon" :size="16" /></span>
+                            <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-brand-50 text-link dark:bg-brand-600/15 dark:text-brand-200"><Icon :name="feature.icon" :size="16" /></span>
                             <span class="text-[0.95rem] text-fg">{{ feature.title }}</span>
                         </li>
                     </ul>

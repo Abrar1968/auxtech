@@ -32,7 +32,7 @@ class HomeController extends Controller
     public function __invoke(LinkBuilder $whatsapp): Response
     {
         $flagship = Solution::query()->published()->where('is_flagship', true)
-            ->with('featureGroups.features')->withCount('projects')->first();
+            ->with('featureGroups.features.media')->withCount('projects')->first();
 
         seo()->title(setting_t('seo.default_title'))->description(setting_t('seo.default_description'))
             ->schema($flagship ? seo()->builder()->softwareApplication(
@@ -68,7 +68,7 @@ class HomeController extends Controller
             'flagship' => $flagship ? (new SolutionResource($flagship))->resolve() : null,
             'projects' => ProjectResource::collection(Project::query()->published()->where('is_featured', true)->ordered()
                 ->with(['client.media', 'industry', 'solution', 'media'])->limit(8)->get())->resolve(),
-            'projectCount' => Project::query()->published()->count(),
+            'projectCount' => Project::query()->published()->where('type', '<>', 'demo')->count(),
             'liveCount' => Project::query()->published()->where('type', ProjectType::Live->value)->count(),
             'solutions' => SolutionResource::collection(Solution::query()->published()->ordered()->with('media')->withCount('projects')->get())->resolve(),
             'testimonials' => TestimonialResource::collection(Testimonial::query()->published()->where('is_featured', true)->ordered()

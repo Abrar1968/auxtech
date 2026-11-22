@@ -34,24 +34,24 @@ Principles, in priority order:
 
 ### 3. Design tokens
 
-Implemented in `resources/css/app.css` (`@theme`). Brand scale is built around the logo colour.
+Implemented in `resources/css/app.css` (`@theme`). Palette (release 1.4.0): **Gray `#2B2D31`**, **Silver `#D9DADC`** and **Yellow `#FFC93C`**.
 
 **Colour**
 
 | Token | Value | Use |
 |---|---|---|
-| `brand-600` | `#0145FF` | Logo blue: buttons, links, focus rings, key accents |
-| `brand-500` / `brand-400` | `#2F61FF` / `#5988FF` | Hover on dark, gradient stops |
-| `brand-50…200` | `#EEF4FF…#BCD2FF` | Tints, light section backgrounds |
-| `brand-700…950` | `#0034D6…#07184D` | Pressed states, deep gradients |
-| `ink-950 / 900 / 800` | `#050816 / #0A0F24 / #111A36` | Dark surfaces |
+| `brand-600` | `#FFC93C` | Yellow: primary buttons, active states, accents, the hero dot. Always with gray text on it |
+| `brand-400…500` | `#FFD254…#FFCD47` | Hover |
+| `brand-50…300` | `#FFFAEB…#FFDD75` | Tints; light yellow text on dark sections (`brand-200`) |
+| `brand-700…950` | `#F0B21A…#3D2E0A` | Pressed states; `brand-900` is text on `brand-50` tints |
+| `ink-950 / 900 / 800 / 700` | `#2B2D31 / #313338 / #3A3C42 / #4A4D55` | Gray: dark sections, hero, footer, dark theme surfaces, the logo on light backgrounds |
+| `silver` | `#D9DADC` | Lines (`--line` in the light theme) and the silver platform card |
 | `whatsapp` | `#25D366` | **Only** for WhatsApp actions, so the eye learns it |
-| Accent (sparingly) | cyan `#22D3EE`, violet `#7C5CFF` | Gradient partners for the aurora; never for text |
 | Semantic | success `#16A34A`, warning `#F59E0B`, danger `#DC2626` | Forms, admin |
 
-Text on white uses `ink-900` (contrast 17:1) and muted `#55607A` (6.6:1). White on `brand-600` is 6.1:1. All pairs meet WCAG AA.
+Gray on yellow is 9:1. Text on white is `#232428`; muted text `#5C5F66` (5.8:1 on the muted surface). White text on gray sections stays at 65% opacity or more (6:1).
 
-**Brand blue as text** uses the theme-aware `text-link` token, not `text-brand-600`: `#0145FF` in the light theme and `#8EB4FF` (brand-300) in the dark theme, where `#0145FF` on the dark surface fails contrast. `text-brand-600` stays correct for text on white cards in both themes and for backgrounds. The axe scan in `tests/e2e/quality.spec.ts` checks both themes.
+**Yellow as text** never sits on a light surface: the theme-aware `text-link` token is deep amber `#8A6100` in the light theme (5.5:1 on white) and yellow `#FFC93C` in the dark theme. Focus rings use `--focus` (gray on light, yellow on dark). The axe scan in `tests/e2e/quality.spec.ts` checks both themes.
 
 **Typography**
 
@@ -68,7 +68,7 @@ Fluid scale (`clamp`): display 40→76 px, h1 34→56, h2 28→44, h3 22→28, b
 
 **Spacing and layout:** 4 px base; section padding 64 px (mobile) to 128 px (desktop); container max 1280 px with 16/24/32 px gutters; 12-column grid on desktop, 4 on mobile.
 
-**Elevation:** `glass` utility (blur 16 px, saturation 160%, hairline border); glow shadow `0 0 80px brand-600/35` for hero objects; soft shadow for light cards.
+**Elevation:** `glass` utility (blur 16 px, saturation 160%, hairline border); soft yellow glow (`brand-600` at 15% or less) behind hero objects; soft shadow for light cards.
 
 **Motion tokens:** durations 150 ms (micro), 300 ms (UI), 600–900 ms (reveals); easing `ease-out-expo` for entrances, springs (`stiffness 260, damping 26`) for interactive elements.
 
@@ -182,7 +182,7 @@ Touch targets ≥ 44 px; inputs 16 px font to prevent iOS zoom; safe-area insets
 
 ### 9. Accessibility
 
-Semantic landmarks and one `h1` per page; skip link; visible focus ring (`brand-600`, 2 px offset); all interactive components keyboard-operable (Reka UI primitives); carousels and marquees pausable; colour is never the only signal; alt text required in admin for every image (EN and BN); form errors announced with `aria-live`; language set per page (`lang="bn"`).
+Semantic landmarks and one `h1` per page; skip link; visible focus ring (`--focus`: gray on light, yellow on dark, 2 px offset); all interactive components keyboard-operable (Reka UI primitives); carousels and marquees pausable; colour is never the only signal; alt text required in admin for every image (EN and BN); form errors announced with `aria-live`; language set per page (`lang="bn"`).
 
 ### 10. Admin panel UX
 

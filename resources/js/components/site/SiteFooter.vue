@@ -41,7 +41,7 @@ const company = computed(() => [
                     </div>
                     <ul v-if="socials.length" class="mt-7 flex gap-2">
                         <li v-for="social in socials" :key="social.key">
-                            <a :href="social.url" target="_blank" rel="noopener me" class="grid size-10 place-items-center rounded-full border border-white/10 transition hover:border-brand-500 hover:bg-brand-600 hover:text-white" :aria-label="social.key">
+                            <a :href="social.url" target="_blank" rel="noopener me" class="grid size-10 place-items-center rounded-full border border-white/10 transition hover:border-brand-500 hover:bg-brand-600 hover:text-ink-950" :aria-label="social.key">
                                 <SocialIcon :name="social.key" />
                             </a>
                         </li>

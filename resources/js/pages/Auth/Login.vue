@@ -17,7 +17,7 @@ function submit(): void {
         <form class="grid gap-4" @submit.prevent="submit">
             <label class="grid gap-1.5 text-sm font-medium">Email<input v-model="form.email" type="email" autocomplete="username" required autofocus :class="input" /></label>
             <label class="grid gap-1.5 text-sm font-medium">
-                <span class="flex justify-between">Password<Link href="/forgot-password" class="font-normal text-brand-600 hover:underline">Forgot?</Link></span>
+                <span class="flex justify-between">Password<Link href="/forgot-password" class="font-normal text-link hover:underline">Forgot?</Link></span>
                 <input v-model="form.password" type="password" autocomplete="current-password" required :class="input" />
             </label>
             <label class="flex items-center gap-2 text-sm"><input v-model="form.remember" type="checkbox" class="size-4 accent-brand-600" />Keep me signed in</label>

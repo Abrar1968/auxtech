@@ -17,7 +17,7 @@ const start = () =>
             if (name.startsWith('Admin/')) return AdminLayout;
             return undefined;
         },
-        progress: { color: '#2f61ff', delay: 150 },
+        progress: { color: '#ffc93c', delay: 150 },
     });
 
 // When the server printed an app shell, let the browser paint it before Vue

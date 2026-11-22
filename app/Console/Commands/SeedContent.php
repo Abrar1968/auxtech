@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Client;
 use App\Models\Project;
 use App\Models\Solution;
+use App\Models\SolutionFeature;
 use App\Support\SiteCache;
 use Database\Seeders\CatalogueSeeder;
 use Database\Seeders\ContentSeeder;
@@ -75,6 +76,10 @@ class SeedContent extends Command
 
         foreach ($data['platforms'] ?? [] as $cover) {
             $added += $this->attach(Solution::query()->where('slug', $cover['slug'])->first(), 'cover', "{$path}/{$cover['file']}", $cover['alt'], $cover['size'] ?? null);
+        }
+
+        foreach ($data['modules'] ?? [] as $module) {
+            $added += $this->attach(SolutionFeature::query()->where('slug', $module['slug'])->first(), 'screenshot', "{$path}/{$module['file']}", $module['alt'], $module['size'] ?? null);
         }
 
         $this->components->info("{$added} images attached.");

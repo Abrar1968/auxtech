@@ -39,7 +39,7 @@ const rows = computed(() => {
                     :aria-hidden="index >= row.length"
                     :class="[
                         'flex h-24 w-48 shrink-0 items-center justify-center rounded-2xl border px-5 transition duration-300 sm:h-28 sm:w-56',
-                        dark ? 'border-white/10 bg-white/[0.04] hover:border-white/25' : 'border-line bg-surface-raised hover:border-brand-300 hover:shadow-[0_18px_40px_-24px_rgb(1_69_255/0.45)]',
+                        dark ? 'border-white/10 bg-white/[0.04] hover:border-white/25' : 'border-line bg-surface-raised hover:border-brand-300 hover:shadow-[0_18px_40px_-24px_rgb(255_201_60/0.45)]',
                     ]"
                 >
                     <a

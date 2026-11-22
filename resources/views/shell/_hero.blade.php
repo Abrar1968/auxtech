@@ -27,7 +27,7 @@
             <div class="container-page flex flex-1 items-center pt-32 pb-16 sm:pt-40">
                 <div class="max-w-3xl">
                     @if (! empty($p['hero']['eyebrow']))
-                        <p class="inline-flex items-center gap-2.5 font-mono text-xs tracking-[0.18em] text-brand-200 uppercase sm:text-[0.8rem]"><span class="size-1.5 rounded-full bg-cyan-accent"></span>[ {{ $p['hero']['eyebrow'] }} ]</p>
+                        <p class="inline-flex items-center gap-2.5 font-mono text-xs tracking-[0.18em] text-brand-200 uppercase sm:text-[0.8rem]"><span class="size-1.5 rounded-full bg-brand-600"></span>[ {{ $p['hero']['eyebrow'] }} ]</p>
                     @endif
                     <div class="mt-6 font-display text-[2.75rem] leading-[1.05] font-semibold tracking-tight sm:text-6xl xl:text-7xl lang-bn:leading-[1.35]" style="letter-spacing:-0.02em;text-wrap:balance">{{ $title }}</div>
                     @if ($lead)<p class="mt-6 max-w-2xl text-base leading-relaxed text-white/75 sm:text-xl">{{ $lead }}</p>@endif
@@ -39,7 +39,7 @@
             <div class="absolute inset-0 -z-10 bg-grid"></div>
             <div class="container-page">
                 @if (count($crumbs) > 1)
-                    <div class="mb-8 flex flex-wrap items-center gap-1.5 text-sm text-white/50">
+                    <div class="mb-8 flex flex-wrap items-center gap-1.5 text-sm text-white/65">
                         @foreach ($crumbs as $crumb)<span>{{ $crumb['name'] }}</span>@if (! $loop->last)<span>›</span>@endif @endforeach
                     </div>
                 @endif

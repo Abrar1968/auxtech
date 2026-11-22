@@ -14,8 +14,8 @@ const form = useForm({ email: '' });
             <label class="grid gap-1.5 text-sm font-medium">Email<input v-model="form.email" type="email" autocomplete="username" required :class="input" /></label>
             <p v-if="form.errors.email" role="alert" class="text-sm text-red-600">{{ form.errors.email }}</p>
             <button type="submit" :disabled="form.processing" :class="[button.primary, 'min-h-11 w-full']">Email me a link</button>
-            <p class="text-xs text-[#55607a]">This needs email to be set up in Settings → Email. Otherwise ask a Super Admin to set a new password for you.</p>
-            <Link href="/login" class="text-sm text-brand-600 hover:underline">Back to sign in</Link>
+            <p class="text-xs text-[#5c5f66]">This needs email to be set up in Settings → Email. Otherwise ask a Super Admin to set a new password for you.</p>
+            <Link href="/login" class="text-sm text-link hover:underline">Back to sign in</Link>
         </form>
     </AuthShell>
 </template>

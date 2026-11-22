@@ -112,7 +112,7 @@ const visible = computed(() => props.sections.filter((key) => has[key]?.()));
 
         <section v-else-if="key === 'flagship' && flagship" class="relative isolate overflow-hidden bg-ink-950 text-white section-y">
             <div aria-hidden="true" class="absolute inset-0 -z-10 bg-grid" />
-            <div aria-hidden="true" class="absolute top-0 right-0 -z-10 size-[36rem] rounded-full bg-[radial-gradient(closest-side,rgb(1_69_255/0.4),transparent)] blur-2xl" />
+            <div aria-hidden="true" class="absolute top-0 right-0 -z-10 size-[36rem] rounded-full bg-[radial-gradient(closest-side,rgb(255_201_60/0.16),transparent)] blur-2xl" />
             <div class="container-page">
                 <SectionHeading :eyebrow="`${t('Our product')} · ${flagship.name}`" :title="copy.flagship?.title" :lead="copy.flagship?.lead" dark />
                 <Reveal class="mt-12"><ModuleExplorer :groups="flagship.feature_groups ?? []" /></Reveal>
@@ -149,15 +149,15 @@ const visible = computed(() => props.sections.filter((key) => has[key]?.()));
                 <SectionHeading :eyebrow="t('Pricing')" :title="copy.pricing?.title" :lead="copy.pricing?.lead" />
                 <div v-if="plans.length" class="mt-14"><PricingCards :plans="plans" placement="home-pricing" /></div>
                 <Reveal class="mt-8">
-                    <div class="flex flex-col gap-6 rounded-3xl bg-gradient-to-r from-brand-700 via-brand-600 to-violet-accent p-8 text-white sm:flex-row sm:items-center sm:justify-between sm:p-10">
+                    <div class="flex flex-col gap-6 rounded-3xl bg-brand-600 p-8 text-ink-950 sm:flex-row sm:items-center sm:justify-between sm:p-10">
                         <div class="flex items-center gap-5">
-                            <span class="hidden size-14 shrink-0 place-items-center rounded-2xl bg-white/15 sm:grid"><Calculator :size="26" aria-hidden="true" /></span>
+                            <span class="hidden size-14 shrink-0 place-items-center rounded-2xl bg-ink-950 text-brand-600 sm:grid"><Calculator :size="26" aria-hidden="true" /></span>
                             <div>
                                 <h3 class="font-display text-2xl font-semibold">{{ t('Get a price in 60 seconds') }}</h3>
-                                <p class="mt-1 text-white/75">{{ t('Answer four quick questions. We send the estimate on WhatsApp.') }}</p>
+                                <p class="mt-1 text-ink-950/80">{{ t('Answer four quick questions. We send the estimate on WhatsApp.') }}</p>
                             </div>
                         </div>
-                        <Button :href="lp('/estimate')" variant="glass" size="lg" class="!bg-white !text-brand-700">{{ t('Start the estimate') }}</Button>
+                        <Button :href="lp('/estimate')" variant="dark" size="lg">{{ t('Start the estimate') }}</Button>
                     </div>
                 </Reveal>
             </div>

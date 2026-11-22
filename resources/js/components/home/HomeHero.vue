@@ -105,6 +105,8 @@ onBeforeUnmount(() => observer?.disconnect());
             </video>
         </motion.div>
         <div aria-hidden="true" class="absolute inset-0 -z-10 bg-gradient-to-r from-ink-950 via-ink-950/75 to-ink-950/5" />
+        <!-- Phones: the poster sits right behind the headline, so dim it further. -->
+        <div aria-hidden="true" class="absolute inset-0 -z-10 bg-ink-950/55 md:hidden" />
         <div aria-hidden="true" class="absolute inset-x-0 bottom-0 -z-10 h-48 bg-gradient-to-t from-ink-950 to-transparent" />
         <div aria-hidden="true" class="absolute inset-0 -z-10 bg-grid opacity-60" />
 

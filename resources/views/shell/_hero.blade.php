@@ -23,6 +23,7 @@
                 <div class="absolute inset-0 -z-20" style="transform:scale(1.04)"><img src="{{ $p['hero']['poster'] }}" alt="" class="size-full object-cover object-right" fetchpriority="high"></div>
             @endif
             <div class="absolute inset-0 -z-10 bg-gradient-to-r from-ink-950 via-ink-950/75 to-ink-950/5"></div>
+            <div class="absolute inset-0 -z-10 bg-ink-950/55 md:hidden"></div>
             <div class="absolute inset-0 -z-10 bg-grid opacity-60"></div>
             <div class="container-page flex flex-1 items-center pt-32 pb-16 sm:pt-40">
                 <div class="max-w-3xl">

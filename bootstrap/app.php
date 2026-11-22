@@ -67,21 +67,24 @@ $app = Application::configure(basePath: dirname(__DIR__))
     })->create();
 
 /*
- | Once installed, the site's settings live in storage/.env. Release zips
- | include a template .env, so extracting an update over the site replaces the
- | top-level file; storage/.env is never in a zip and survives every update.
- | Installs made before 1.4.0 kept their settings in the top-level .env: the
- | first request after updating copies it to storage (update zips for those
- | sites leave the top-level .env out).
+ | Settings survive updates. Release zips include a template .env (no app key),
+ | so extracting an update over the site replaces the top-level file. The site
+ | therefore keeps a backup in storage/.env (never in a zip):
+ |  - a top-level .env with a real APP_KEY is always used, and the backup is
+ |    refreshed from it whenever it changes;
+ |  - when the top-level .env is the empty template, the backup is used.
+ | The installer writes the settings to storage/.env.
  */
 if (getenv('APP_ENV') !== 'testing') {
-    $live = $app->storagePath('.env');
+    $backup = $app->storagePath('.env');
     $root = $app->basePath('.env');
-    if (! is_file($live) && is_file($app->storagePath('installed')) && preg_match('/^APP_KEY=\S+/m', (string) @file_get_contents($root)) === 1) {
-        @copy($root, $live);
-        @chmod($live, 0600);
-    }
-    if (is_file($live)) {
+    $rootIsReal = is_file($root) && preg_match('/^APP_KEY=\S+/m', (string) @file_get_contents($root)) === 1;
+    if ($rootIsReal) {
+        if ((! is_file($backup) || filemtime($root) > filemtime($backup)) && is_dir($app->storagePath())) {
+            @copy($root, $backup);
+            @chmod($backup, 0600);
+        }
+    } elseif (is_file($backup)) {
         $app->useEnvironmentPath($app->storagePath());
     }
 }

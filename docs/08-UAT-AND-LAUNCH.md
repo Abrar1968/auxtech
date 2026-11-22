@@ -45,16 +45,29 @@ Do this on a staging copy or on the live site before announcing it. Use at least
 
 ## Part B — Launch
 
+### Updating the live site (auxtechsoftware.com)
+
+The zip's contents go straight into `public_html` (no folder inside the zip). Your uploads (`public/uploads`) are not in the zip, so extracting never touches them.
+
+1. In File Manager, open `public_html` and **download a copy of `.env`** (and of `.htaccess` if cPanel added a PHP-version block to it).
+2. Delete leftovers that are not part of the site: the folder `auxtech-production (1)` and `node_modules`.
+3. Upload `auxtech-production.zip` into `public_html`, select it, **Extract**, and allow it to overwrite. Delete the zip afterwards.
+4. Put your own `.env` back (upload or edit `public_html/.env` and paste your production values). From 1.4.0 the site keeps a backup of it in `storage/.env`: if a later update replaces `.env` with the empty template, the site keeps running on the backup. Edits you make to `public_html/.env` always take effect.
+5. If cPanel had added a PHP handler to `.htaccess`, open **MultiPHP Manager**, select auxtechsoftware.com and apply PHP 8.2 (or newer) again; it writes the block back.
+6. Sign in at `/admin` and run **System > Update database**, then **Clear caches**.
+7. In cPanel **Terminal**, inside `public_html`: `php artisan auxtech:seed` (adds the new projects, the Automotive industry and the pricing packages; keeps your edits), then upload and extract the new image pack outside `public_html` and run `php artisan auxtech:seed --images=/home/YOUR-CPANEL-USER/auxtech-image-pack` (adds only images that are missing). Add `--overwrite` to the first command only if you want the rewritten project texts.
+
+
 ### B1. Before uploading
 
-- [ ] **Renew the domain auxtechbd.com** and point it to the hosting account (it has expired).
+- [ ] The site lives at **auxtechsoftware.com** (the cPanel account's main domain, `public_html`). If `auxtechsoftware.com` is renewed later, add it as an alias or redirect to auxtechsoftware.com: about 20 client sites link to it.
 - [ ] In cPanel, issue the free SSL certificate (AutoSSL / Let's Encrypt) for the domain, and for `www`.
 - [ ] In cPanel > MySQL Databases: create a database and a user, give the user all privileges on it. Note the names and password.
 
 ### B2. Install
 
 1. Upload `auxtech-production.zip` to the domain's folder (usually `public_html`) with File Manager and **Extract** it there.
-2. Open `https://auxtechbd.com/install`. Enter the website address (with `https://`), the database details, your admin name, email and password, and the Gmail app password (optional here, can be added later).
+2. Open `https://auxtechsoftware.com/install`. Enter the website address (with `https://`), the database details, your admin name, email and password, and the Gmail app password (optional here, can be added later).
 3. When it says **Your website is installed**, sign in at `/admin`.
 
 The installer locks itself afterwards. The zip holds the whole project, dotfiles included (`.htaccess`, `.env`, `.env.production`); turn on "Show hidden files" in File Manager to see them. Private files (`.env`, `vendor`, `storage`, source, docs) are blocked by the included `.htaccess`.
@@ -85,7 +98,7 @@ Until the images are uploaded, pages show client names instead of logos and empt
 ### B4. Launch-day smoke test
 
 - [ ] Home, Work, one case study, Auxtech Ecommerce and Contact open over `https://` in English and Bangla.
-- [ ] `https://auxtechbd.com/.env` shows **Forbidden** (403).
+- [ ] `https://auxtechsoftware.com/.env` shows **Forbidden** (403).
 - [ ] Send a real test lead: it appears in the admin, the email arrives, WhatsApp opens with the right number.
 - [ ] `/sitemap.xml`, `/robots.txt` and `/llms.txt` open. `robots.txt` ends with a `Sitemap:` line.
 - [ ] Admin dashboard shows the green "Live" badge (Pusher).
@@ -93,7 +106,7 @@ Until the images are uploaded, pages show client names instead of logos and empt
 
 ### B5. Search engines
 
-- [ ] Google Search Console: add the domain, verify, submit `https://auxtechbd.com/sitemap.xml`, request indexing for the home page.
+- [ ] Google Search Console: add the domain, verify, submit `https://auxtechsoftware.com/sitemap.xml`, request indexing for the home page.
 - [ ] Bing Webmaster Tools: import from Search Console (this also feeds ChatGPT search and Copilot).
 - [ ] Google Business Profile: name, address and phone exactly as on the site (`754/1, 5th Floor, West Shewrapara, Begum Rokeya Avenue, Sharini 1216, Dhaka`; 01805019415).
 - [ ] Test the home page and one case study in Google's Rich Results Test.

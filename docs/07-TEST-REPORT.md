@@ -108,4 +108,4 @@ Shared hosting will differ; the numbers show the application has no errors under
 | Rich Results Test, Search Console, Bing | Need the public domain | Launch day |
 | Firefox, Safari, Samsung Internet, real iPhone | Only Chromium is available in the test sandbox | UAT on staff phones and laptops |
 | Screen reader (TalkBack, VoiceOver) | Manual | UAT |
-| Real hosting performance and HTTPS | The domain auxtechbd.com has expired | After renewal |
+| Real hosting performance and HTTPS | Not measured from the test machine | On auxtechsoftware.com after the update |

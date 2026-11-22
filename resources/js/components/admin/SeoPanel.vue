@@ -31,7 +31,7 @@ const counter = (length: number, ideal: number, max: number) => (length > max ? 
         <p class="mt-1 text-xs text-[#5c5f66]">Optional. Empty fields use the title and summary.</p>
 
         <div class="mt-4 rounded-lg border border-[#e3e4e6] p-3">
-            <p class="truncate text-xs text-[#202124]">{{ publicUrl ?? 'auxtechbd.com' }}</p>
+            <p class="truncate text-xs text-[#202124]">{{ publicUrl ?? 'auxtechsoftware.com' }}</p>
             <p class="mt-0.5 line-clamp-1 text-[17px] text-[#1a0dab]">{{ previewTitle }}</p>
             <p class="mt-0.5 line-clamp-2 text-[13px] text-[#4d5156]">{{ description || 'The page summary will be used.' }}</p>
         </div>

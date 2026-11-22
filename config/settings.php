@@ -27,7 +27,7 @@ return [
             'en' => 'Auxtech is a software development company in Dhaka, Bangladesh. We design, build and support custom software, web applications, e-commerce platforms and mobile apps, and help our clients grow them with data-driven digital marketing.',
             'bn' => 'Auxtech ঢাকা, বাংলাদেশের একটি সফটওয়্যার ডেভেলপমেন্ট কোম্পানি। আমরা কাস্টম সফটওয়্যার, ওয়েব অ্যাপ্লিকেশন, ই-কমার্স প্ল্যাটফর্ম ও মোবাইল অ্যাপ ডিজাইন, তৈরি ও সাপোর্ট করি, আর ডেটা-ভিত্তিক ডিজিটাল মার্কেটিংয়ের মাধ্যমে ক্লায়েন্টদের ব্যবসা বড় করতে সাহায্য করি।',
         ],
-        'company.url' => 'https://auxtechbd.com',
+        'company.url' => 'https://auxtechsoftware.com',
         'company.email' => 'auxtechbd@gmail.com',
         'company.phone' => '+8801805019415',
         'company.phone_display' => '01805019415',

@@ -51,7 +51,7 @@ fi
 sed -e 's/^APP_ENV=.*/APP_ENV=production/' \
     -e 's/^APP_DEBUG=.*/APP_DEBUG=false/' \
     -e 's/^APP_KEY=.*/APP_KEY=/' \
-    -e 's|^APP_URL=.*|APP_URL=https://auxtechbd.com|' \
+    -e 's|^APP_URL=.*|APP_URL=https://auxtechsoftware.com|' \
     -e '/^APP_INSTALLED=/d' \
     -e 's/^LOG_LEVEL=.*/LOG_LEVEL=warning/' \
     -e 's/^MAIL_MAILER=.*/MAIL_MAILER=smtp/' \

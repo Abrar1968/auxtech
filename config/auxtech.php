@@ -19,8 +19,8 @@ return [
         'name' => 'Auxtech',
         'tagline' => 'Website development, app development and digital marketing',
         'slogan' => "Don't go for a company that makes simple software, go for a company that can make the software simple.",
-        'domain' => 'auxtechbd.com',
-        'url' => 'https://auxtechbd.com',
+        'domain' => 'auxtechsoftware.com',
+        'url' => 'https://auxtechsoftware.com',
         'email' => 'auxtechbd@gmail.com',
         'address' => [
             'street' => '754/1, 5th Floor, West Shewrapara, Begum Rokeya Avenue',

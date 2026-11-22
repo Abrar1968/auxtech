@@ -291,7 +291,7 @@ Hosting is shared cPanel. **No SSH, Composer, Node or cron is required on the se
 
 1. In cPanel create a MySQL database and user (cPanel → MySQL Databases).
 2. Upload the zip to the domain's folder with File Manager and extract it.
-3. Open `https://auxtechbd.com/install`. The installer:
+3. Open `https://auxtechsoftware.com/install`. The installer:
    - checks PHP version (8.2+), extensions and folder permissions, and explains anything missing;
    - asks for the database name, user and password and tests the connection;
    - asks for the admin name, email and password;

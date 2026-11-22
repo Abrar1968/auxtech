@@ -99,4 +99,4 @@ tests/              Pest (Unit, Feature) and Playwright (e2e)
 - **Testing status and open items** are in [`docs/07-TEST-REPORT.md`](docs/07-TEST-REPORT.md); the launch steps for Auxtech staff are in [`docs/08-UAT-AND-LAUNCH.md`](docs/08-UAT-AND-LAUNCH.md).
 - **Playwright** is pinned to 1.63.0. Firefox and WebKit must be installed locally with `npx playwright install`.
 - The SVG logo was traced from the 1125 px WebP. It is accurate at normal sizes; if the designer's original vector file exists, drop it into `resources/brand/` and `public/brand/` for perfectly sharp corners.
-- **`auxtechbd.com` is expired** (checked 16 Nov 2026) and must be renewed before launch. See `docs/00-RESEARCH.md` §2.1.
+- The live domain is **`auxtechsoftware.com`** (decided 22 Nov 2026). `auxtechbd.com` had expired; if it is renewed, redirect it to auxtechsoftware.com, because about 20 client sites link to it.
